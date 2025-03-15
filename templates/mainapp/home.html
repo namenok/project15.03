@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+{% load static %}
+
+
+<link href="{% static 'mainapp/for_home.css'%}" rel="stylesheet">
+
+<h1>{{ title }}</h1>
+
+<a class="nav-link" href="{% url 'mainapp:new_entry' %}">Залишити свої важливі думки тут !</a>
+<hr>
+<hr>
+<h3>зараз {% now "d/m/y h:i:s" %}</h3>
+<hr>
+<hr>
+
+{# коментар мовою DTL #}
+
+<ul>
+    {% for item in list_data %}
+        <li>{{ item|title }}</li>
+    {% endfor %}
+</ul>
+
+
+
+
+<a class="nav-link" href="{% url 'mainapp:image_uploads' %}">Завантажити зображення тут !</a>
+
+{% endblock %}

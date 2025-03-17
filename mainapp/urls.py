@@ -21,4 +21,6 @@ urlpatterns = [
     path('category/<str:name>', views.category, name='category'),
     path('search', views.search, name='search'),
     path('create', views.create, name='create'),
+
+
 ]

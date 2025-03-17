@@ -10,7 +10,7 @@ from .models import Category, Post, LibText, Teg
 
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
-
+from django.contrib.auth.views import LoginView, LogoutView
 # Create your views here.
 
 def get_categories():

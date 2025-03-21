@@ -27,8 +27,10 @@
 
 		                	<a href="#">Hi {{ request.user | title }}</a>
 	    	                <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+                            <a href="{% url 'users_profile' %}" class="nav-item nav-link">Profile</a>
 	                {% else %}
 							<a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+                            <a href="{% url 'register' %}" class="btn btn-outline">Sing up</a>
 
 	                {% endif %}
 	              </nav>

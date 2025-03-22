@@ -13,6 +13,7 @@ from django.http import HttpResponse
 from django.contrib.auth.views import LoginView, LogoutView
 # Create your views here.
 
+@login_required()
 def get_categories():
     all = Category.objects.all()
     count = all.count()
@@ -37,6 +38,8 @@ def image_upload(request):
         form = FotoForm()
     return render(request, 'mainapp/image_uploads.html', {'form': form})
 
+
+@login_required()
 def success(request):
     return HttpResponse('successfully uploaded')
 
@@ -55,8 +58,6 @@ def home(request):
         "title":title,
         "list_data": lst,
     }
-
-
     return render(request, 'mainapp/home.html', context=context)
 
 
@@ -80,10 +81,10 @@ def library(request):
                # "post": id_post_blog_list,
                "tegs": tegs}
     context.update(get_categories())
-
     return render(request, 'mainapp/library.html', context=context)
 
 
+@login_required()
 def post(request, id=None):
     post = get_object_or_404(Post, pk=id)
     context={"post": post}
@@ -118,6 +119,7 @@ def new_entry(request):
 
 
 # не працює
+@login_required()
 def category(request, name=None):
     c = get_object_or_404(Category, name=name)
     posts = Post.objects.filter(category=c)
@@ -129,6 +131,7 @@ def category(request, name=None):
     return render(request, 'mainapp/home.html', context=context)
 
 
+@login_required()
 def search(request):
     query = request.GET.get('query')
 
@@ -141,6 +144,7 @@ def search(request):
     return render(request, 'mainapp/library.html', context=context)
 
 
+@login_required()
 def create(request):
     if request.method == 'POST':
         form = PostForm(request.POST)

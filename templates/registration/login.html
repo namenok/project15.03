@@ -15,9 +15,9 @@
 		
 		<input type="submit" value="Login" class="btn btn-primary full-width">
 		<hr>
-		  <a href="{% url 'password_reset' %}"><i>Forgot Password?</i></a>
-		<p class="text-center">Forgot your password <a href="#">Reset Password</a></p>
-		<p class="text-center">Don't have an account? <a href="#">Regestration</a></p>
+
+		<p class="text-center">Forgot your password <a href="{% url 'password_reset' %}" class="btn btn-outline"><i>Forgot Password?</i></a></p>
+		<p class="text-center">Don't have an account? <a href="{% url 'register' %}" class="btn btn-outline">Registration</a></p>
 
 	</form>
 </div>

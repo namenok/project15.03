@@ -25,9 +25,11 @@
     {% endfor %}
 </ul>
 
-
-
-
+{% if request.user.is_authenticated %}
+<p>можеш ось ут завантажити картинку під настрій</p>
 <a class="nav-link" href="{% url 'mainapp:image_uploads' %}">Завантажити зображення тут !</a>
+{% else %}
+<p>якщо не залогініуся то йди залогінься і побаичш усі функції сторінки home</p>
+
 
 {% endblock %}

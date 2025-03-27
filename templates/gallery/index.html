@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>index text</title>
-</head>
-<body>
-<p>багато тексту</p>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<h2>Галерея</h2>
+<a  href="{% url 'gallery:uploads' %}">Закинути фотку в галерею</a>
+<hr>
+    {% for photo in photos %}
+
+    <img src="{{ photo.image.url }}" alt="{{ photo.description }}" width="500" >
+    {% endfor %}
+
+{% endblock %}

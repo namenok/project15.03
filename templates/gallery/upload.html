@@ -1,10 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>uploads text</title>
-</head>
-<body>
-<a>сторінка для завантажень</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+<h2>Завантажуємся:</h2>
+<form enctype="multipart/form-data" method="POST" action="{% url 'gallery:uploads' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-default">Зберегти</button>
+
+</form>
+{% endblock %}

@@ -14,10 +14,9 @@ from django.contrib.auth.views import LoginView, LogoutView
 # Create your views here.
 
 @login_required()
-def get_categories():
+def get_categories(request):
     all = Category.objects.all()
     count = all.count()
-
     return {
         "cat1":all[:count//2],
         "cat2":all[count//2:]
@@ -26,12 +25,9 @@ def get_categories():
 
 @login_required()
 def image_upload(request):
-
     if request.method == 'POST':
         form = FotoForm(request.POST, request.FILES)
-
         if form.is_valid():
-
             form.save()
             return redirect('mainapp:home')
     else:
@@ -50,14 +46,9 @@ def index(request):
 
 @login_required()
 def home(request):
-
-    # тимчасовий приклад
-    lst = ['one', 'two', 'three']
-    title = "Вітаю!"
+    title = "це мій домашній кабінет тут записую думки та картикни"
     context = {
-        "title":title,
-        "list_data": lst,
-    }
+        "title":title,}
     return render(request, 'mainapp/home.html', context=context)
 
 
@@ -69,26 +60,21 @@ def checkme(request):
 @login_required()
 def library(request):
     post_blog_list = Post.objects.all().order_by("-published_date")
-    # id_post_blog_list = Post.objects.get(pk=1) #просто перевірили фільтр
     my_posts_list = LibText.objects.all()
-    # category_list = Category.objects.all()
-
     tegs = Teg.objects.all()
 
     context = {"post_blog_list": post_blog_list,
                "my_posts_list": my_posts_list,
-               # "category_list": category_list,
-               # "post": id_post_blog_list,
-               "tegs": tegs}
-    context.update(get_categories())
+               "tegs": tegs,}
+    context.update(get_categories(request))
     return render(request, 'mainapp/library.html', context=context)
 
 
 @login_required()
 def post(request, id=None):
     post = get_object_or_404(Post, pk=id)
-    context={"post": post}
-    context.update(get_categories())
+    context = {"post": post, }
+    context.update(get_categories(request))
     return  render(request, 'mainapp/post.html', context=context)
 
 
@@ -99,7 +85,6 @@ def calendar(request):
 
 @login_required()
 def new_entry(request):
-
     if request.method != 'POST':
         form = EntryForm()
     else:
@@ -118,17 +103,13 @@ def new_entry(request):
 
 
 
-# не працює
 @login_required()
 def category(request, name=None):
     c = get_object_or_404(Category, name=name)
-    posts = Post.objects.filter(category=c)
-    my_posts = LibText.objects.filter(to_category=c)
-    context = {'posts': posts,
-               'my_posts': my_posts
-               }
-    context.update(get_categories())
-    return render(request, 'mainapp/home.html', context=context)
+    posts = Post.objects.filter(category=c).order_by("-published_date")
+    context = {'posts': posts,}
+    context.update(get_categories(request))
+    return render(request, 'mainapp/library.html', context=context)
 
 
 @login_required()
@@ -140,7 +121,7 @@ def search(request):
     context = {'post_blog_list': post_blog_list,
                'my_posts_list': my_posts_list
                }
-    context.update(get_categories())
+    context.update(get_categories(request))
     return render(request, 'mainapp/library.html', context=context)
 
 
@@ -155,5 +136,5 @@ def create(request):
             return library(request)
     form = PostForm()
     context = {"form": form}
-    context.update(get_categories())
+    context.update(get_categories(request))
     return render(request, 'mainapp/create.html', context=context)

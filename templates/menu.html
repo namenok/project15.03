@@ -7,8 +7,9 @@
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'mainapp:home' %}">Home</a>
+            {% if request.user.is_authenticated %}
+          <li class="nav-item ">
+            <a class="nav-link" href="{% url 'mainapp:home' %}">мійКабінет-домашня</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'mainapp:calendar' %}">Calendar</a>
@@ -19,6 +20,10 @@
              <li class="nav-item">
             <a class="nav-link" href="{% url 'mainapp:checkme' %}">Checkme</a>
           </li>
+             <li class="nav-item">
+            <a class="nav-link" href="{% url 'gallery:gallery' %}">Gallery</a>
+          </li>
+            {% endif %}
         </ul>
 <nav class="nav">
 

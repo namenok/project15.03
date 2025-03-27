@@ -10,26 +10,20 @@
 
 <h1>{{ title }}</h1>
 
-<a class="nav-link" href="{% url 'mainapp:new_entry' %}">Залишити свої важливі думки тут !</a>
-<hr>
-<hr>
-<h3>зараз {% now "d/m/y h:i:s" %}</h3>
+<a class="nav-link" href="{% url 'mainapp:new_entry' %}">Запишу важливу думку</a>
 <hr>
 <hr>
 
-{# коментар мовою DTL #}
+<hr>
+<hr>
 
-<ul>
-    {% for item in list_data %}
-        <li>{{ item|title }}</li>
-    {% endfor %}
-</ul>
 
-{% if request.user.is_authenticated %}
-<p>можеш ось ут завантажити картинку під настрій</p>
-<a class="nav-link" href="{% url 'mainapp:image_uploads' %}">Завантажити зображення тут !</a>
-{% else %}
-<p>якщо не залогініуся то йди залогінься і побаичш усі функції сторінки home</p>
+
+
+    <a class="nav-link" href="{% url 'mainapp:image_uploads' %}">закину картинку</a>
+
+
+
 
 
 {% endblock %}

@@ -5,17 +5,7 @@
 {% load static %}
 
 <link href="{% static 'mainapp/for_lib.css'%}" rel="stylesheet">
-<h1>бібліотека</h1>
-<p style="background-color:rgb(132, 144, 202);">Емоції (від фр. é mouvoir — «у русі», «хвилювання», «збудження») — це внутрішнє переживання або рух настрою, наприклад радість, страх, гнів, смуток, які можуть бути викликані ситуацією чи подією. Емоції також можуть виникати спонтанно. Емоції є суб'єктивними переживаннями і пов'язані з фізичними реакціями, виразом обличчя та поведінкою.</p>
-<h2>Класифікація емоцій</h2>
-<p style="background-color:rgb(181, 144, 202);">За ступенем збудження чи заспокоєння розрізняють:
 
-Стенічні емоції — підштовхують до вчинків, висловів, збільшують напругу сил. Людині важко мовчати, не діяти активно (радість, впевненість, тріумф, страх, злість).
-Астенічні емоції — характеризуються пасивністю, бездіяльністю (страждання, неспокій, страх).
-За наявністю відтінків задоволення або незадоволення розрізняють:
-
-
-<hr>
 
 
 <hr>
@@ -34,61 +24,39 @@
         </div>
     </div>
 </div>
-
-
-
-<hr>
-<div>
-    <h4>КАТЕГОРІЇ</h4>
-    <div class="row">
-        <div class="col-lg-6">
-            <ul class="list-unstyled">
-                {% for cat in cat1 %}
-                <li>
-                    <a href="{% url 'mainapp:category' name=cat.name %}">{{cat.name}}</a>
-                {% endfor %}
-                </li>
-            </ul>
-            </div>
-            <div class="col-lg-6">
-             <ul class="list-unstyled">
-                {% for cat in cat2 %}
-                <li>
-                    <a href="{% url 'mainapp:category' name=cat.name %}">{{cat.name}}</a>
-                {% endfor %}
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-
-{% for post in post_blog_list %}
-    <h1 class="page-header"><a >{{post.title}} </a></h1>
-    <p><a>автор: {{ post.user }}</a>
-        {% for teg in tegs %}
-    <p><a> {{ teg.name }}</a>
-    {% endfor %}
-    </p>
-    <p>дата поступ: {{ post.published_date }}</p>
-    <hr>
-    <img class="img-responsive" src="{{post.poster}}" alt="">
-    <hr>
-    <p> {{ post.content|truncatewords:30 }} </p>
-        <a class="btn btn-primary" href="{% url 'mainapp:post' id=post.id %}">читати більше</a>
-{% endfor %}
-<hr>
 <hr>
 
+<h2>Категорії</h2>
+<ul>
+      {% for category in categories %}
+            <li>
+              <a href="{% url 'mainapp:library_posts_by_category' slug=category.slug %}">
+                {{ category.name }}
+              </a>
+            </li>
+      {% endfor %}
+</ul>
 
-{% for post in my_posts_list %}
-    <h1 class="page-header">
-        <a> {{post.title}} </a>
-    </h1>
-    <hr>
-    <p> {{ post.content|truncatewords:30 }} </p>
-    <hr>
-{% endfor %}
+<hr>
 
+{% if selected_category %}
+
+    <h3>Пости в категорії: "{{ selected_category.name }}"</h3>
+        {% if posts %}
+    <ul>
+      {% for post in posts %}
+        <h1 class="page-header"><a >{{post.title}} </a></h1>
+        <p> {{ post.content }} </p>
+        <li>{{ post.published_date }} </li>
+        <li>{{ post.user }} </li>
+        <img class="img-responsive" src="{{post.poster}}" alt="">
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>У цій категорії ще немає постів.</p>
+  {% endif %}
+{% else %}
+  <p>Оберіть категорію, щоб побачити пости.</p>
+{% endif %}
 
 {% endblock content %}

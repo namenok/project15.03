@@ -10,15 +10,17 @@ urlpatterns = [
     path('', views.index, name='index'),  # /first
     path('home/', views.home, name='home'),
     path('checkme/', views.checkme, name='checkme'),
-    path('library/', views.library, name='library'),
+
     path('calendar/', views.calendar, name='calendar'),
 
     path('new_entry/', views.new_entry, name='new_entry'),
 
     path('image_uploads/', views.image_upload, name='image_uploads'),
-    path('post/<int:id>', views.post, name='post'),
+    path('post/<str:id>', views.post, name='post'),
 
-    path('category/<str:name>', views.category, name='category'),
+    path('categories/', views.library_view, name='library_category_list'),
+    path('category/<slug:slug>/', views.library_view, name='library_posts_by_category'),
+
     path('search/', views.search, name='search'),
     path('create/', views.create, name='create'),
 

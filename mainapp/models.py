@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
 
 
 class Entry(models.Model):
@@ -22,20 +23,37 @@ class Foto(models.Model):
 
 
 
-
 class Category(models.Model):
     name = models.CharField(max_length=30, verbose_name = "Назва")
+    slug = models.SlugField(unique=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            base_slug = slugify(self.name)
+            slug = base_slug
+            counter = 1
+            while Category.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{counter}"
+                counter += 1
+            self.slug = slug
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name = "Категорія"
         verbose_name_plural = "Категорії"
 
 
+
+
 class Teg(models.Model):
     name = models.TextField(max_length=10)
+
     def __str__(self):
         return self.name
+
     class Meta:
         verbose_name = "Хештег"
         verbose_name_plural = "Хештеги"
@@ -46,10 +64,8 @@ class Post(models.Model):
     title = models.CharField(max_length=30, verbose_name = "Заголовок посту")
     content = models.TextField(verbose_name = "Опис посту")
     published_date = models.DateTimeField(auto_created=True, verbose_name = "Дата та час посту")
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name = "Категорія")
+    category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, verbose_name="Категорія")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = "Автор")
-    # (юзер не потрібен бо акаунт
-    # буде ен доступний для багатьох юзерів приберу це потім
     poster = models.URLField(
         default="https://images.pexels.com/photos/147465/pexels-photo-147465.jpeg?auto=compress&cs=tinysrgb&w=600",
         verbose_name = "Постер")
@@ -61,7 +77,6 @@ class Post(models.Model):
     class Meta:
         verbose_name = "ПостБложний"
         verbose_name_plural = "ПостиБложні"
-
 
 
 

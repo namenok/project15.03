@@ -1,26 +1,14 @@
+from dbm.ndbm import library
 from django.shortcuts import render
-
 from django.utils import timezone
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
 from .forms import EntryForm, FotoForm, PostForm
 from django.contrib.auth.decorators import login_required
 from .models import Category, Post, LibText, Teg
-
-from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
-from django.contrib.auth.views import LoginView, LogoutView
-# Create your views here.
 
-@login_required()
-def get_categories(request):
-    all = Category.objects.all()
-    count = all.count()
-    return {
-        "cat1":all[:count//2],
-        "cat2":all[count//2:]
-    }
+
 
 
 @login_required()
@@ -47,8 +35,7 @@ def index(request):
 @login_required()
 def home(request):
     title = "це мій домашній кабінет тут записую думки та картикни"
-    context = {
-        "title":title,}
+    context = {"title":title,}
     return render(request, 'mainapp/home.html', context=context)
 
 
@@ -57,24 +44,12 @@ def checkme(request):
     return render(request, 'mainapp/checkme.html')
 
 
-@login_required()
-def library(request):
-    post_blog_list = Post.objects.all().order_by("-published_date")
-    my_posts_list = LibText.objects.all()
-    tegs = Teg.objects.all()
-
-    context = {"post_blog_list": post_blog_list,
-               "my_posts_list": my_posts_list,
-               "tegs": tegs,}
-    context.update(get_categories(request))
-    return render(request, 'mainapp/library.html', context=context)
-
 
 @login_required()
 def post(request, id=None):
-    post = get_object_or_404(Post, pk=id)
+    post = get_object_or_404(Post, title=id)
     context = {"post": post, }
-    context.update(get_categories(request))
+    # context.update(get_categories(request))
     return  render(request, 'mainapp/post.html', context=context)
 
 
@@ -94,22 +69,8 @@ def new_entry(request):
             new_entry.owner = request.user
             new_entry.save()
             return redirect('mainapp:home')
-
     context = {'form': form}
-    return render(
-        request,
-        'mainapp/new_entry.html',
-        context=context)
-
-
-
-@login_required()
-def category(request, name=None):
-    c = get_object_or_404(Category, name=name)
-    posts = Post.objects.filter(category=c).order_by("-published_date")
-    context = {'posts': posts,}
-    context.update(get_categories(request))
-    return render(request, 'mainapp/library.html', context=context)
+    return render(request,'mainapp/new_entry.html', context=context)
 
 
 @login_required()
@@ -119,9 +80,7 @@ def search(request):
     post_blog_list = Post.objects.filter(Q(content__icontains=query) | Q(title__icontains=query)).order_by("-published_date")
     my_posts_list = LibText.objects.filter(content__icontains=query)
     context = {'post_blog_list': post_blog_list,
-               'my_posts_list': my_posts_list
-               }
-    context.update(get_categories(request))
+               'my_posts_list': my_posts_list}
     return render(request, 'mainapp/library.html', context=context)
 
 
@@ -136,5 +95,34 @@ def create(request):
             return library(request)
     form = PostForm()
     context = {"form": form}
-    context.update(get_categories(request))
     return render(request, 'mainapp/create.html', context=context)
+
+
+@login_required()
+def category_list_view(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    posts = Post.objects.filter(category=category)
+    context = {'categories': category, 'posts':posts}
+    return render(request, 'mainapp/library.html', context=context)
+
+
+@login_required()
+def posts_by_category_view(request, slug):
+    category = get_object_or_404(Category, slug=slug)
+    posts = category.posts.all()
+    return render(request, 'mainapp/library.html', {'category': category,'posts': posts})
+
+
+@login_required()
+def library_view(request, slug=None):
+    categories = Category.objects.all()
+    posts = None
+    selected_category = None
+    if slug:
+        selected_category = get_object_or_404(Category, slug=slug)
+        posts = selected_category.posts.all()
+    return render(request, 'mainapp/library.html', {
+        'categories': categories,
+        'selected_category': selected_category,
+        'posts': posts,
+    })

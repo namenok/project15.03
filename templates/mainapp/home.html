@@ -8,22 +8,14 @@
 
 <link href="{% static 'mainapp/for_home.css'%}" rel="stylesheet">
 
-<h1>{{ title }}</h1>
-
-<a class="nav-link" href="{% url 'mainapp:new_entry' %}">Запишу важливу думку</a>
-<hr>
-<hr>
-
-<hr>
-<hr>
 
 
 
-
-    <a class="nav-link" href="{% url 'mainapp:image_uploads' %}">закину картинку</a>
-
-
-
-
+{% include "mainapp/create.html" %}
+<!--<form action="{% url 'mainapp:create' %}" method="POST">-->
+<!--    {% csrf_token %}-->
+<!--    {{ form.as_p }}-->
+<!--    <input type="submit" value="Створити" class="btn btn-default">-->
+<!--</form>-->
 
 {% endblock %}

@@ -3,9 +3,9 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .forms import EntryForm, FotoForm, PostForm
+from .forms import EntryForm, FotoForm, PostForm, PersonalPostForm
 from django.contrib.auth.decorators import login_required
-from .models import Category, Post, LibText, Teg
+from .models import Category, Post, LibText, Teg, Survey, UserAnswer, Answers, PersonalPost
 from django.http import HttpResponse
 
 
@@ -32,16 +32,35 @@ def index(request):
     return render(request, 'mainapp/index.html')
 
 
-@login_required()
-def home(request):
-    title = "це мій домашній кабінет тут записую думки та картикни"
-    context = {"title":title,}
-    return render(request, 'mainapp/home.html', context=context)
 
 
-@login_required()
-def checkme(request):
-    return render(request, 'mainapp/checkme.html')
+
+
+@login_required
+def survey_view(request):
+    surveys = Survey.objects.prefetch_related('answers').all()
+    today = timezone.now().date()
+
+    if request.method == 'POST':
+        for survey in surveys:
+            # Перевіряємо, чи вибрано варіант відповіді для кожного опитування
+            selected_answer = request.POST.get(f"survey_{survey.id}")
+            if selected_answer:
+                # Отримуємо вибраний варіант
+                answer_choice = Answers.objects.get(id=selected_answer)
+
+                # Створюємо або оновлюємо відповідь для поточної дати
+                UserAnswer.objects.create(
+                    user=request.user,
+                    survey=survey,
+                    answer_choice=answer_choice,
+                    date=today  # Зберігаємо поточну дату
+                )
+                return render(request, 'mainapp/survey_thanks.html')
+        # redirect('survey_thanks') # Перенаправляємо користувача на сторінку з підтвердженням
+    return render(request, 'mainapp/checkme.html', {'surveys': surveys})
+
+
 
 
 
@@ -55,7 +74,8 @@ def post(request, id=None):
 
 @login_required()
 def calendar(request):
-    return render(request, 'mainapp/calendar.html')
+    user_answers = UserAnswer.objects.filter(user=request.user)
+    return render(request, 'mainapp/calendar.html', {'user_answers': user_answers})
 
 
 @login_required()
@@ -82,6 +102,11 @@ def search(request):
     context = {'post_blog_list': post_blog_list,
                'my_posts_list': my_posts_list}
     return render(request, 'mainapp/library.html', context=context)
+
+
+@login_required()
+def home(request):
+    return render(request, 'mainapp/home.html')
 
 
 @login_required()
@@ -126,3 +151,25 @@ def library_view(request, slug=None):
         'selected_category': selected_category,
         'posts': posts,
     })
+
+
+from django.urls import reverse
+@login_required
+def daily_post_view(request):
+    today = timezone.now().date()
+    post, created = PersonalPost.objects.get_or_create(user=request.user, date=today)
+
+    if request.method == 'POST':
+        form = PersonalPostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            return redirect('mainapp:post_history')  # Або залишити на цій же сторінці
+    else:
+            form = PersonalPostForm(instance=post)
+    return render(request, 'mainapp/personal_post.html', {'form': form, 'created': created})
+
+
+@login_required
+def post_history_view(request):
+    posts = PersonalPost.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'mainapp/personal_post_history.html', {'posts': posts})

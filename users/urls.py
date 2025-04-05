@@ -6,6 +6,8 @@ from .views import MyLoginView, UserLogoutView, RegisterView, ResetPasswordView,
 from django.contrib.auth.views import LogoutView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth import views as auth_views
 
+app_name = 'users'
+
 urlpatterns = [
     path('login/', MyLoginView.as_view(), name='login'),
     path('logout/', UserLogoutView.as_view(http_method_names = ['get', 'post', 'options']), name='logout'),

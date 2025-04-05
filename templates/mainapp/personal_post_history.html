@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<h2>Історія твоїх постів</h2>
+<ul>
+    {% for post in posts %}
+        <li><strong>{{ post.date }}</strong>: {{ post.content|linebreaks }}</li>
+    {% empty %}
+        <li>Поки що немає постів.</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}

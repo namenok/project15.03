@@ -9,7 +9,8 @@ app_name = 'mainapp'
 urlpatterns = [
     path('', views.index, name='index'),  # /first
     path('home/', views.home, name='home'),
-    path('checkme/', views.checkme, name='checkme'),
+    path('checkme/', views.survey_view, name='checkme'),
+    # path('successful/', views.survey_thanks, name='survey_thanks'),
 
     path('calendar/', views.calendar, name='calendar'),
 
@@ -23,6 +24,9 @@ urlpatterns = [
 
     path('search/', views.search, name='search'),
     path('create/', views.create, name='create'),
+
+    path('write/', views.daily_post_view, name='daily_post'),  
+    path('history/', views.post_history_view, name='post_history'),
 
 
 ]

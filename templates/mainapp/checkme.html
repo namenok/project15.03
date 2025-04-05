@@ -7,59 +7,22 @@
 <h1>Перевірити свій стан!</h1>
 <p style="background-color:tomato;">Опитування</p>
 
-<input type="checkbox"  name="vehicle1" value="Bike">
-<label for="vehicle1"> гарний настрій</label><br>
-<input type="checkbox"  name="vehicle2" value="Car">
-<label for="vehicle2"> поганий настрій</label><br>
-<input type="checkbox"  name="vehicle3" value="Boat">
-<label for="vehicle3"> середній настрій</label><br>
-<input type="checkbox"  name="vehicle1" value="Bike">
-<label for="vehicle1"> гарний настрій</label><br>
-<input type="checkbox"  name="vehicle2" value="Car">
-<label for="vehicle2"> поганий настрій</label><br>
-<input type="checkbox"  name="vehicle3" value="Boat">
-<label for="vehicle3"> середній настрій</label><br>
-<input type="checkbox"  name="vehicle1" value="Bike">
-<label for="vehicle1"> гарний настрій</label><br>
-<input type="checkbox"  name="vehicle2" value="Car">
-<label for="vehicle2"> поганий настрій</label><br>
-<input type="checkbox"  name="vehicle3" value="Boat">
-<label for="vehicle3"> середній настрій</label><br>
-<input type="checkbox"  name="vehicle1" value="Bike">
-<label for="vehicle1"> гарний настрій</label><br>
-<input type="checkbox"  name="vehicle2" value="Car">
-<label for="vehicle2"> поганий настрій</label><br>
-<input type="checkbox"  name="vehicle3" value="Boat">
-<label for="vehicle3"> середній настрій</label><br>
-<input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-<label for="vehicle1"> гарний настрій</label><br>
-<input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-<label for="vehicle2"> поганий настрій</label><br>
-<input type="checkbox" id="vehicle3" name="vehicle3" value="Boat">
-<label for="vehicle3"> середній настрій</label><br>
 
-<input type="checkbox"  name="vehicle1" value="Bike">
-<label for="vehicle1"> гарний настрій</label><br>
-<input type="checkbox"  name="vehicle2" value="Car">
-<label for="vehicle2"> поганий настрій</label><br>
-<input type="checkbox"  name="vehicle3" value="Boat">
-<label for="vehicle3"> середній настрій</label><br>
-<input type="checkbox"  name="vehicle1" value="Bike">
-<label for="vehicle1"> гарний настрій</label><br>
-<input type="checkbox"  name="vehicle2" value="Car">
-<label for="vehicle2"> поганий настрій</label><br>
+{% for survey in surveys %}
+    <h3>{{ survey.question }}</h3>
+    <form method="POST">
+        {% csrf_token %}
+        {% for answer in survey.answers.all %}
+            <label>
+                <input type="radio" name="survey_{{ survey.id }}" value="{{ answer.id }}">
+                {{ answer.choice_text }}
+            </label><br>
+        {% endfor %}
+        <button type="submit">Відправити</button>
+    </form>
+{% endfor %}
 
-<input type="checkbox"  name="vehicle3" value="Boat">
-<label for="vehicle3"> середній настрій</label><br>
-<input type="checkbox"  name="vehicle1" value="Bike">
-<label for="vehicle1"> гарний настрій</label><br>
-<input type="checkbox"  name="vehicle2" value="Car">
-<label for="vehicle2"> поганий настрій</label><br>
-<input type="checkbox"  name="vehicle3" value="Boat">
-<label for="vehicle3"> середній настрій</label><br>
-<input type="checkbox"  name="vehicle1" value="Bike">
 
-<button type="button">зберегти !</button>
 
 {% endblock %}
 

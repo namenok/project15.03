@@ -25,7 +25,12 @@
     </div>
 </div>
 <hr>
-
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
 <h2>Категорії</h2>
 <ul>
       {% for category in categories %}
@@ -38,9 +43,13 @@
 </ul>
 
 <hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
 
 {% if selected_category %}
-
     <h3>Пости в категорії: "{{ selected_category.name }}"</h3>
         {% if posts %}
     <ul>
@@ -58,5 +67,17 @@
 {% else %}
   <p>Оберіть категорію, щоб побачити пости.</p>
 {% endif %}
-
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<hr>
+<!--{% include "mainapp/create.html" %}-->
+<p>СТВОРИТИ ЗАПИС В БІБЛІОТЕКУ , ЦІКАВОЇ ІНФОРМАЦІЇ ЯКУ ДЕСЬ ЗНАЙШЛА І ХОЧЕШ СОБІ ЗАФІКСУВАТИ </p>
+<form action="{% url 'mainapp:create' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Створити" class="btn btn-default">
+</form>
 {% endblock content %}

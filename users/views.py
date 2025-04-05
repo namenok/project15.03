@@ -34,7 +34,7 @@ class MyLoginView(LoginView):
 class UserLogoutView(LogoutView):
     def get(self, request):
         logout(request)
-        return redirect('login')
+        return redirect('users:login')
 
 
 def users_home(request):

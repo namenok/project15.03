@@ -16,13 +16,16 @@
           </li>
             <li class="nav-item">
             <a class="nav-link" href="{% url 'mainapp:library_category_list' %}">Library</a>
-          </li>
+            </li>
              <li class="nav-item">
             <a class="nav-link" href="{% url 'mainapp:checkme' %}">Checkme</a>
-          </li>
+             </li>
              <li class="nav-item">
             <a class="nav-link" href="{% url 'gallery:gallery' %}">Gallery</a>
-          </li>
+             </li>
+             <li class="nav-item">
+            <a class="nav-link" href="{% url 'mainapp:daily_post' %}">ЩоденніДумкиЗаписати</a>
+             </li>
             {% endif %}
         </ul>
 <nav class="nav">
@@ -31,11 +34,11 @@
 
 
 		                	<a href="#">Hi {{ request.user | title }}</a>
-	    	                <a href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
-                            <a href="{% url 'users_profile' %}" class="nav-item nav-link">Profile</a>
+	    	                <a href="{% url 'users:logout' %}" class="btn btn-outline">Logout</a>
+                            <a href="{% url 'users:users_profile' %}" class="nav-item nav-link">Profile</a>
 	                {% else %}
-							<a href="{% url 'login' %}" class="btn btn-outline">Login</a>
-                            <a href="{% url 'register' %}" class="btn btn-outline">Sing up</a>
+							<a href="{% url 'users:login' %}" class="btn btn-outline">Login</a>
+                            <a href="{% url 'users:register' %}" class="btn btn-outline">Sing up</a>
 
 	                {% endif %}
 	              </nav>

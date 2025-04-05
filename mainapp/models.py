@@ -79,6 +79,25 @@ class Post(models.Model):
         verbose_name_plural = "ПостиБложні"
 
 
+class PersonalPost(models.Model):
+    title = models.CharField(max_length=30, verbose_name = "Заголовок посту")
+    content = models.TextField(verbose_name = "Опис посту")
+    published_date = models.DateTimeField(auto_now_add=True, verbose_name = "Дата та час посту")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = "Автор")
+    poster = models.URLField(
+        default="https://images.pexels.com/photos/147465/pexels-photo-147465.jpeg?auto=compress&cs=tinysrgb&w=600",
+        verbose_name = "Постер")
+    date = models.DateField()
+
+    def __str__(self):
+        return f"{self.user.username} - {self.date}"
+
+    class Meta:
+        verbose_name = "ОсобистийПост"
+        verbose_name_plural = "Особисті Пости"
+        unique_together = ('user', 'poster', 'date', 'content')
+
+
 
 
 class LibText(models.Model):
@@ -96,15 +115,43 @@ class LibText(models.Model):
 
 
 
+
 class CheckForm(models.Model):
     date = models.DateTimeField(verbose_name="дата опитування")
     answer1 = models.BooleanField(verbose_name="мені сумно", default=False)
     answer2 = models.BooleanField(verbose_name="мені весело", default=False)
     answer3 = models.BooleanField(verbose_name="мені норм", default=False)
-
     class Meta:
         verbose_name = "Опитуваннячко"
         verbose_name_plural = "Опитування"
 
 
 
+class Survey(models.Model):
+    question = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.question
+
+
+class Answers(models.Model):
+    survey = models.ForeignKey(Survey, related_name='answers', on_delete=models.CASCADE)
+    choice_text = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.choice_text
+
+
+
+class UserAnswer(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    answer_choice = models.ForeignKey(Answers, on_delete=models.CASCADE)
+    answered_at = models.DateTimeField(auto_now_add=True)
+    date = models.DateField()
+
+    class Meta:
+        unique_together = ('user', 'survey', 'date')  # Унікальна комбінація користувача, опитування і дати
+
+    def __str__(self):
+        return f"Відповідь {self.user.username} на {self.survey.question} {self.date}"

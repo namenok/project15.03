@@ -4,10 +4,10 @@
 {% block content %}
 <link href="{% static 'mainapp/new_check.css'%}" rel="stylesheet">
 
-<h2>Давай створимо запис в щоденник !</h2>
+<!--<p>СТВОРИТИ ЗАПИС В БІБЛІОТЕКУ , ЦІКАВОЇ ІНФОРМАЦІЇ ЯКУ ДЕСЬ ЗНАЙШЛА І ХОЧЕШ СОБІ ЗАФІКСУВАТИ </p>-->
 <form action="{% url 'mainapp:create' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Save" class="btn btn-default">
+    <input type="submit" value="Створити" class="btn btn-default">
 </form>
 {% endblock %}

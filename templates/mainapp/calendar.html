@@ -75,4 +75,14 @@ table, th, td {
 </body>
 </html>
 
+
+{% for answer in user_answers  %}
+    <p>{{ answer.user }}</p>
+    <p>{{ answer.survey }}</p>
+    <p>{{ answer.answer_choice }}</p>
+    <p>{{ answer.answered_at }}</p>
+    <p>{{ answer.date }}</p>
+    <hr>
+{% endfor %}
+
 {% endblock %}

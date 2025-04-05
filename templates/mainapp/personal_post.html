@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<h2>Твій щоденний пост</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Зберегти</button>
+</form>
+
+{% if created %}
+    <p>Новий пост на сьогодні створено.</p>
+{% else %}
+    <p>Ти вже писав сьогодні — можеш оновити.</p>
+{% endif %}
+
+
+
+<a href="{% url 'mainapp:post_history' %}">До історії</a>
+{% endblock %}

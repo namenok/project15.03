@@ -6,8 +6,9 @@
 <a  href="{% url 'gallery:uploads' %}">Закинути фотку в галерею</a>
 <hr>
     {% for photo in photos %}
-
-    <img src="{{ photo.image.url }}" alt="{{ photo.description }}" width="500" >
+        <img src="{{ photo.image.url }}" alt="{{ photo.description }}" style="max-width: 300px" >
+        {% empty %}
+        <p>Ви ще не додали жодного фото.</p>
     {% endfor %}
 
 {% endblock %}

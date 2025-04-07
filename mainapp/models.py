@@ -1,26 +1,8 @@
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.text import slugify
-
-
-class Entry(models.Model):
-    text = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    class Meta:
-        verbose_name = "ДумкаФорма"
-        verbose_name_plural = "ДумкиФорма"
-    def __str__(self):
-        return f'{self.text[:50]}...'
-
-
-
-class Foto(models.Model):
-    image = models.ImageField(upload_to='media')
-    class Meta:
-        verbose_name = "Зображення"
-        verbose_name_plural = "УсіЗображення"
-
 
 
 class Category(models.Model):
@@ -59,6 +41,19 @@ class Teg(models.Model):
         verbose_name_plural = "Хештеги"
 
 
+# class LibUserPost(models.Model):
+#     title = models.CharField(max_length=30, verbose_name = "Заголовок посту")
+#     content = models.TextField(verbose_name = "Опис посту")
+#     published_date = models.DateTimeField(auto_now_add=True, verbose_name = "Дата та час посту")
+#     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = "Автор")
+#     date = models.DateField()
+#     to_category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Мій текст належить до Категорії", related_name='posts')
+#     def __str__(self):
+#         return f"{self.user.username} - {self.date}"
+#
+#     class Meta:
+#         verbose_name = "постЮзерВБібліотеку"
+#         verbose_name_plural = "постиЮзерВБібліотеку Пости"
 
 class Post(models.Model):
     title = models.CharField(max_length=30, verbose_name = "Заголовок посту")
@@ -66,9 +61,7 @@ class Post(models.Model):
     published_date = models.DateTimeField(auto_created=True, verbose_name = "Дата та час посту")
     category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, verbose_name="Категорія")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = "Автор")
-    poster = models.URLField(
-        default="https://images.pexels.com/photos/147465/pexels-photo-147465.jpeg?auto=compress&cs=tinysrgb&w=600",
-        verbose_name = "Постер")
+    poster = models.ImageField(upload_to='uploads')
     teg = models.ManyToManyField(Teg, blank=True, related_name='posts', verbose_name="Хештеги")
 
     def __str__(self):
@@ -84,9 +77,7 @@ class PersonalPost(models.Model):
     content = models.TextField(verbose_name = "Опис посту")
     published_date = models.DateTimeField(auto_now_add=True, verbose_name = "Дата та час посту")
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = "Автор")
-    poster = models.URLField(
-        default="https://images.pexels.com/photos/147465/pexels-photo-147465.jpeg?auto=compress&cs=tinysrgb&w=600",
-        verbose_name = "Постер")
+    poster = models.ImageField(upload_to='uploads' ,verbose_name = "ПостерДоПерсональногоПосту")
     date = models.DateField()
 
     def __str__(self):
@@ -109,21 +100,8 @@ class LibText(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "Мій постик"
-        verbose_name_plural = "Мої постики"
-
-
-
-
-
-class CheckForm(models.Model):
-    date = models.DateTimeField(verbose_name="дата опитування")
-    answer1 = models.BooleanField(verbose_name="мені сумно", default=False)
-    answer2 = models.BooleanField(verbose_name="мені весело", default=False)
-    answer3 = models.BooleanField(verbose_name="мені норм", default=False)
-    class Meta:
-        verbose_name = "Опитуваннячко"
-        verbose_name_plural = "Опитування"
+        verbose_name = "пост адміна для Бібліотеки"
+        verbose_name_plural = "постИ адміна для бібліотеки"
 
 
 
@@ -134,10 +112,12 @@ class Survey(models.Model):
         return self.question
 
 
+
+
+
 class Answers(models.Model):
     survey = models.ForeignKey(Survey, related_name='answers', on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=50)
-
     def __str__(self):
         return self.choice_text
 

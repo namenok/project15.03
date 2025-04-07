@@ -3,20 +3,23 @@
 {% load static %}
 {% block content %}
 
-<h2>Твій щоденний пост</h2>
+
+<hr>
+<hr>
+
+{% if created %}
+    <h2>це твій Новий пост на сьогодні, СТВОРЮЙ :</h2>
+{% else %}
+    <h2>Ви РЕДАГУЄТЕ існуючий пост на сьогодні.</h2>
+{% endif %}
+<hr>
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Зберегти</button>
 </form>
-
-{% if created %}
-    <p>Новий пост на сьогодні створено.</p>
-{% else %}
-    <p>Ти вже писав сьогодні — можеш оновити.</p>
-{% endif %}
-
-
+<hr>
 
 <a href="{% url 'mainapp:post_history' %}">До історії</a>
 {% endblock %}

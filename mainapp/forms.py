@@ -1,32 +1,28 @@
 from django import forms
 
-from .models import Entry, Foto, Post, PersonalPost
+from .models import PersonalPost, Post
 
 
-class EntryForm(forms.ModelForm):
-    class Meta:
-        model = Entry
-        fields = ['text', ]
-        labels = {'text': 'Entry text'}
-        widgets = {'text': forms.Textarea(attrs={'cols': 80})}
-
-
-class FotoForm(forms.ModelForm):
-    class Meta:
-        model = Foto
-        fields = ['image']
-
+# class LibUserPostForm(forms.ModelForm):
+#     class Meta:
+#         model = LibUserPost
+#         exclude = ('published_date', 'user', )
+#         widgets = {
+#             'content': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Напиши свій пост на сьогодні...'})
+#         }
 
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        exclude = ("published_date", )
+        exclude = ('published_date',  )
+
+
 
 
 class PersonalPostForm(forms.ModelForm):
     class Meta:
         model = PersonalPost
-        exclude = ("published_date", 'user')
+        exclude = ('published_date', 'user', )
         widgets = {
             'content': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Напиши свій пост на сьогодні...'})
         }

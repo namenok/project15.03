@@ -85,4 +85,19 @@ table, th, td {
     <hr>
 {% endfor %}
 
+{% for post in user_personal_post  %}
+    <p>{{ post.title }}</p>
+    <p>{{ post.content }}</p>
+    <p>{{ post.poster }}</p>
+    <p>{{ post.published_date }}</p>
+
+    <hr>
+{% endfor %}
+
+
+{% for photo in gallery_photo %}
+<img src="{{ photo.image.url }}" alt="{{ photo.description }}" width="500" >
+
+{% endfor %}
+
 {% endblock %}

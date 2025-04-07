@@ -20,7 +20,10 @@ def upload(request):
     if request.method == "POST":
         form = PhotoGalleryForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            photo = form.save(commit=False)
+            photo.user = request.user  # 👈 Прив'язуємо до поточного користувача
+            photo.save()
             return(gallery(request))
-    form = PhotoGalleryForm()
+    else:
+        form = PhotoGalleryForm()
     return render(request,'gallery/upload.html', {'form': form})

@@ -50,20 +50,18 @@
 <hr>
 
 {% if selected_category %}
-    <h3>Пости в категорії: "{{ selected_category.name }}"</h3>
+    <p>Пости в категорії(написані користувачем): "{{selected_category.name}}"</p>
         {% if posts %}
-    <ul>
-      {% for post in posts %}
-        <h1 class="page-header"><a >{{post.title}} </a></h1>
-        <p> {{ post.content }} </p>
-        <li>{{ post.published_date }} </li>
-        <li>{{ post.user }} </li>
-        <img class="img-responsive" src="{{post.poster}}" alt="">
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>У цій категорії ще немає постів.</p>
-  {% endif %}
+            {% for post in posts %}
+            <p> class="page-header"><a >{{post.title}} </a></p>
+            <p> {{ post.content }} </p>
+            <li>{{ post.published_date }} </li>
+            <li>{{ post.user }} </li>
+            <li> <img class="img-responsive" src="{{ post.poster.url }}" alt=""></li>
+            {% endfor %}
+        {% else %}
+            <p>У цій категорії ще немає постів.</p>
+        {% endif %}
 {% else %}
   <p>Оберіть категорію, щоб побачити пости.</p>
 {% endif %}
@@ -73,11 +71,13 @@
 <hr>
 <hr>
 <hr>
-<!--{% include "mainapp/create.html" %}-->
-<p>СТВОРИТИ ЗАПИС В БІБЛІОТЕКУ , ЦІКАВОЇ ІНФОРМАЦІЇ ЯКУ ДЕСЬ ЗНАЙШЛА І ХОЧЕШ СОБІ ЗАФІКСУВАТИ </p>
+
+<p>СТВОРИТИ ЗАПИС В БІБЛІОТЕКУ, ЦІКАВОЇ ІНФОРМАЦІЇ ЯКУ ДЕСЬ ЗНАЙШЛА І ХОЧЕШ СОБІ ЗАФІКСУВАТИ </p>
 <form action="{% url 'mainapp:create' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Створити" class="btn btn-default">
 </form>
+
+
 {% endblock content %}

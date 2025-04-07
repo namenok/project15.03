@@ -3,37 +3,28 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from .forms import EntryForm, FotoForm, PostForm, PersonalPostForm
+from .forms import PersonalPostForm, PostForm
 from django.contrib.auth.decorators import login_required
-from .models import Category, Post, LibText, Teg, Survey, UserAnswer, Answers, PersonalPost
+from .models import Category, Teg, Survey, UserAnswer, Answers, PersonalPost, LibText,  Post
 from django.http import HttpResponse
 
-
-
-
-@login_required()
-def image_upload(request):
-    if request.method == 'POST':
-        form = FotoForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-            return redirect('mainapp:home')
-    else:
-        form = FotoForm()
-    return render(request, 'mainapp/image_uploads.html', {'form': form})
+from gallery.models import PhotoGallery
 
 
 @login_required()
-def success(request):
-    return HttpResponse('successfully uploaded')
+def post(request, id=None):
+    post = get_object_or_404(Post, title=id)
+    context = {"post": post, }
+    # context.update(get_categories(request))
+    return  render(request, 'mainapp/post.html', context=context)
 
 
 def index(request):
     return render(request, 'mainapp/index.html')
 
-
-
-
+@login_required()
+def success(request):
+    return HttpResponse('successfully uploaded')
 
 
 @login_required
@@ -48,7 +39,6 @@ def survey_view(request):
             if selected_answer:
                 # Отримуємо вибраний варіант
                 answer_choice = Answers.objects.get(id=selected_answer)
-
                 # Створюємо або оновлюємо відповідь для поточної дати
                 UserAnswer.objects.create(
                     user=request.user,
@@ -64,33 +54,17 @@ def survey_view(request):
 
 
 
-@login_required()
-def post(request, id=None):
-    post = get_object_or_404(Post, title=id)
-    context = {"post": post, }
-    # context.update(get_categories(request))
-    return  render(request, 'mainapp/post.html', context=context)
-
 
 @login_required()
 def calendar(request):
     user_answers = UserAnswer.objects.filter(user=request.user)
-    return render(request, 'mainapp/calendar.html', {'user_answers': user_answers})
+    user_personal_post = PersonalPost.objects.filter(user=request.user)
+    gallery_photo = PhotoGallery.objects.all()
+    return render(request, 'mainapp/calendar.html', {'user_answers': user_answers,
+                                                     'user_personal_post': user_personal_post,
+                                                     'gallery_photo': gallery_photo})
 
 
-@login_required()
-def new_entry(request):
-    if request.method != 'POST':
-        form = EntryForm()
-    else:
-        form = EntryForm(request.POST)
-        if form.is_valid():
-            new_entry = form.save(commit=False)
-            new_entry.owner = request.user
-            new_entry.save()
-            return redirect('mainapp:home')
-    context = {'form': form}
-    return render(request,'mainapp/new_entry.html', context=context)
 
 
 @login_required()
@@ -112,15 +86,19 @@ def home(request):
 @login_required()
 def create(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
         if form.is_valid():
             post = form.save(commit=False)
             post.published_date = timezone.now()
+            post.user = request.user
             post.save()
-            return library(request)
+            form.save_m2m()  # ← для ManyToMany поля "teg"(в тг
+            return redirect('mainapp:library_category_list')
     form = PostForm()
     context = {"form": form}
     return render(request, 'mainapp/create.html', context=context)
+
+
 
 
 @login_required()
@@ -153,19 +131,20 @@ def library_view(request, slug=None):
     })
 
 
+
+
 from django.urls import reverse
 @login_required
 def daily_post_view(request):
     today = timezone.now().date()
-    post, created = PersonalPost.objects.get_or_create(user=request.user, date=today)
-
+    post, created = PersonalPost.objects.get_or_create(user=request.user, date=today)#  Якщо пост уже існує, він буде завантажений для редагування.
     if request.method == 'POST':
-        form = PersonalPostForm(request.POST, instance=post)
+        form = PersonalPostForm(request.POST, instance=post)# inscatce Якщо це існуючий запис (щоденний пост для конкретної дати), форма завантажить дані з бази і дозволить редагувати пост.
         if form.is_valid():
             form.save()
             return redirect('mainapp:post_history')  # Або залишити на цій же сторінці
     else:
-            form = PersonalPostForm(instance=post)
+        form = PersonalPostForm()
     return render(request, 'mainapp/personal_post.html', {'form': form, 'created': created})
 
 
@@ -173,3 +152,4 @@ def daily_post_view(request):
 def post_history_view(request):
     posts = PersonalPost.objects.filter(user=request.user).order_by('-date')
     return render(request, 'mainapp/personal_post_history.html', {'posts': posts})
+

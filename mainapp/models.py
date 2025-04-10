@@ -41,19 +41,7 @@ class Teg(models.Model):
         verbose_name_plural = "Хештеги"
 
 
-# class LibUserPost(models.Model):
-#     title = models.CharField(max_length=30, verbose_name = "Заголовок посту")
-#     content = models.TextField(verbose_name = "Опис посту")
-#     published_date = models.DateTimeField(auto_now_add=True, verbose_name = "Дата та час посту")
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = "Автор")
-#     date = models.DateField()
-#     to_category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Мій текст належить до Категорії", related_name='posts')
-#     def __str__(self):
-#         return f"{self.user.username} - {self.date}"
-#
-#     class Meta:
-#         verbose_name = "постЮзерВБібліотеку"
-#         verbose_name_plural = "постиЮзерВБібліотеку Пости"
+
 
 class Post(models.Model):
     title = models.CharField(max_length=30, verbose_name = "Заголовок посту")
@@ -68,8 +56,8 @@ class Post(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "ПостБложний"
-        verbose_name_plural = "ПостиБложні"
+        verbose_name = "запис юзера в бібл"
+        verbose_name_plural = "записи юзера в бібл"
 
 
 class PersonalPost(models.Model):
@@ -100,8 +88,8 @@ class LibText(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "пост адміна для Бібліотеки"
-        verbose_name_plural = "постИ адміна для бібліотеки"
+        verbose_name = "пост зАдмінки для Бібліотеки"
+        verbose_name_plural = "постИ з адмінки для бібліотеки"
 
 
 

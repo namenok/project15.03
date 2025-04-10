@@ -1,4 +1,6 @@
 from dbm.ndbm import library
+
+from django.contrib import messages
 from django.shortcuts import render
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
@@ -69,13 +71,14 @@ def calendar(request):
 
 @login_required()
 def search(request):
-    query = request.GET.get('query')
-
+    query = request.GET.get('query', '')
     post_blog_list = Post.objects.filter(Q(content__icontains=query) | Q(title__icontains=query)).order_by("-published_date")
-    my_posts_list = LibText.objects.filter(content__icontains=query)
+    my_posts_list = LibText.objects.filter(content__icontains=query )
     context = {'post_blog_list': post_blog_list,
-               'my_posts_list': my_posts_list}
+               'my_posts_list': my_posts_list,
+               'query': query}
     return render(request, 'mainapp/library.html', context=context)
+
 
 
 @login_required()
@@ -137,15 +140,27 @@ from django.urls import reverse
 @login_required
 def daily_post_view(request):
     today = timezone.now().date()
-    post, created = PersonalPost.objects.get_or_create(user=request.user, date=today)#  Якщо пост уже існує, він буде завантажений для редагування.
+    post = PersonalPost.objects.filter(user=request.user, date=today).first()
     if request.method == 'POST':
-        form = PersonalPostForm(request.POST, instance=post)# inscatce Якщо це існуючий запис (щоденний пост для конкретної дати), форма завантажить дані з бази і дозволить редагувати пост.
+        # Якщо пост існує, передаємо його в форму, інакше створюємо новий пост
+        if post:
+            form = PersonalPostForm(request.POST, request.FILES, instance=post)
+        else:
+            form = PersonalPostForm(request.POST, request.FILES)
+
         if form.is_valid():
-            form.save()
+            # Якщо форма валідна, зберігаємо або створюємо новий запис
+            post = form.save(commit=False)
+            if not post.user_id:
+                post.user = request.user  # Призначаємо поточного користувача
+
+            post.save()
+            messages.success(request, "Запис успішно збережено!")
             return redirect('mainapp:post_history')  # Або залишити на цій же сторінці
     else:
-        form = PersonalPostForm()
-    return render(request, 'mainapp/personal_post.html', {'form': form, 'created': created})
+        # Якщо це не POST-запит, то просто відображаємо форму без створення нових постів
+        form = PersonalPostForm(instance=post) if post else PersonalPostForm()
+    return render(request, 'mainapp/personal_post.html', {'form': form})
 
 
 @login_required

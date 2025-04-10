@@ -7,19 +7,28 @@
 <hr>
 <hr>
 
-{% if created %}
-    <h2>це твій Новий пост на сьогодні, СТВОРЮЙ :</h2>
-{% else %}
-    <h2>Ви РЕДАГУЄТЕ існуючий пост на сьогодні.</h2>
-{% endif %}
+<h2>
+    {% if form.instance.pk %}
+        Ви РЕДАГУЄТЕ існуючий пост на сьогодні.
+    {% else %}
+        Це твій Новий пост на сьогодні, СТВОРЮЙ :
+    {% endif %}
+</h2>
 <hr>
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Зберегти</button>
 </form>
 <hr>
-
+<hr>
+{% if messages %}
+  {% for message in messages %}
+    <div>{{ message }}</div>
+  {% endfor %}
+{% endif %}
+<hr>
+<hr>
 <a href="{% url 'mainapp:post_history' %}">До історії</a>
 {% endblock %}

@@ -57,7 +57,7 @@
             <p> {{ post.content }} </p>
             <li>{{ post.published_date }} </li>
             <li>{{ post.user }} </li>
-            <li> <img class="img-responsive" src="{{ post.poster.url }}" alt=""></li>
+            <li><img class="img-responsive" src="{{ post.poster.url }}" alt=""></li>
             {% endfor %}
         {% else %}
             <p>У цій категорії ще немає постів.</p>
@@ -69,6 +69,23 @@
 <hr>
 <hr>
 <hr>
+
+<h2>Результати пошуку по записам користувача :</h2>
+{% for post in post_blog_list %}
+    <p>{{ post.title }}</p>
+    <p>{{ post.content }}</p>
+{% empty %}
+    <p>Нічого не знайдено !</p>
+{% endfor %}
+
+<h2>Результати пошуку по бібліотеці(з адмінпанелі):</h2>
+{% for lib in my_posts_list %}
+    <p>{{ post.title }}</p>
+    <p>{{ lib.content }}</p>
+{% empty %}
+    <p>Нічого не знайдено !</p>
+{% endfor %}
+
 <hr>
 <hr>
 

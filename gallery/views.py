@@ -10,7 +10,7 @@ from .forms import PhotoGalleryForm
 
 @login_required()
 def gallery(request):
-    photos = PhotoGallery.objects.all()
+    photos = PhotoGallery.objects.filter(user=request.user)
     return render(request,'gallery/index.html', {'photos': photos})
 
 

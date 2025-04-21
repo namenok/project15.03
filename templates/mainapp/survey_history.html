@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}<h2>Моя історія відповідей</h2>
+
+
+{% if history %}
+    {% for date, answers in history.items %}
+        <h3>{{ date }}</h3>
+        <ul>
+            {% for answer in answers %}
+                <li><strong>{{ answer.survey.question }}</strong>: {{ answer.answer_choice.choice_text }}</li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+{% else %}
+    <p>Ви ще не проходили жодне опитування.</p>
+{% endif %}
+{% endblock %}

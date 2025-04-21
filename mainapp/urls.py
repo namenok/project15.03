@@ -10,9 +10,11 @@ urlpatterns = [
     path('', views.index, name='index'),  # /first
     path('home/', views.home, name='home'),
     path('checkme/', views.survey_view, name='checkme'),
+    path('survey/history/', views.survey_history, name='survey_history'),
     # path('successful/', views.survey_thanks, name='survey_thanks'),
 
-    path('calendar/', views.calendar, name='calendar'),
+    path('calendar/', views.calendar_combined_view, name='calendar_combined'),
+
     path('post/<str:id>', views.post, name='post'),
     # path('new_entry/', views.new_entry, name='new_entry'),
 

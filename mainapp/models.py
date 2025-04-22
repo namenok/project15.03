@@ -78,7 +78,6 @@ class PersonalPost(models.Model):
 
 
 
-
 class LibText(models.Model):
     title = models.CharField(max_length=30, verbose_name="Заголовок мого поля з текстом")
     content = models.TextField(verbose_name="Зміст")
@@ -98,8 +97,6 @@ class Survey(models.Model):
 
     def __str__(self):
         return self.question
-
-
 
 
 

@@ -41,6 +41,9 @@
 <hr>
 <p>🟩 – є записи на цей день. Натисни на дату, щоб переглянути.</p>
 <hr>
+<form method="get" action="{% url 'mainapp:monthly_analytics' %}">
+  <button type="submit">Отримати аналітику за місяць</button>
+</form>
 <hr>
 <h2>Дані за {{ selected_date }}</h2>
 

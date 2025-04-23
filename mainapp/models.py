@@ -101,6 +101,12 @@ class Survey(models.Model):
 
 
 class Answers(models.Model):
+    CHOICES = (
+        ('good', 'Добре'),
+        ('neutral', 'Середнє'),
+        ('bad', 'Погано')
+    )
+    marker = models.CharField(max_length=10, choices=CHOICES)
     survey = models.ForeignKey(Survey, related_name='answers', on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=50)
     def __str__(self):

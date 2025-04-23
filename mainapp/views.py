@@ -80,6 +80,61 @@ def survey_history(request):
     return render(request, 'mainapp/survey_history.html', {'history': history})
 
 
+def get_monthly_analytics(user):
+    now = timezone.now()
+    start_of_month = now.replace(day=1)
+    end_of_month = now
+
+    answers = UserAnswer.objects.filter(
+        user=user,
+        answered_at__date__gte=start_of_month,
+        answered_at__date__lte=end_of_month
+    ).select_related('answer_choice') # Витягни всі записи, де дата відповіді більша або дорівнює першому числу місяця І менша або дорівнює сьогоднішній даті
+
+    counts = {'good': 0, 'neutral': 0, 'bad': 0}
+
+    for answer in answers:
+        marker = answer.answer_choice.marker # кожної відповіді користувача ми отримуємо маркер
+        if marker in counts: # перевіряємо, чи цей маркер є в словнику
+            counts[marker] += 1
+
+    max_value = max(counts.values())
+
+    if list(counts.values()).count(max_value) > 1: # кількість повторів максимального значення.
+        return "немає вектору в конкретну сторону , в цьому місяці ти ні там ні там"
+    elif counts['good'] == max_value:
+        return "у цьому місяці динаміка супер крута"
+    elif counts['neutral'] == max_value:
+        return "цього місяця тримаємось середнього"
+    else:
+        return "в цьому місця усе погано"
+
+
+def monthly_analytics_view(request):
+    message = get_monthly_analytics(request.user)
+    return render(request, 'mainapp/monthly_analytics.html', {'message': message})
+
+
+def get_daily_data(user, selected_date):
+    data_dates = set(
+        PhotoGallery.objects.filter(user=user).values_list("date", flat=True)
+    ) | set(
+        PersonalPost.objects.filter(user=user).values_list("date", flat=True)
+    ) | set(
+        UserAnswer.objects.filter(user=user).values_list("date", flat=True)
+    )
+
+    gallery_items = PhotoGallery.objects.filter(user=user, date=selected_date)
+    personal_post = PersonalPost.objects.filter(user=user, date=selected_date).first()
+    survey_answers = UserAnswer.objects.filter(user=user, date=selected_date).select_related('survey', 'answer_choice')
+
+    return {
+        "data_dates": data_dates,
+        "gallery_items": gallery_items,
+        "personal_post": personal_post,
+        "survey_answers": survey_answers,
+    }
+
 
 @login_required
 def calendar_combined_view(request):
@@ -88,7 +143,7 @@ def calendar_combined_view(request):
     month = int(request.GET.get('month', today.month))
     selected_date = request.GET.get('date')
 
-    if 'month' in request.GET:# Перемикання місяця
+    if 'month' in request.GET:# Перемикання місяця назад вперед
         month = int(request.GET.get('month'))
         if month < 1:
             month = 12
@@ -116,17 +171,7 @@ def calendar_combined_view(request):
     weeks = [all_days[i:i + 7] for i in range(0, len(all_days), 7)]
 
     user = request.user
-    data_dates = set(
-        PhotoGallery.objects.filter(user=user).values_list("date", flat=True)
-    ) | set(
-        PersonalPost.objects.filter(user=user).values_list("date", flat=True)
-    ) | set(
-        UserAnswer.objects.filter(user=user).values_list("date", flat=True)
-    )
-
-    gallery_items = PhotoGallery.objects.filter(user=user, date=selected_date)
-    personal_post = PersonalPost.objects.filter(user=user, date=selected_date).first()
-    survey_answers = UserAnswer.objects.filter(user=user, date=selected_date).select_related('survey', 'answer_choice')
+    daily_data = get_daily_data(user, selected_date)
 
     context = {
         "year": year,
@@ -134,15 +179,14 @@ def calendar_combined_view(request):
         "calendar_days": calendar_days,
         "today": today,
         "selected_date": selected_date,
-        "data_dates": data_dates,
-        "gallery_items": gallery_items,
-        "personal_post": personal_post,
-        "survey_answers": survey_answers,
         "weekdays": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"],
         "start_blank_days": range(start_blank_days),
         "calendar_weeks": weeks,
+        **daily_data,
     }
     return render(request, "mainapp/calendar.html", context)
+
+
 
 
 @login_required()

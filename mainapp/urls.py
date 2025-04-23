@@ -32,5 +32,7 @@ urlpatterns = [
     path('write/', views.daily_post_view, name='daily_post'),  
     path('history/', views.post_history_view, name='post_history'),
 
+    path('analytics/', views.monthly_analytics_view, name='monthly_analytics'),
+
 
 ]

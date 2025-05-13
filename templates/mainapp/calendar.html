@@ -10,6 +10,7 @@
     &nbsp;&nbsp;&nbsp;
     <a href="?year={{ year }}&month={{ month|add:1 }}" style="font-size: 1.5rem;">Наступний місяць &#8594;</a>
 </div>
+
 <table style="width: 100%; font-size: 1.3rem; text-align: center; border-collapse: collapse;">
     <tr>
         {% for day in weekdays %}
@@ -37,7 +38,6 @@
     {% endfor %}
 </table>
 
-
 <hr>
 <p>🟩 – є записи на цей день. Натисни на дату, щоб переглянути.</p>
 <hr>
@@ -45,18 +45,39 @@
   <button type="submit">Отримати аналітику за місяць</button>
 </form>
 <hr>
+
 <h2>Дані за {{ selected_date }}</h2>
 
 <h3>📸 Фото</h3>
 {% if gallery_items %}
-    {% for item in gallery_items %}
-        <div>
-            <img src="{{ item.image.url }}" width="150"><br>
-            {{ item.description }}
-        </div>
-    {% endfor %}
+    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+        {% for item in gallery_items %}
+            <div style="flex: 1 0 30%; text-align: center;">
+                <img src="{{ item.image.url }}" width="100%" style="max-width: 200px; border: 1px solid #ccc; border-radius: 8px;"><br>
+                <small>{{ item.description }}</small>
+            </div>
+        {% endfor %}
+    </div>
 {% else %}
     <p>Немає фотографій за цю дату.</p>
+{% endif %}
+
+<h3>🎥 Відео</h3>
+{% if video_items %}
+    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+        {% for item in video_items %}
+            <div style="flex: 1 0 30%; text-align: center;">
+                <video width="100%" style="max-width: 250px;" controls>
+                    <source src="{{ item.video.url }}" type="video/mp4">
+                    Ваш браузер не підтримує відео.
+                </video>
+                <br>
+                <small>{{ item.description }}</small>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Немає відео за цю дату.</p>
 {% endif %}
 
 <h3>📝 Персональний пост</h3>
@@ -64,7 +85,6 @@
     <div>
         <h4>{{ personal_post.title }}</h4>
         <img src="{{ personal_post.poster }}" width="150"><br>
-
         <p>{{ personal_post.content }}</p>
     </div>
 {% else %}
@@ -81,7 +101,5 @@
 {% else %}
     <p>Немає відповідей за цю дату.</p>
 {% endif %}
-
-
 
 {% endblock %}

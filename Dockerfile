@@ -1,15 +1,24 @@
-# Офіційний Python-образ
 FROM python:3.12.3-slim
 
-# Робоча директорія в контейнері
 WORKDIR /app
 
-# Копіюємо requirements
+# Системні залежності (для moviepy, ffmpeg тощо)
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    libsm6 \
+    libxext6 \
+    libgl1 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Оновлення pip і встановлення бібліотек
+RUN pip install --upgrade pip setuptools wheel
+
+# Копіюємо requirements.txt і встановлюємо залежності
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копіюємо весь код
+# Копіюємо код проєкту
 COPY . .
 
-# Команда для запуску Django-сервера
+# Запускаємо сервер
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

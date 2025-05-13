@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Category, Teg, Survey, UserAnswer, Answers, PersonalPost, LibText, Post
 from django.http import HttpResponse
 from django.urls import reverse
-from gallery.models import PhotoGallery
+from gallery.models import PhotoGallery, GalleryDay
 import calendar
 from datetime import date, timedelta
 from django.utils import timezone
@@ -116,24 +116,36 @@ def monthly_analytics_view(request):
 
 
 def get_daily_data(user, selected_date):
+    # Дати, коли щось є в будь-якій з моделей
     data_dates = set(
-        PhotoGallery.objects.filter(user=user).values_list("date", flat=True)
+        GalleryDay.objects.filter(user=user).values_list("date", flat=True)
     ) | set(
         PersonalPost.objects.filter(user=user).values_list("date", flat=True)
     ) | set(
         UserAnswer.objects.filter(user=user).values_list("date", flat=True)
     )
 
-    gallery_items = PhotoGallery.objects.filter(user=user, date=selected_date)
+    # Галерея — фото і відео через GalleryDay
+    gallery_day = GalleryDay.objects.filter(user=user, date=selected_date).first()
+    if gallery_day:
+        gallery_items = gallery_day.photos.all()  # пов’язано через related_name='photos'
+        video_items = gallery_day.videos.all()    # пов’язано через related_name='videos'
+    else:
+        gallery_items = []
+        video_items = []
+
+    # Пости й опитування
     personal_post = PersonalPost.objects.filter(user=user, date=selected_date).first()
     survey_answers = UserAnswer.objects.filter(user=user, date=selected_date).select_related('survey', 'answer_choice')
 
     return {
         "data_dates": data_dates,
         "gallery_items": gallery_items,
+        "video_items": video_items,
         "personal_post": personal_post,
         "survey_answers": survey_answers,
     }
+
 
 
 @login_required
@@ -142,7 +154,6 @@ def calendar_combined_view(request):
     year = int(request.GET.get('year', today.year))
     month = int(request.GET.get('month', today.month))
     selected_date = request.GET.get('date')
-
     if 'month' in request.GET:# Перемикання місяця назад вперед
         month = int(request.GET.get('month'))
         if month < 1:
@@ -151,11 +162,9 @@ def calendar_combined_view(request):
         elif month > 12:
             month = 1
             year += 1
-
     start_day = date(year, month, 1)
     start_weekday = start_day.weekday()
     start_blank_days = start_weekday
-
     if selected_date:# Формування тижнів
         try:
             selected_date = parser.parse(selected_date).date()
@@ -163,16 +172,12 @@ def calendar_combined_view(request):
             selected_date = today
     else:
         selected_date = today
-
     _, days_in_month = calendar.monthrange(year, month)
     calendar_days = [start_day + timedelta(days=i) for i in range(days_in_month)]
-
     all_days = [None] * start_blank_days + calendar_days
     weeks = [all_days[i:i + 7] for i in range(0, len(all_days), 7)]
-
     user = request.user
     daily_data = get_daily_data(user, selected_date)
-
     context = {
         "year": year,
         "month": month,

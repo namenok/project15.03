@@ -66,7 +66,7 @@ def upload(request):
 
             if not form.errors:
                 messages.success(request, "Файли успішно завантажено.")
-                return redirect('gallery')
+                return redirect('gallery:gallery')
     else:
         form = MediaUploadForm()
     return render(request, 'gallery/upload.html', {'form': form})

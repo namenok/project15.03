@@ -1,3 +1,6 @@
+import mimetypes
+import tempfile
+
 from django.core.exceptions import ValidationError
 
 
@@ -42,7 +45,7 @@ class MediaUploadForm(forms.Form):
         help_text="Завантажте до 2 відео"
     )
 
-# для валідації на рівні моделей
+
 def validate_image_size(image):
     max_size = 10 * 1024 * 1024  # 10MB
     if image.size > max_size:
@@ -58,12 +61,8 @@ ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/quicktime']
 ALLOWED_VIDEO_EXTENSIONS = ['.mp4', '.mov']
 
 def validate_video_duration(video):
-    import mimetypes
-
-    # Визначаємо content_type безпосередньо, якщо відсутній
     content_type = getattr(video, 'content_type', None)
     if content_type is None:
-        # Визначаємо тип через mimetypes (наприклад, в admin)
         content_type, _ = mimetypes.guess_type(video.name)
 
     if content_type not in ALLOWED_VIDEO_TYPES:
@@ -73,16 +72,16 @@ def validate_video_duration(video):
     if ext not in ALLOWED_VIDEO_EXTENSIONS:
         raise ValidationError("Неправильне розширення відеофайлу. Має бути .mp4 або .mov.")
 
+    tmp_file_path = None  # 👉 обов’язково ініціалізуємо
     try:
-        if hasattr(video, 'read'):
-            # це або UploadedFile, або вже відкритий файл
-            video_file = io.BytesIO(video.read())
-        else:
-            # це FieldFile, відкриваємо заново
-            with open(video.path, 'rb') as f:
-                video_file = io.BytesIO(f.read())
+        # Створюємо тимчасовий файл
+        with tempfile.NamedTemporaryFile(delete=False, suffix=ext) as tmp_file:
+            for chunk in video.chunks():
+                tmp_file.write(chunk)
+            tmp_file_path = tmp_file.name
 
-        clip = VideoFileClip(video_file)
+        clip = VideoFileClip(tmp_file_path)
+
         if clip.duration > 30:
             raise ValidationError("Відео повинне бути до 30 секунд.")
     except Exception as e:
@@ -90,6 +89,8 @@ def validate_video_duration(video):
     finally:
         if 'clip' in locals():
             clip.close()
+        if tmp_file_path and os.path.exists(tmp_file_path):
+            os.remove(tmp_file_path)
         if hasattr(video, 'seek'):
             video.seek(0)
 

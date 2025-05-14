@@ -22,7 +22,11 @@
             {% for day in week %}
                 {% if day %}
                     {% if day == today %}
-                        <td style="background-color: #ffd;"><strong>{{ day.day }}</strong></td>
+                        <td style="background-color: #ffd;">
+                            <a href="?year={{ year }}&month={{ month }}&date={{ day }}">
+                                <strong>{{ day.day }}</strong>
+                            </a>
+                        </td>
                     {% elif day in data_dates %}
                         <td style="background-color: #c8e6c9;">
                             <a href="?year={{ year }}&month={{ month }}&date={{ day }}">{{ day.day }}</a>

@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
 {% block content %}<header>
-        <h1>Ваша Галерея</h1>
-        <a href="{% url 'gallery:uploads' %}">Завантажити нові файли</a>
+        <h1>{% trans "Ваша Галерея" %}</h1>
+        <a href="{% url 'gallery:uploads' %}">{% trans "Завантажити нові файли" %}</a>
     </header>
 
     <div class="gallery-container">
@@ -17,7 +17,7 @@
                         {% if item.video %}
                             <video controls class="gallery-video">
                                 <source src="{{ item.video.url }}" type="video/mp4">
-                                Ваш браузер не підтримує відео.
+                                <p>{% trans "Ваш браузер не підтримує відео." %}</p>
                             </video>
                         {% endif %}
                         {% if item.description %}
@@ -27,11 +27,9 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p>Ваша галерея пуста. Завантажте фотографії чи відео!</p>
+            <p>{% trans "Ваша галерея пуста. Завантажте фотографії чи відео!" %}</p>
         {% endif %}
     </div>
 
-    <footer>
-        <p>© 2025 Ваша галерея</p>
-    </footer>
+
 {% endblock %}

@@ -31,7 +31,7 @@ class PhotoGallery(models.Model):
 
     def clean(self):
         if self.gallery_day.photos.count() >= 5:
-            raise ValidationError("На день можна додати лише 5 фото.")
+            raise ValidationError(_("На день можна додати лише 5 фото."))
 
 
 class VideoGallery(models.Model):
@@ -40,5 +40,5 @@ class VideoGallery(models.Model):
     description = models.CharField(max_length=100, blank=True)
     def clean(self):
         if self.gallery_day.videos.count() >= 2:
-            raise ValidationError("На день можна додати лише 2 відео.")
+            raise ValidationError(_("На день можна додати лише 2 відео."))
 

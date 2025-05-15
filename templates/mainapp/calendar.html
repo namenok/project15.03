@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% block content %}
 
 {% load static %}
 
-<h2 style="text-align:center;">Календар {{ month }}/{{ year }}</h2>
+<h2 style="text-align:center;">{% trans "Календар" %} {{ month }}/{{ year }}</h2>
 <div style="text-align:center;">
-    <a href="?year={{ year }}&month={{ month|add:-1 }}" style="font-size: 1.5rem;">&#8592; Попередній місяць</a>
+    <a href="?year={{ year }}&month={{ month|add:-1 }}" style="font-size: 1.5rem;">&#8592;{% trans "Попередній місяць" %}</a>
     &nbsp;&nbsp;&nbsp;
-    <a href="?year={{ year }}&month={{ month|add:1 }}" style="font-size: 1.5rem;">Наступний місяць &#8594;</a>
+    <a href="?year={{ year }}&month={{ month|add:1 }}" style="font-size: 1.5rem;">{% trans "Наступний місяць" %} &#8594;</a>
 </div>
 
 <table style="width: 100%; font-size: 1.3rem; text-align: center; border-collapse: collapse;">
@@ -43,16 +43,16 @@
 </table>
 
 <hr>
-<p>🟩 – є записи на цей день. Натисни на дату, щоб переглянути.</p>
+<p>{% trans "🟩 – є записи на цей день. Натисни на дату, щоб переглянути." %}</p>
 <hr>
 <form method="get" action="{% url 'mainapp:monthly_analytics' %}">
-  <button type="submit">Отримати аналітику за місяць</button>
+  <button type="submit">{% trans "Отримати аналітику за місяць" %}</button>
 </form>
 <hr>
 
-<h2>Дані за {{ selected_date }}</h2>
+<h2>{% trans "Дані за {{ selected_date }}" %}</h2>
 
-<h3>📸 Фото</h3>
+<h3>{% trans "📸 Фото" %}</h3>
 {% if gallery_items %}
     <div style="display: flex; flex-wrap: wrap; gap: 15px;">
         {% for item in gallery_items %}
@@ -63,17 +63,17 @@
         {% endfor %}
     </div>
 {% else %}
-    <p>Немає фотографій за цю дату.</p>
+    <p>{% trans "Немає фотографій за цю дату." %}</p>
 {% endif %}
 
-<h3>🎥 Відео</h3>
+<h3>{% trans "🎥 Відео" %}</h3>
 {% if video_items %}
     <div style="display: flex; flex-wrap: wrap; gap: 15px;">
         {% for item in video_items %}
             <div style="flex: 1 0 30%; text-align: center;">
                 <video width="100%" style="max-width: 250px;" controls>
                     <source src="{{ item.video.url }}" type="video/mp4">
-                    Ваш браузер не підтримує відео.
+                    <p>{% trans "Ваш браузер не підтримує відео." %}</p>
                 </video>
                 <br>
                 <small>{{ item.description }}</small>
@@ -81,10 +81,10 @@
         {% endfor %}
     </div>
 {% else %}
-    <p>Немає відео за цю дату.</p>
+    <p>{% trans "Немає відео за цю дату." %}</p>
 {% endif %}
 
-<h3>📝 Персональний пост</h3>
+<h3>{% trans "📝 Персональний пост" %}</h3>
 {% if personal_post %}
     <div>
         <h4>{{ personal_post.title }}</h4>
@@ -92,10 +92,10 @@
         <p>{{ personal_post.content }}</p>
     </div>
 {% else %}
-    <p>Посту за цю дату немає.</p>
+    <p>{% trans "Посту за цю дату немає." %}</p>
 {% endif %}
 
-<h3>📋 Відповіді на опитування</h3>
+<h3>{% trans "📋 Відповіді на опитування" %}</h3>
 {% if survey_answers %}
     <ul>
         {% for ans in survey_answers %}
@@ -103,7 +103,7 @@
         {% endfor %}
     </ul>
 {% else %}
-    <p>Немає відповідей за цю дату.</p>
+    <p>{% trans "Немає відповідей за цю дату." %}</p>
 {% endif %}
 
 {% endblock %}

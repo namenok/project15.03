@@ -1,25 +1,20 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load i18n %}
 <link href="{% static 'mainapp/for_lib.css'%}" rel="stylesheet">
 
 {% block content %}
 
 <hr>
     <h1 class="page-header"><a >{{post.title}} </a></h1>
-    <p><a>автор: {{ post.user }}</a>
+    <p><a>{% trans "автор:" %} {{ post.user }}</a>
         {% for teg in tegs %}
             <p><a> {{ teg.name }}</a>
         {% endfor %}
     </p>
-    <p>дата поступ: {{ post.published_date }}</p>
-    <hr>
-    <img class="img-responsive" src="{{post.poster}}" alt="">
+    <p>{% trans "дата поступ:" %} {{ post.published_date }}</p>
+
     <hr>
     <p> {{ post.content }} </p>
-
-
-<p>тут сторінка просто посилання на сторінку марштук пост </p>
-
 
 {% endblock content %}

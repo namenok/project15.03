@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 
 
 {% block content %}
 {% load static %}
 
 
-    <title>Аналітика за місяць</title>
+    <title>{% trans "Аналітика за місяць" %}</title>
 
 
-    <h1>Твоя аналітика за цей місяць</h1>
+    <h1>{% trans "Твоя аналітика за цей місяць" %}</h1>
     <p>{{ message }}</p>
 
 

@@ -1,18 +1,16 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
 {% block content %}
 
-<h2>Історія твоїх постів бібліотечних</h2>
+<h2>{% trans "Історія твоїх постів бібліотечних" %}</h2>
 <ul>
     {% for post in posts %}
         <p>{{ post.title }}</p>
-
-        <img src="{{ post.poster }}" style="max-width: 300px" >
         <p>{{ post.content }}</p>
         <p>{{ post.date }}</p>
     {% empty %}
-        <li>Поки що немає постів.</li>
+        <li>{% trans "Поки що немає постів." %}</li>
     {% endfor %}
 </ul>
 

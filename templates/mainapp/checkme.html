@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
 {% block content %}
 
 <link href="{% static 'mainapp/new_check.css'%}" rel="stylesheet">
 
-<p><a href="{% url 'mainapp:survey_history' %}">Переглянути свою історію відповідей на опрос</a></p>
+<p><a href="{% url 'mainapp:survey_history' %}">{% trans "Переглянути свою історію відповідей на питування" %}</a></p>
 
-<h1>Перевірити свій стан!</h1>
-<p style="background-color:tomato;">Опитування</p>
+<h1>{% trans "Перевірити свій стан!" %}</h1>
+<p style="background-color:tomato;">{% trans "Опитування" %}</p>
 
 
 {% if error %}
@@ -31,7 +31,7 @@
         </div>
     {% endfor %}
 
-    <button type="submit">Зберегти відповіді</button>
+    <button type="submit">{% trans "Зберегти відповіді" %}</button>
 </form>
 
 

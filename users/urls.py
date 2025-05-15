@@ -2,7 +2,8 @@
 from django.urls import path
 
 from . import views
-from .views import MyLoginView, UserLogoutView, RegisterView, ResetPasswordView, ChangePasswordView
+from .views import MyLoginView, UserLogoutView, RegisterView, ResetPasswordView, ChangePasswordView, \
+    CustomPasswordResetConfirmView
 from django.contrib.auth.views import LogoutView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.contrib.auth import views as auth_views
 
@@ -24,9 +25,11 @@ urlpatterns = [
          name='password_reset_sent'),
 
     # Ввід нового пароля з посилання в email
-    path('password-reset-confirm/<uidb64>/<token>/',
-         auth_views.PasswordResetConfirmView.as_view(template_name='registration/password_reset_confirm.html'),
-         name='password_reset_confirm'),
+    path(
+        'password-reset-confirm/<uidb64>/<token>/',
+        CustomPasswordResetConfirmView.as_view(),
+        name='password_reset_confirm'
+    ),
 
     # Після підтвердження нового пароля
     path('password-reset-complete/',

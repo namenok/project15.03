@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
-
+from django.utils.translation import gettext as _
 
 from .models import PhotoGallery, VideoGallery, GalleryDay
 from .forms import  validate_image_size, MediaUploadForm, validate_video_size, validate_video_duration
@@ -52,7 +52,7 @@ def upload(request):
             available_video_slots = 2 - existing_videos
 
             if available_video_slots <= 0:
-                form.add_error('videos', "На сьогодні вже додано 2 відео.")
+                form.add_error('videos', _("На сьогодні вже додано 2 відео."))
             else:
                 # Обмежуємо кількість відео для завантаження
                 videos = videos[:available_video_slots]
@@ -65,7 +65,7 @@ def upload(request):
                         form.add_error('videos', e)
 
             if not form.errors:
-                messages.success(request, "Файли успішно завантажено.")
+                messages.success(request, _("Файли успішно завантажено."))
                 return redirect('gallery:gallery')
     else:
         form = MediaUploadForm()

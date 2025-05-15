@@ -1,16 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 {% block content %}
     <header>
-        <h1>Завантажити файли</h1>
-        <a href="{% url 'gallery:gallery' %}">Переглянути галерею</a>
+        <h1>{% trans "Завантажити файли" %}</h1>
+        <a href="{% url 'gallery:gallery' %}">{% trans "Переглянути галерею" %}</a>
     </header>
 
     <div class="upload-container">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                <label for="images">Фото (до 5 файлів):</label>
+                <label for="images">{% trans "Фото (до 5 файлів)" %}</label>
                 {{ form.images }}
                 {% if form.images.errors %}
                     <div class="error-list">
@@ -23,7 +24,7 @@
             </div>
 
             <div class="form-group">
-                <label for="videos">Відео (до 2 файлів):</label>
+                <label for="videos">{% trans "Відео (до 2 файлів):" %}</label>
                 {{ form.videos }}
                 {% if form.videos.errors %}
                     <div class="error-list">
@@ -35,7 +36,7 @@
                 <small>{{ form.videos.help_text }}</small>
             </div>
 
-            <button type="submit">Завантажити</button>
+            <button type="submit">{% trans "Завантажити" %}</button>
         </form>
 
         {% if form.errors %}
@@ -63,7 +64,5 @@
         {% endif %}
     </div>
 
-    <footer>
-        <p>© 2025 Завантаження файлів</p>
-    </footer>
+
 {% endblock %}

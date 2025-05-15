@@ -1,3 +1,4 @@
+{% load i18n %}
 <style>
   .nav-item.active > .nav-link {
     background-color: #555;
@@ -14,38 +15,38 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
-      {% if request.user.is_authenticated %}
-        <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'mainapp:home' %}">мійКабінет-домашня</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'calendar_combined' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'mainapp:calendar_combined' %}">Календар</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'library_category_list' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'mainapp:library_category_list' %}">Бібліотека</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'checkme' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'mainapp:checkme' %}">ПеревірСебе</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'gallery:gallery' %}">Галерея</a>
-        </li>
-        <li class="nav-item {% if request.resolver_match.url_name == 'daily_post' %}active{% endif %}">
-          <a class="nav-link" href="{% url 'mainapp:daily_post' %}">ЩоденніДумкиЗаписати</a>
-        </li>
-      {% endif %}
-    </ul>
+  <ul class="navbar-nav mr-auto">
+    {% if request.user.is_authenticated %}
+      <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'mainapp:home' %}">{% trans "мійКабінет-домашня" %}</a>
+      </li>
+      <li class="nav-item {% if request.resolver_match.url_name == 'calendar_combined' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'mainapp:calendar_combined' %}">{% trans "Календар" %}</a>
+      </li>
+      <li class="nav-item {% if request.resolver_match.url_name == 'library_category_list' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'mainapp:library_category_list' %}">{% trans "Бібліотека" %}</a>
+      </li>
+      <li class="nav-item {% if request.resolver_match.url_name == 'checkme' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'mainapp:checkme' %}">{% trans "ПеревірСебе" %}</a>
+      </li>
+      <li class="nav-item {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'gallery:gallery' %}">{% trans "Галерея" %}</a>
+      </li>
+      <li class="nav-item {% if request.resolver_match.url_name == 'daily_post' %}active{% endif %}">
+        <a class="nav-link" href="{% url 'mainapp:daily_post' %}">{% trans "ЩоденніДумкиЗаписати" %}</a>
+      </li>
+    {% endif %}
+  </ul>
 
-    <nav class="nav">
-      {% if request.user.is_authenticated %}
-        <a href="#" class="nav-item nav-link">Hi {{ request.user|title }}</a>
-        <a href="{% url 'users:users_profile' %}" class="nav-item nav-link">Profile</a>
-        <a href="{% url 'users:logout' %}" class="btn btn-outline">Logout</a>
-      {% else %}
-        <a href="{% url 'users:login' %}" class="btn btn-outline">Login</a>
-        <a href="{% url 'users:register' %}" class="btn btn-outline">Sign up</a>
-      {% endif %}
-    </nav>
-  </div>
+  <nav class="nav">
+    {% if request.user.is_authenticated %}
+      <a href="#" class="nav-item nav-link">{% trans "Hi" %} {{ request.user|title }}</a>
+      <a href="{% url 'users:users_profile' %}" class="nav-item nav-link">{% trans "Профіль" %}</a>
+      <a href="{% url 'users:logout' %}" class="btn btn-outline">{% trans "Вийти" %}</a>
+    {% else %}
+      <a href="{% url 'users:login' %}" class="btn btn-outline">{% trans "Увійти" %}</a>
+      <a href="{% url 'users:register' %}" class="btn btn-outline">{% trans "Зареєструватись" %}</a>
+    {% endif %}
+  </nav>
+</div>
 </nav>

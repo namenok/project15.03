@@ -114,7 +114,18 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'uk'
+USE_I18N = True # систему інтернаціоналізації (i18n),перекладу
+USE_L10N = True
+
+LANGUAGES = [
+    ('uk', 'Ukrainian'),
+    ('en-gb', 'English (UK)'),
+]
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 TIME_ZONE = 'UTC'
 
@@ -144,7 +155,8 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/account/login'
 
 # email configs
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587

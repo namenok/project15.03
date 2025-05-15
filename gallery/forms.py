@@ -2,7 +2,7 @@ import mimetypes
 import tempfile
 
 from django.core.exceptions import ValidationError
-
+from django.utils.translation import gettext_lazy as _
 
 from django.core.exceptions import ValidationError
 import io
@@ -37,24 +37,24 @@ class MediaUploadForm(forms.Form):
     images = MultipleFileField(
         required=False,
         label="Images",
-        help_text="Завантажте до 5 фото"
+        help_text=_("Завантажте до 5 фото"),
     )
     videos = MultipleFileField(
         required=False,
         label="Videos",
-        help_text="Завантажте до 2 відео"
+        help_text=_("Завантажте до 2 відео"),
     )
 
 
 def validate_image_size(image):
     max_size = 10 * 1024 * 1024  # 10MB
     if image.size > max_size:
-        raise ValidationError("Максимальний розмір фото – 10MB.")
+        raise ValidationError(_("Максимальний розмір фото – 10MB."))
 
 def validate_video_size(video):
     max_size = 100 * 1024 * 1024  # 100MB
     if video.size > max_size:
-        raise ValidationError("Максимальний розмір відео – 100MB.")
+        raise ValidationError(_("Максимальний розмір відео – 100MB."))
 
 
 ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/quicktime']
@@ -66,11 +66,11 @@ def validate_video_duration(video):
         content_type, _ = mimetypes.guess_type(video.name)
 
     if content_type not in ALLOWED_VIDEO_TYPES:
-        raise ValidationError("Непідтримуваний формат відео. Дозволено лише MP4 або MOV.")
+        raise ValidationError(_("Непідтримуваний формат відео. Дозволено лише MP4 або MOV."))
 
     ext = os.path.splitext(video.name)[1].lower()
     if ext not in ALLOWED_VIDEO_EXTENSIONS:
-        raise ValidationError("Неправильне розширення відеофайлу. Має бути .mp4 або .mov.")
+        raise ValidationError(_("Неправильне розширення відеофайлу. Має бути .mp4 або .mov."))
 
     tmp_file_path = None  # 👉 обов’язково ініціалізуємо
     try:
@@ -83,9 +83,9 @@ def validate_video_duration(video):
         clip = VideoFileClip(tmp_file_path)
 
         if clip.duration > 30:
-            raise ValidationError("Відео повинне бути до 30 секунд.")
+            raise ValidationError(_("Відео повинне бути до 30 секунд."))
     except Exception as e:
-        raise ValidationError(f"Помилка при перевірці відео: {e}")
+        raise ValidationError(_("Помилка при перевірці відео: %(error)s") % {"error": e})
     finally:
         if 'clip' in locals():
             clip.close()

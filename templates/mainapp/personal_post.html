@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
 {% block content %}
 
@@ -8,18 +8,18 @@
 <hr>
 
 <h2>
-    {% if form.instance.pk %}
-        Ви РЕДАГУЄТЕ існуючий пост на сьогодні.
-    {% else %}
-        Це твій Новий пост на сьогодні, СТВОРЮЙ :
-    {% endif %}
+{% if form.instance.pk %}
+    <p>{% trans "Ви РЕДАГУЄТЕ пост, який вже існує на сьогодні." %}</p>
+{% else %}
+    <p>{% trans "Це твій Новий пост на сьогодні: СТВОРЮЙ :" %}</p>
+{% endif %}
 </h2>
 <hr>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Зберегти</button>
+    <button type="submit">{% trans "Зберегти" %}</button>
 </form>
 <hr>
 <hr>
@@ -30,5 +30,5 @@
 {% endif %}
 <hr>
 <hr>
-<a href="{% url 'mainapp:post_history' %}">До історії</a>
+<a href="{% url 'mainapp:post_history' %}">{% trans "До історії" %}</a>
 {% endblock %}

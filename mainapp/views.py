@@ -1,26 +1,22 @@
-from dbm.ndbm import library
+
 from django.contrib import messages
-from django.shortcuts import render
-from django.utils import timezone
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import  redirect, get_object_or_404
 from django.db.models import Q
 from .forms import PersonalPostForm, PostForm
 from django.contrib.auth.decorators import login_required
-from .models import Category, Teg, Survey, UserAnswer, Answers, PersonalPost, LibText, Post
+from .models import Category,  Survey, Answers, LibText, Post
 from django.http import HttpResponse
-from django.urls import reverse
-from gallery.models import PhotoGallery, GalleryDay
+from gallery.models import GalleryDay
 import calendar
 from datetime import date, timedelta
 from django.utils import timezone
 from django.shortcuts import render
-from gallery.models import PhotoGallery
 from .models import PersonalPost, UserAnswer
 from dateutil import parser
-from itertools import zip_longest
 
 
 
+# Користувача персональний
 @login_required()
 def post(request, id=None):
     post = get_object_or_404(Post, title=id)
@@ -36,6 +32,7 @@ def index(request):
 def success(request):
     return HttpResponse('successfully uploaded')
 
+from django.utils.translation import gettext as _
 
 @login_required
 def survey_view(request):
@@ -63,7 +60,7 @@ def survey_view(request):
             UserAnswer.objects.bulk_create(answers_to_save)# Зберігаємо всі відповіді разом
             return render(request, 'mainapp/survey_thanks.html')
         else:
-            error = "Будь ласка, дайте відповідь на всі питання."
+            error = _("Будь ласка, дайте відповідь на всі питання.")
             return render(request, 'mainapp/checkme.html', {
                 'surveys': surveys,
                 'error': error})
@@ -100,14 +97,14 @@ def get_monthly_analytics(user):
 
     max_value = max(counts.values())
 
-    if list(counts.values()).count(max_value) > 1: # кількість повторів максимального значення.
-        return "немає вектору в конкретну сторону , в цьому місяці ти ні там ні там"
+    if list(counts.values()).count(max_value) > 1:
+        return _("немає вектору в конкретну сторону, в цьому місяці ти ні там ні там")
     elif counts['good'] == max_value:
-        return "у цьому місяці динаміка супер крута"
+        return _("у цьому місяці динаміка супер крута")
     elif counts['neutral'] == max_value:
-        return "цього місяця тримаємось середнього"
+        return _("цього місяця тримаємось середнього")
     else:
-        return "в цьому місця усе погано"
+        return _("в цьому місяці усе погано")
 
 
 def monthly_analytics_view(request):
@@ -184,7 +181,7 @@ def calendar_combined_view(request):
         "calendar_days": calendar_days,
         "today": today,
         "selected_date": selected_date,
-        "weekdays": ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"],
+        "weekdays": [_("Пн"), _("Вт"), _("Ср"), _("Чт"), _("Пт"), _("Сб"), _("Нд")],
         "start_blank_days": range(start_blank_days),
         "calendar_weeks": weeks,
         **daily_data,
@@ -261,20 +258,19 @@ def library_view(request, slug=None):
 def daily_post_view(request):
     today = timezone.now().date()
     post = PersonalPost.objects.filter(user=request.user, date=today).first()
+
     if request.method == 'POST':
-        if post:# Якщо пост існує, передаємо його в форму, інакше створюємо новий пост
-            form = PersonalPostForm(request.POST, request.FILES, instance=post)
-        else:
-            form = PersonalPostForm(request.POST, request.FILES)
+        form = PersonalPostForm(request.POST, instance=post) if post else PersonalPostForm(request.POST)
         if form.is_valid():
-            post = form.save(commit=False)# Якщо форма валідна, зберігаємо або створюємо новий запис
+            post = form.save(commit=False)
             if not post.user_id:
-                post.user = request.user  # Призначаємо поточного користувача
+                post.user = request.user
             post.save()
-            messages.success(request, "Запис успішно збережено!")
-            return redirect('mainapp:post_history')  # Або залишити на цій же сторінці
+            messages.success(request, _("Запис успішно збережено!"))
+            return redirect('mainapp:post_history')
     else:
-        form = PersonalPostForm(instance=post) if post else PersonalPostForm() # просто відображаємо форму без створення нових постів
+        form = PersonalPostForm(instance=post) if post else PersonalPostForm()
+
     return render(request, 'mainapp/personal_post.html', {'form': form})
 
 

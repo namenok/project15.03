@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 
 
 {% block content %}
@@ -7,15 +7,10 @@
 
 
 <link href="{% static 'mainapp/for_home.css'%}" rel="stylesheet">
+<h2>{% trans "ця сторінка домашня , тут можуть бути новини чи щось з штучним інтелектом"%}</h2>
 
 
 
 
-{% include "mainapp/create.html" %}
-<!--<form action="{% url 'mainapp:create' %}" method="POST">-->
-<!--    {% csrf_token %}-->
-<!--    {{ form.as_p }}-->
-<!--    <input type="submit" value="Створити" class="btn btn-default">-->
-<!--</form>-->
 
 {% endblock %}

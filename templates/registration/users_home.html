@@ -1,30 +1,21 @@
 {% extends 'base.html' %}
-{% block title %} Home Page {% endblock title%}
+{% load i18n %}
+{% block title %}{% trans "Домашня сторінка" %}  {% endblock title%}
 {% block content %}
-    <div class="jumbotron">
-        <h1 class="display-4">Welcome</h1>
-        <p class="lead">
-            This is <b>user registration and login system</b> build with django which is
-            a Python-based free and open-source web framework that follows the model–template–views architectural pattern.
-        </p>
-        <hr class="my-4">
-        <p class="lead">
-            <a class="btn btn-primary btn-lg" href="#" role="button">Logout</a>
-            <a class="btn btn-primary btn-lg" href="#" role="button">Sign in</a>
-        </p>
-    </div>
+
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
 {% if messages %}
-  <div class="alert alert-dismissible" role="alert">
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-    {% endfor %}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
+  {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  {% endfor %}
 {% endif %}
+
 {% endblock content %}
  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

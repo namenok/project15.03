@@ -1,30 +1,12 @@
+
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.text import slugify
-
-
-class Entry(models.Model):
-    text = models.TextField()
-    date_added = models.DateTimeField(auto_now_add=True)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
-    class Meta:
-        verbose_name = "ДумкаФорма"
-        verbose_name_plural = "ДумкиФорма"
-    def __str__(self):
-        return f'{self.text[:50]}...'
-
-
-
-class Foto(models.Model):
-    image = models.ImageField(upload_to='media')
-    class Meta:
-        verbose_name = "Зображення"
-        verbose_name_plural = "УсіЗображення"
-
-
+from django.utils.translation import gettext_lazy as _
 
 class Category(models.Model):
-    name = models.CharField(max_length=30, verbose_name = "Назва")
+    name = models.CharField(max_length=30, verbose_name=_("Назва"))
     slug = models.SlugField(unique=True, blank=True)
 
     def save(self, *args, **kwargs):
@@ -42,8 +24,8 @@ class Category(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "Категорія"
-        verbose_name_plural = "Категорії"
+        verbose_name = _("Категорія")
+        verbose_name_plural = _("Категорії")
 
 
 
@@ -55,75 +37,58 @@ class Teg(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "Хештег"
-        verbose_name_plural = "Хештеги"
+        verbose_name = _("Хештег")
+        verbose_name_plural = _("Хештеги")
 
 
 
+# від юзера в бібліотеку
 class Post(models.Model):
-    title = models.CharField(max_length=30, verbose_name = "Заголовок посту")
-    content = models.TextField(verbose_name = "Опис посту")
-    published_date = models.DateTimeField(auto_created=True, verbose_name = "Дата та час посту")
-    category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, verbose_name="Категорія")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = "Автор")
-    poster = models.URLField(
-        default="https://images.pexels.com/photos/147465/pexels-photo-147465.jpeg?auto=compress&cs=tinysrgb&w=600",
-        verbose_name = "Постер")
-    teg = models.ManyToManyField(Teg, blank=True, related_name='posts', verbose_name="Хештеги")
+    title = models.CharField(max_length=30, verbose_name=_("Заголовок посту"))
+    content = models.TextField(verbose_name=_("Опис посту"))
+    published_date = models.DateTimeField(auto_created=True, verbose_name=_("Дата та час посту"))
+    category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, verbose_name=_("Категорія"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Автор"))
+    teg = models.ManyToManyField(Teg, blank=True, related_name='posts', verbose_name=_("Хештеги"))
 
     def __str__(self):
         return self.title
 
     class Meta:
-        verbose_name = "ПостБложний"
-        verbose_name_plural = "ПостиБложні"
+        verbose_name = _("запис користувача в бібліотеку")
+        verbose_name_plural = _("записи користувача в бібліотеку")
 
 
+#персональний юзера в його щоденник
 class PersonalPost(models.Model):
-    title = models.CharField(max_length=30, verbose_name = "Заголовок посту")
-    content = models.TextField(verbose_name = "Опис посту")
-    published_date = models.DateTimeField(auto_now_add=True, verbose_name = "Дата та час посту")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = "Автор")
-    poster = models.URLField(
-        default="https://images.pexels.com/photos/147465/pexels-photo-147465.jpeg?auto=compress&cs=tinysrgb&w=600",
-        verbose_name = "Постер")
+    title = models.CharField(max_length=30, verbose_name = _("Заголовок посту"))
+    content = models.TextField(verbose_name = _("Опис посту"))
+    published_date = models.DateTimeField(auto_now_add=True, verbose_name = _("Дата та час посту"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = _("Автор"))
+
     date = models.DateField()
 
     def __str__(self):
         return f"{self.user.username} - {self.date}"
 
     class Meta:
-        verbose_name = "ОсобистийПост"
-        verbose_name_plural = "Особисті Пости"
-        unique_together = ('user', 'poster', 'date', 'content')
+        verbose_name = _("ОсобистийПост")
+        verbose_name_plural = _("Особисті Пости")
+        unique_together = ('user', 'date', 'content')
 
 
-
-
+#з адмінки в бібліотеку
 class LibText(models.Model):
-    title = models.CharField(max_length=30, verbose_name="Заголовок мого поля з текстом")
-    content = models.TextField(verbose_name="Зміст")
-    to_category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name="Мій текст належить до Категорії")
+    title = models.CharField(max_length=30, verbose_name=_("Заголовок мого поля з текстом"))
+    content = models.TextField(verbose_name=_("Зміст"))
+    to_category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_("Мій текст належить до Категорії"))
 
     def __str__(self):
         return self.title
 
     class Meta:
-        verbose_name = "Мій постик"
-        verbose_name_plural = "Мої постики"
-
-
-
-
-
-class CheckForm(models.Model):
-    date = models.DateTimeField(verbose_name="дата опитування")
-    answer1 = models.BooleanField(verbose_name="мені сумно", default=False)
-    answer2 = models.BooleanField(verbose_name="мені весело", default=False)
-    answer3 = models.BooleanField(verbose_name="мені норм", default=False)
-    class Meta:
-        verbose_name = "Опитуваннячко"
-        verbose_name_plural = "Опитування"
+        verbose_name = _("пост зАдмінки для Бібліотеки")
+        verbose_name_plural = _("постИ з адмінки для бібліотеки")
 
 
 
@@ -134,10 +99,16 @@ class Survey(models.Model):
         return self.question
 
 
+
 class Answers(models.Model):
+    CHOICES = (
+        ('good', _('Добре')),
+        ('neutral', _('Середнє')),
+        ('bad', _('Погано'))
+    )
+    marker = models.CharField(max_length=10, choices=CHOICES)
     survey = models.ForeignKey(Survey, related_name='answers', on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=50)
-
     def __str__(self):
         return self.choice_text
 
@@ -154,4 +125,8 @@ class UserAnswer(models.Model):
         unique_together = ('user', 'survey', 'date')  # Унікальна комбінація користувача, опитування і дати
 
     def __str__(self):
-        return f"Відповідь {self.user.username} на {self.survey.question} {self.date}"
+        return _("Відповідь %(username)s на %(question)s %(date)s") % {
+            'username': self.user.username,
+            'question': self.survey.question,
+            'date': self.date,
+        }

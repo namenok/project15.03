@@ -1,0 +1,6 @@
+Django
+pillow
+python-dateutil
+psycopg2-binary
+moviepy
+django-modeltranslation

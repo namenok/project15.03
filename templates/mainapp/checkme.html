@@ -1,27 +1,38 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
 {% block content %}
 
 <link href="{% static 'mainapp/new_check.css'%}" rel="stylesheet">
-<h1>Перевірити свій стан!</h1>
-<p style="background-color:tomato;">Опитування</p>
+
+<p><a href="{% url 'mainapp:survey_history' %}">{% trans "Переглянути свою історію відповідей на питування" %}</a></p>
+
+<h1>{% trans "Перевірити свій стан!" %}</h1>
+<p style="background-color:tomato;">{% trans "Опитування" %}</p>
 
 
-{% for survey in surveys %}
-    <h3>{{ survey.question }}</h3>
-    <form method="POST">
-        {% csrf_token %}
-        {% for answer in survey.answers.all %}
-            <label>
-                <input type="radio" name="survey_{{ survey.id }}" value="{{ answer.id }}">
-                {{ answer.choice_text }}
-            </label><br>
-        {% endfor %}
-        <button type="submit">Відправити</button>
-    </form>
-{% endfor %}
+{% if error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
 
+<form method="POST">
+    {% csrf_token %}
+
+    {% for survey in surveys %}
+        <div style="margin-bottom: 20px;">
+            <h3>{{ survey.question }}</h3>
+
+            {% for answer in survey.answers.all %}
+                <label>
+                    <input type="radio" name="survey_{{ survey.id }}" value="{{ answer.id }}" required>
+                    {{ answer.choice_text }}
+                </label><br>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <button type="submit">{% trans "Зберегти відповіді" %}</button>
+</form>
 
 
 {% endblock %}

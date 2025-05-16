@@ -1,13 +1,35 @@
 {% extends 'base.html' %}
-
+{% load i18n %}
 {% load static %}
-{% block content %}
-<h2>Галерея</h2>
-<a  href="{% url 'gallery:uploads' %}">Закинути фотку в галерею</a>
-<hr>
-    {% for photo in photos %}
+{% block content %}<header>
+        <h1>{% trans "Ваша Галерея" %}</h1>
+        <a href="{% url 'gallery:uploads' %}">{% trans "Завантажити нові файли" %}</a>
+    </header>
 
-    <img src="{{ photo.image.url }}" alt="{{ photo.description }}" width="500" >
-    {% endfor %}
+    <div class="gallery-container">
+        {% if media_items %}
+            <div class="gallery-grid">
+                {% for item in media_items %}
+                    <div class="gallery-item">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="Фото" class="gallery-photo">
+                        {% endif %}
+                        {% if item.video %}
+                            <video controls class="gallery-video">
+                                <source src="{{ item.video.url }}" type="video/mp4">
+                                <p>{% trans "Ваш браузер не підтримує відео." %}</p>
+                            </video>
+                        {% endif %}
+                        {% if item.description %}
+                            <p>{{ item.description }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>{% trans "Ваша галерея пуста. Завантажте фотографії чи відео!" %}</p>
+        {% endif %}
+    </div>
+
 
 {% endblock %}

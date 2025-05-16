@@ -85,7 +85,7 @@ def validate_video_duration(video):
         if clip.duration > 30:
             raise ValidationError(_("Відео повинне бути до 30 секунд."))
     except Exception as e:
-        raise ValidationError(_("Помилка при перевірці відео: %(error)s") % {"error": e})
+        raise ValidationError(_("Помилка при перевірці відео: ") + str(e))
     finally:
         if 'clip' in locals():
             clip.close()

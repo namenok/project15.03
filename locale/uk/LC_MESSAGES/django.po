@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-16 16:20+0000\n"
+"POT-Creation-Date: 2025-05-16 16:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,593 +16,584 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 #: gallery/forms.py:40
 msgid "Завантажте до 5 фото"
-msgstr "Upload up to 5 photos"
+msgstr ""
 
 #: gallery/forms.py:45
 msgid "Завантажте до 2 відео"
-msgstr "Upload up to 2 videos"
+msgstr ""
 
 #: gallery/forms.py:52
 msgid "Максимальний розмір фото – 10MB."
-msgstr "The maximum photo size is 10MB."
+msgstr ""
 
 #: gallery/forms.py:57
 msgid "Максимальний розмір відео – 100MB."
-msgstr "The maximum video size is 100MB."
+msgstr ""
 
 #: gallery/forms.py:69
 msgid "Непідтримуваний формат відео. Дозволено лише MP4 або MOV."
-msgstr "Unsupported video format. Only MP4 or MOV are allowed."
+msgstr ""
 
 #: gallery/forms.py:73
 msgid "Неправильне розширення відеофайлу. Має бути .mp4 або .mov."
-msgstr "Invalid video file extension. Must be .mp4 or .mov."
+msgstr ""
 
 #: gallery/forms.py:86
 msgid "Відео повинне бути до 30 секунд."
-msgstr "The video must be up to 30 seconds long."
+msgstr ""
 
 #: gallery/forms.py:88
 msgid "Помилка при перевірці відео: "
-msgstr "Error while checking video: "
+msgstr ""
 
 #: gallery/models.py:34
 msgid "На день можна додати лише 5 фото."
-msgstr "You can only add 5 photos per day."
+msgstr ""
 
 #: gallery/models.py:43
 msgid "На день можна додати лише 2 відео."
-msgstr "You can only add 2 videos per day."
+msgstr ""
 
 #: gallery/views.py:55
 msgid "На сьогодні вже додано 2 відео."
-msgstr "2 videos have already been added today."
+msgstr ""
 
 #: gallery/views.py:68
 msgid "Файли успішно завантажено."
-msgstr "Files successfully uploaded."
+msgstr ""
 
 #: mainapp/forms.py:19
 msgid "Напиши свій пост на сьогодні..."
-msgstr "Write your post for today..."
+msgstr ""
 
 #: mainapp/models.py:9
 msgid "Назва"
-msgstr "Name"
+msgstr ""
 
 #: mainapp/models.py:27 mainapp/models.py:50
 msgid "Категорія"
-msgstr "Category"
+msgstr ""
 
 #: mainapp/models.py:28 templates/mainapp/library.html:34
 msgid "Категорії"
-msgstr "Categories"
+msgstr ""
 
 #: mainapp/models.py:40
 msgid "Хештег"
-msgstr "Hashtag"
+msgstr ""
 
 #: mainapp/models.py:41 mainapp/models.py:52
 msgid "Хештеги"
-msgstr "Hashtags"
+msgstr ""
 
 #: mainapp/models.py:47 mainapp/models.py:64
 msgid "Заголовок посту"
-msgstr "Post title"
+msgstr ""
 
 #: mainapp/models.py:48 mainapp/models.py:65
 msgid "Опис посту"
-msgstr "Post description"
+msgstr ""
 
 #: mainapp/models.py:49 mainapp/models.py:66
 msgid "Дата та час посту"
-msgstr "Post date and time"
+msgstr ""
 
 #: mainapp/models.py:51 mainapp/models.py:67
 msgid "Автор"
-msgstr "Author"
+msgstr ""
 
 #: mainapp/models.py:58
 msgid "запис користувача в бібліотеку"
-msgstr "user entry in the library"
+msgstr ""
 
 #: mainapp/models.py:59
 msgid "записи користувача в бібліотеку"
-msgstr "user entries in the library"
+msgstr ""
 
 #: mainapp/models.py:75
 msgid "ОсобистийПост"
-msgstr "PersonalPost"
+msgstr ""
 
 #: mainapp/models.py:76
 msgid "Особисті Пости"
-msgstr "PersonalPosts"
+msgstr ""
 
 #: mainapp/models.py:82
 msgid "Заголовок мого поля з текстом"
-msgstr "The title of my text field"
+msgstr ""
 
 #: mainapp/models.py:83
 msgid "Зміст"
-msgstr "Content"
+msgstr ""
 
 #: mainapp/models.py:84
 msgid "Мій текст належить до Категорії"
-msgstr "My text belongs to the Category"
+msgstr ""
 
 #: mainapp/models.py:90
 msgid "пост зАдмінки для Бібліотеки"
-msgstr "post fromAdmin for the Library"
+msgstr ""
 
 #: mainapp/models.py:91
 msgid "постИ з адмінки для бібліотеки"
-msgstr "posts from the admin for the library"
+msgstr ""
 
 #: mainapp/models.py:105
 msgid "Добре"
-msgstr "Good"
+msgstr ""
 
 #: mainapp/models.py:106
 msgid "Середнє"
-msgstr "Average"
+msgstr ""
 
 #: mainapp/models.py:107
 msgid "Погано"
-msgstr "Badly"
+msgstr ""
 
 #: mainapp/models.py:128
 #, python-format
 msgid "Відповідь %(username)s на %(question)s %(date)s"
-msgstr "%(username)s replied to %(question)s on %(date)s"
+msgstr ""
 
 #: mainapp/views.py:64
 msgid "Будь ласка, дайте відповідь на всі питання."
-msgstr "Be honest and please answer all questions."
+msgstr ""
 
 #: mainapp/views.py:102
 msgid "немає вектору в конкретну сторону, в цьому місяці ти ні там ні там"
-msgstr "This month, we’re staying in the middle."
+msgstr ""
 
 #: mainapp/views.py:104
 msgid "у цьому місяці динаміка супер крута"
-msgstr "this month the dynamics are super cool"
+msgstr ""
 
 #: mainapp/views.py:106
 msgid "цього місяця тримаємось середнього"
-msgstr "this month we are sticking to the average"
+msgstr ""
 
 #: mainapp/views.py:108
 msgid "в цьому місяці усе погано"
-msgstr "everything is bad this month"
+msgstr ""
 
 #: mainapp/views.py:185
 msgid "Пн"
-msgstr "Mon"
+msgstr ""
 
 #: mainapp/views.py:185
 msgid "Вт"
-msgstr "Tue"
+msgstr ""
 
 #: mainapp/views.py:185
 msgid "Ср"
-msgstr "Wed"
+msgstr ""
 
 #: mainapp/views.py:185
 msgid "Чт"
-msgstr "Thu"
+msgstr ""
 
 #: mainapp/views.py:185
 msgid "Пт"
-msgstr "Fri"
+msgstr ""
 
 #: mainapp/views.py:185
 msgid "Сб"
-msgstr "Sat"
+msgstr ""
 
 #: mainapp/views.py:185
 msgid "Нд"
-msgstr "Sun"
+msgstr ""
 
 #: mainapp/views.py:270
 msgid "Запис успішно збережено!"
-msgstr "The entry was successfully saved!"
+msgstr ""
 
 #: templates/gallery/index.html:5
 msgid "Ваша Галерея"
-msgstr "Your Gallery"
+msgstr ""
 
 #: templates/gallery/index.html:6
 msgid "Завантажити нові файли"
-msgstr "Upload new files"
+msgstr ""
 
 #: templates/gallery/index.html:20 templates/mainapp/calendar.html:76
 msgid "Ваш браузер не підтримує відео."
-msgstr "Your browser does not support video."
+msgstr ""
 
 #: templates/gallery/index.html:30
 msgid "Ваша галерея пуста. Завантажте фотографії чи відео!"
-msgstr "Your gallery is empty. Upload photos or videos!"
+msgstr ""
 
 #: templates/gallery/upload.html:6
 msgid "Завантажити файли"
-msgstr "Download files"
+msgstr ""
 
 #: templates/gallery/upload.html:7
 msgid "Переглянути галерею"
-msgstr "View gallery"
+msgstr ""
 
 #: templates/gallery/upload.html:14
 msgid "Фото (до 5 файлів)"
-msgstr "Photos (up to 5 files):"
+msgstr ""
 
 #: templates/gallery/upload.html:27
 msgid "Відео (до 2 файлів):"
-msgstr "Video (up to 2 files):"
+msgstr ""
 
 #: templates/gallery/upload.html:39
 msgid "Завантажити"
-msgstr "Download"
+msgstr ""
 
 #: templates/mainapp/already_answered.html:5
 msgid "Опитування вже пройдено"
-msgstr "The survey has already been completed."
+msgstr ""
 
 #: templates/mainapp/already_answered.html:6
 msgid ""
 "Дякуємо! Ви вже відповідали на сьогоднішнє опитування. Спробуйте завтра 😊"
-msgstr "You've already taken the survey today, see you tomorrow.😊"
+msgstr ""
 
 #: templates/mainapp/already_answered.html:7
 msgid "Переглянути свою історію відповідей на опрос"
-msgstr "View your survey response history"
+msgstr ""
 
 #: templates/mainapp/calendar.html:7 templates/menu.html:24
 msgid "Календар"
-msgstr "Calendar"
+msgstr ""
 
 #: templates/mainapp/calendar.html:9
 msgid "Попередній місяць"
-msgstr "Previous month"
+msgstr ""
 
 #: templates/mainapp/calendar.html:11
 msgid "Наступний місяць"
-msgstr "Next month"
+msgstr ""
 
 #: templates/mainapp/calendar.html:46
 msgid "🟩 – є записи на цей день. Натисни на дату, щоб переглянути."
-msgstr "🟩 – there are entries for this day. Click on the date to view."
+msgstr ""
 
 #: templates/mainapp/calendar.html:49
 msgid "Отримати аналітику за місяць"
-msgstr "Get analytics for the current month"
+msgstr ""
 
 #: templates/mainapp/calendar.html:53
-#, fuzzy
-#| msgid "Дані за "
 msgid "Дані за"
-msgstr "Data for "
+msgstr ""
 
 #: templates/mainapp/calendar.html:55
 msgid "📸 Фото"
-msgstr "📸 Photos"
+msgstr ""
 
 #: templates/mainapp/calendar.html:66
 msgid "Немає фотографій за цю дату."
-msgstr "There are no photos for this date."
+msgstr ""
 
 #: templates/mainapp/calendar.html:69
 msgid "🎥 Відео"
-msgstr "🎥 Video"
+msgstr ""
 
 #: templates/mainapp/calendar.html:84
 msgid "Немає відео за цю дату."
-msgstr "There are no videos for this date."
+msgstr ""
 
 #: templates/mainapp/calendar.html:87
 msgid "📝 Персональний пост"
-msgstr "📝 diary entry"
+msgstr ""
 
 #: templates/mainapp/calendar.html:95
 msgid "Посту за цю дату немає."
-msgstr "There is no post for this date."
+msgstr ""
 
 #: templates/mainapp/calendar.html:98
 msgid "📋 Відповіді на опитування"
-msgstr "📋 Survey answers"
+msgstr ""
 
 #: templates/mainapp/calendar.html:106
 msgid "Немає відповідей за цю дату."
-msgstr "There are no responses for this date."
+msgstr ""
 
 #: templates/mainapp/checkme.html:8
 msgid "Переглянути свою історію відповідей на питування"
-msgstr "View your survey response history"
+msgstr ""
 
 #: templates/mainapp/checkme.html:10
 msgid "Перевірити свій стан!"
-msgstr "Check your mental state!"
+msgstr ""
 
 #: templates/mainapp/checkme.html:11
 msgid "Опитування"
-msgstr "survey"
+msgstr ""
 
 #: templates/mainapp/checkme.html:34
 msgid "Зберегти відповіді"
-msgstr "Save answers"
+msgstr ""
 
 #: templates/mainapp/home.html:10
 msgid ""
 "ця сторінка домашня , тут можуть бути новини чи щось з штучним інтелектом"
 msgstr ""
-"this is the homepage, there might be news or something with artificial "
-"intelligence"
 
 #: templates/mainapp/index.html:8
 msgid ""
 "та тут сторінка початкова для користувача який вже зареєстрований, це "
 "індекс !"
 msgstr ""
-"and here is the home page for a user who is already registered, this is the "
-"index !"
 
 #: templates/mainapp/index.html:10
 msgid ""
 "текст для незареєстрованого користувача і більше нічого немає бути, це індекс"
 msgstr ""
-"text for an unregistered user and there is nothing else to be, this is an "
-"index"
 
 #: templates/mainapp/lib_user_post.html:5
 msgid "Створити пост"
-msgstr "Create a post"
+msgstr ""
 
 #: templates/mainapp/lib_user_post.html:13
 msgid "Помилки:"
-msgstr "error"
+msgstr ""
 
 #: templates/mainapp/lib_user_post.html:24 templates/mainapp/library.html:96
 msgid "Створити"
-msgstr "create"
+msgstr ""
 
 #: templates/mainapp/lib_user_post_history.html:6
 msgid "Історія твоїх постів бібліотечних"
-msgstr "History of your library posts"
+msgstr ""
 
 #: templates/mainapp/lib_user_post_history.html:13
 #: templates/mainapp/personal_post_history.html:15
 msgid "Поки що немає постів."
-msgstr "There are no posts yet."
+msgstr ""
 
 #: templates/mainapp/library.html:15
 msgid "ПОШУК по бібліотеці"
-msgstr "SEARCH the library"
+msgstr ""
 
 #: templates/mainapp/library.html:20
 msgid "шукати"
-msgstr "search"
+msgstr ""
 
 #: templates/mainapp/library.html:53
 msgid "Пости в категорії(написані користувачем):"
-msgstr "Posts in category (by user):"
+msgstr ""
 
 #: templates/mainapp/library.html:63
 msgid "У цій категорії ще немає постів."
-msgstr "There are no posts in this category yet."
+msgstr ""
 
 #: templates/mainapp/library.html:66
 msgid "Оберіть категорію, щоб побачити пости."
-msgstr "Select a category to see posts."
+msgstr ""
 
 #: templates/mainapp/library.html:73
 msgid "Результати пошуку по записаx користувача :"
-msgstr "Library search (by user) results: "
+msgstr ""
 
 #: templates/mainapp/library.html:78 templates/mainapp/library.html:86
 msgid "Нічого не знайдено !"
-msgstr "Nothing found!"
+msgstr ""
 
 #: templates/mainapp/library.html:81
 msgid "Результати пошуку по бібліотеці(з адмінпанелі):"
-msgstr "Library search (by website) results: "
+msgstr ""
 
 #: templates/mainapp/library.html:92
 msgid ""
 "СТВОРИТИ ЗАПИС В БІБЛІОТЕКУ, ЦІКАВОЇ ІНФОРМАЦІЇ ЯКУ ДЕСЬ ЗНАЙШЛА І ХОЧЕШ "
 "СОБІ ЗАФІКСУВАТИ"
 msgstr ""
-"CREATE A LIBRARY RECORD OF INTERESTING INFORMATION THAT YOU HAVE FOUND "
-"SOMEWHERE AND WANT TO REMEMBER IT"
 
 #: templates/mainapp/monthly_analytics.html:9
 msgid "Аналітика за місяць"
-msgstr "Analytics for the month"
+msgstr ""
 
 #: templates/mainapp/monthly_analytics.html:12
 msgid "Твоя аналітика за цей місяць"
-msgstr "Your analytics for the current month"
+msgstr ""
 
 #: templates/mainapp/personal_post.html:12
 msgid "Ви РЕДАГУЄТЕ пост, який вже існує на сьогодні."
-msgstr "You already made a diary entry today, you can edit it: "
+msgstr ""
 
 #: templates/mainapp/personal_post.html:14
 msgid "Це твій Новий пост на сьогодні: СТВОРЮЙ :"
 msgstr ""
-"You haven't written anything today. This is your new diary entry for today: "
 
 #: templates/mainapp/personal_post.html:22
 msgid "Зберегти"
-msgstr "Save"
+msgstr ""
 
 #: templates/mainapp/personal_post.html:33
 msgid "До історії"
-msgstr "go to history"
+msgstr ""
 
 #: templates/mainapp/personal_post_history.html:6
 msgid "Історія твоїх постів"
-msgstr "History of your diary posts"
+msgstr ""
 
 #: templates/mainapp/post.html:10
 msgid "автор:"
-msgstr "author:"
+msgstr ""
 
 #: templates/mainapp/post.html:15
 msgid "дата поступ:"
-msgstr "date of entry:"
+msgstr ""
 
 #: templates/mainapp/survey_history.html:4
 msgid "Моя історія відповідей"
-msgstr "history of my survey responses"
+msgstr ""
 
 #: templates/mainapp/survey_history.html:17
 msgid "Ви ще не проходили жодне опитування."
-msgstr "you haven't answered the survey yet"
+msgstr ""
 
 #: templates/mainapp/survey_thanks.html:4
 msgid "дякую що пройшов опитування !"
-msgstr "survey passed, good job!"
+msgstr ""
 
 #: templates/menu.html:21
 msgid "мійКабінет-домашня"
-msgstr "Home"
+msgstr ""
 
 #: templates/menu.html:27
 msgid "Бібліотека"
-msgstr "Library"
+msgstr ""
 
 #: templates/menu.html:30
 msgid "ПеревірСебе"
-msgstr "Check Yourself"
+msgstr ""
 
 #: templates/menu.html:33
 msgid "Галерея"
-msgstr "Gallery"
+msgstr ""
 
 #: templates/menu.html:36
 msgid "ЩоденніДумкиЗаписати"
-msgstr "Diary"
+msgstr ""
 
 #: templates/menu.html:43
 msgid "Вітаю "
-msgstr "Welcome "
+msgstr ""
 
 #: templates/menu.html:44
 msgid "Профіль"
-msgstr "Profile"
+msgstr ""
 
 #: templates/menu.html:45
 msgid "Вийти"
-msgstr "Log out"
+msgstr ""
 
 #: templates/menu.html:47
 msgid "Увійти"
-msgstr "Log in"
+msgstr ""
 
 #: templates/menu.html:48 templates/registration/login.html:24
 #: templates/registration/register.html:73
 msgid "Зареєструватись"
-msgstr "Register"
+msgstr ""
 
 #: templates/registration/change_password.html:10
 msgid "Змінити свій пароль"
-msgstr "Change your password"
+msgstr ""
 
 #: templates/registration/change_password.html:31
 msgid "Старий пароль"
-msgstr "old password"
+msgstr ""
 
 #: templates/registration/change_password.html:34
 msgid "введи старий пароль"
-msgstr "enter old password"
+msgstr ""
 
 #: templates/registration/change_password.html:43
 #: templates/registration/password_reset_confirm.html:33
 msgid "Новий пароль"
-msgstr "new password"
+msgstr ""
 
 #: templates/registration/change_password.html:46
 msgid "введи новий пароль"
-msgstr "enter new password"
+msgstr ""
 
 #: templates/registration/change_password.html:55
 msgid "Новий пароль підтвердити"
-msgstr "Confirm new password"
+msgstr ""
 
 #: templates/registration/change_password.html:58
 msgid "повтори новий пароль"
-msgstr "repeat new password"
+msgstr ""
 
 #: templates/registration/change_password.html:65
 msgid "Оновити пароль"
-msgstr "Update password"
+msgstr ""
 
 #: templates/registration/login.html:10
 msgid "Увійди в сві акаунт"
-msgstr "Log in to your account"
+msgstr ""
 
 #: templates/registration/login.html:19
 msgid "Login"
-msgstr "login"
+msgstr ""
 
 #: templates/registration/login.html:23
 #: templates/registration/password_reset.html:11
 msgid "Забув пароль?"
-msgstr "Forgot your password?"
+msgstr ""
 
 #: templates/registration/password_reset.html:31
 #: templates/registration/register.html:51
 msgid "Імейл"
-msgstr "email"
+msgstr ""
 
 #: templates/registration/password_reset.html:34
 msgid "введи мейл"
-msgstr "enter email"
+msgstr ""
 
 #: templates/registration/password_reset.html:41
 msgid "Підтвердити"
-msgstr "Confirm"
+msgstr ""
 
 #: templates/registration/password_reset.html:50
 msgid "Створити новий акаунт"
-msgstr "Create a new account"
+msgstr ""
 
 #: templates/registration/password_reset.html:51
 msgid "Повернутись в "
-msgstr "Return to "
+msgstr ""
 
 #: templates/registration/password_reset_complete.html:9
 msgid "Твій пароль змінено. Можеш продовжити та"
-msgstr "Your password has been changed. You can continue and "
+msgstr ""
 
 #: templates/registration/password_reset_complete.html:9
 msgid "залогінітись тут!"
-msgstr "login here!"
+msgstr ""
 
 #: templates/registration/password_reset_confirm.html:3
 msgid "Перевстановити пароль"
-msgstr "reset password"
+msgstr ""
 
 #: templates/registration/password_reset_confirm.html:12
 #: templates/registration/password_reset_confirm.html:55
 #: templates/registration/profile.html:31
 msgid "Змінити пароль"
-msgstr "change password"
+msgstr ""
 
 #: templates/registration/password_reset_confirm.html:36
 msgid "введи пароль"
-msgstr "enter password"
+msgstr ""
 
 #: templates/registration/password_reset_confirm.html:45
 msgid "Нового пароля підтвердження"
-msgstr "New password confirmation"
+msgstr ""
 
 #: templates/registration/password_reset_confirm.html:48
 msgid "підтверди пароль"
-msgstr "confirm password"
+msgstr ""
 
 #: templates/registration/password_reset_email.html:4
 #, python-format
@@ -612,115 +603,98 @@ msgid ""
 "(%(email)s),\n"
 "натисніть на посилання нижче:\n"
 msgstr ""
-"\n"
-"To start the password reset process for your account (%(email)s),\n"
-"click the link below:\n"
 
 #: templates/registration/password_reset_email.html:11
 msgid ""
 "Якщо натискання на посилання вище не працює, скопіюйте та вставте URL-адресу "
 "в новому вікні браузера."
 msgstr ""
-"If clicking the link above doesn't work, copy and paste the URL in a new "
-"browser window."
 
 #: templates/registration/password_reset_email.html:13
 msgid "З повагою,"
-msgstr "Sincerely, "
+msgstr ""
 
 #: templates/registration/password_reset_email.html:14
 msgid "Розробник"
-msgstr "your team!"
+msgstr ""
 
 #: templates/registration/password_reset_sent.html:4
 msgid "Мейл надіслався , чекни пошту !"
-msgstr "The email has been sent, check your inbox!"
+msgstr ""
 
 #: templates/registration/profile.html:25
 msgid "Ім'я користувача:"
-msgstr "first name"
+msgstr ""
 
 #: templates/registration/profile.html:27
 msgid "Імейл:"
-msgstr "email"
+msgstr ""
 
 #: templates/registration/profile.html:33
 msgid "Змінити аватарку:"
-msgstr "Change avatar:"
+msgstr ""
 
 #: templates/registration/profile.html:40
 msgid "Зберегти зміни"
-msgstr "Save changes"
+msgstr ""
 
 #: templates/registration/profile.html:41
 msgid "Змінити"
-msgstr "Change"
+msgstr ""
 
 #: templates/registration/register.html:11
 msgid "Створити аккаунт"
-msgstr "Create an account"
+msgstr ""
 
 #: templates/registration/register.html:31
 msgid "Ім'я"
-msgstr "name"
+msgstr ""
 
 #: templates/registration/register.html:37
 msgid "Фамілія"
-msgstr "last name"
+msgstr ""
 
 #: templates/registration/register.html:45
 msgid "Нікнейм"
-msgstr "nickname"
+msgstr ""
 
 #: templates/registration/register.html:59
 msgid "Пароль"
-msgstr "password"
+msgstr ""
 
 #: templates/registration/register.html:67
 msgid "Підтвердити пароль"
-msgstr "Confirm password"
+msgstr ""
 
 #: templates/registration/register.html:79
 msgid "Маєш обліковий запис? Перейди до розділу Вхід"
-msgstr "Do you have an account? Go to the Login section"
+msgstr ""
 
 #: templates/registration/users_home.html:3
 msgid "Домашня сторінка"
-msgstr "Home page"
+msgstr ""
 
 #: users/views.py:28
 #, python-format
 msgid "Вітаю %(user)s"
-msgstr "Welcome %(user)s"
+msgstr ""
 
 #: users/views.py:60
 #, python-format
 msgid "Створений акаунт для %(username)s"
-msgstr "%(username)s's account is all set — go for it!"
+msgstr ""
 
 #: users/views.py:75
 msgid "Твій акаунт оновлено успішно!"
-msgstr "Your account has been updated successfully!"
+msgstr ""
 
 #: users/views.py:90
-#, fuzzy
-#| msgid ""
-#| "Ми надіслали вам інструкції для зміни пароля, якщо обліковий запис із "
-#| "введеною електронною адресою існує. Ви маєте отримати лист найближчим "
-#| "часом. Якщо ви не отримаєте листа, переконайтеся, що ввели адресу, з якою "
-#| "реєструвались, та перевірте папку зі спамом."
 msgid ""
 "Ми щойно надіслали інструкції для зміни пароля (якщо акаунт з цією адресою "
 "існує). Лист має прийти незабаром. Якщо його не буде — перевір спам і чи "
 "правильно введено електронну адресу."
 msgstr ""
-"We just sent you password reset instructions (if there's an account with "
-"that email). The message should arrive soon. If not — check your spam and "
-"make sure the email is correct."
 
 #: users/views.py:100
 msgid "Ваш пароль успішно змінено!"
-msgstr "Nice! Your password’s been changed."
-
-#~ msgid "Hi"
-#~ msgstr "Hello"
+msgstr ""

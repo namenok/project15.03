@@ -40,7 +40,7 @@
 
   <nav class="nav">
     {% if request.user.is_authenticated %}
-      <a href="#" class="nav-item nav-link">{% trans "Hi" %} {{ request.user|title }}</a>
+      <a href="#" class="nav-item nav-link">{% trans "Вітаю " %} {{ request.user|title }}</a>
       <a href="{% url 'users:users_profile' %}" class="nav-item nav-link">{% trans "Профіль" %}</a>
       <a href="{% url 'users:logout' %}" class="btn btn-outline">{% trans "Вийти" %}</a>
     {% else %}

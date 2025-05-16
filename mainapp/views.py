@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from .models import PersonalPost, UserAnswer
 from dateutil import parser
+from django.utils.translation import gettext as _
 
 
 
@@ -32,7 +33,7 @@ def index(request):
 def success(request):
     return HttpResponse('successfully uploaded')
 
-from django.utils.translation import gettext as _
+
 
 @login_required
 def survey_view(request):
@@ -169,7 +170,7 @@ def calendar_combined_view(request):
             selected_date = today
     else:
         selected_date = today
-    _, days_in_month = calendar.monthrange(year, month)
+    start_day_of_week, days_in_month = calendar.monthrange(year, month)
     calendar_days = [start_day + timedelta(days=i) for i in range(days_in_month)]
     all_days = [None] * start_blank_days + calendar_days
     weeks = [all_days[i:i + 7] for i in range(0, len(all_days), 7)]

@@ -50,7 +50,7 @@
 </form>
 <hr>
 
-<h2>{% trans "Дані за {{ selected_date }}" %}</h2>
+<h2>{% trans "Дані за" %} {{ selected_date|date:"j E Y" }}</h2>
 
 <h3>{% trans "📸 Фото" %}</h3>
 {% if gallery_items %}

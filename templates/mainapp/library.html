@@ -10,26 +10,34 @@
 
 <hr>
 <div class="row">
-    <div class="col-nd-4">
-        <div class="well">
-        <h4>{% trans "ПОШУК по бібліотеці" %}</h4>
-            <form class="input-group" method="GET" action="{% url 'mainapp:search' %}">
-                <input class="form-control" type="search" name="query">
-                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="submit">
-                                        <span class="glyphicon glyphicon-search">{% trans "шукати" %}</span>
-                                    </button>
-                </span>
-            </form>
-        </div>
-    </div>
+  <div class="col-md-6 offset-md-3">
+    <h4 class="mb-3">{% trans "Пошук по бібліотеці" %}</h4>
+    <form method="GET" action="{% url 'mainapp:search' %}" class="input-group mb-4">
+      <input
+        type="search"
+        name="query"
+        class="form-control"
+        placeholder="{% trans 'Введіть ключове слово...' %}"
+        value="{{ query|default:'' }}"
+        aria-label="{% trans 'Пошук' %}"
+      >
+      <button class="btn btn-primary" type="submit">
+        {% trans "Шукати" %}
+      </button>
+    </form>
+
+    {% if query == "" %}
+      <div class="alert alert-warning" role="alert">
+        {% trans "Ви не ввели ключове слово для пошуку." %}
+      </div>
+    {% endif %}
+  </div>
 </div>
+
 <hr>
 <hr>
 <hr>
-<hr>
-<hr>
-<hr>
+
 <hr>
 <h2>{% trans "Категорії" %}</h2>
 <ul>
@@ -48,15 +56,13 @@
 <hr>
 <hr>
 <hr>
-
+# результат пошуку по категоріям
 {% if selected_category %}
     <p>{% trans "Пости в категорії(написані користувачем):" %} "{{selected_category.name}}"</p>
         {% if posts %}
             {% for post in posts %}
-            <p> class="page-header"><a >{{post.title}} </a></p>
+            <p class="page-header"> <a>{{post.title}} </a></p>
             <p> {{ post.content }} </p>
-            <li>{{ post.published_date }} </li>
-            <li>{{ post.user }} </li>
 
             {% endfor %}
         {% else %}
@@ -70,21 +76,29 @@
 <hr>
 <hr>
 
-<h2>{% trans "Результати пошуку по записаx користувача :" %}</h2>
-{% for post in post_blog_list %}
-    <p>{{ post.title }}</p>
-    <p>{{ post.content }}</p>
-{% empty %}
-    <p>{% trans "Нічого не знайдено !" %}</p>
-{% endfor %}
+# результат пошуку по слову
+{% if query %}
+    <h2>{% trans "Результати пошуку по записах користувача:" %}</h2>
+    {% for post in post_blog_list %}
+        <div class="search-result">
+            <p><strong>{{ post.title }}</strong></p>
+            <p>{{ post.content }}</p>
+        </div>
+    {% empty %}
+        <p>{% trans "Нічого не знайдено!" %}</p>
+    {% endfor %}
 
-<h2>{% trans "Результати пошуку по бібліотеці(з адмінпанелі):" %}</h2>
-{% for lib in my_posts_list %}
-    <p>{{ post.title }}</p>
-    <p>{{ lib.content }}</p>
-{% empty %}
-    <p>{% trans "Нічого не знайдено !" %}</p>
-{% endfor %}
+    <h2>{% trans "Результати пошуку по бібліотеці (з адмінпанелі):" %}</h2>
+    {% for lib in my_posts_list %}
+        <div class="search-result">
+            <p><strong>{{ lib.title }}</strong></p>
+            <p>{{ lib.content }}</p>
+        </div>
+    {% empty %}
+        <p>{% trans "Нічого не знайдено!" %}</p>
+    {% endfor %}
+{% endif %}
+
 
 <hr>
 <hr>

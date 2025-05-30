@@ -81,13 +81,13 @@ class PersonalPost(models.Model):
 class LibText(models.Model):
     title = models.CharField(max_length=30, verbose_name=_("Заголовок мого поля з текстом"))
     content = models.TextField(verbose_name=_("Зміст"))
-    to_category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name=_("Мій текст належить до Категорії"))
+    to_category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name = "libtexts", verbose_name=_("Мій текст належить до Категорії"))
 
     def __str__(self):
         return self.title
 
     class Meta:
-        verbose_name = _("пост зАдмінки для Бібліотеки")
+        verbose_name = _("пост з aдмінки для бібліотеки")
         verbose_name_plural = _("постИ з адмінки для бібліотеки")
 
 

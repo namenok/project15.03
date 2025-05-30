@@ -1,3 +1,4 @@
+from itertools import chain
 
 from django.contrib import messages
 from django.shortcuts import  redirect, get_object_or_404
@@ -246,7 +247,14 @@ def library_view(request, slug=None):
     selected_category = None
     if slug:
         selected_category = get_object_or_404(Category, slug=slug)
-        posts = selected_category.posts.all()
+        user_posts = selected_category.posts.all()
+        admin_posts = selected_category.libtexts.all()
+
+        posts = sorted(
+            chain(user_posts, admin_posts),
+            key=lambda x: getattr(x, 'published_date', timezone.now()),
+            reverse=True
+        )
     return render(request, 'mainapp/library.html', {
         'categories': categories,
         'selected_category': selected_category,

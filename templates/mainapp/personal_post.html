@@ -1,34 +1,26 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load static %}
+
 {% block content %}
+<div class="post-form-container">
+  <h2 class="post-form-title">
+    {% if form.instance.pk %}
+        {% trans "ти редагуєш пост, який вже існує на сьогодні." %}
+    {% else %}
+        {% trans "новий запис на сьогодні" %}
+    {% endif %}
+  </h2>
+
+  <form method="post" enctype="multipart/form-data" class="post-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="submit-button">{% trans "зберегти" %}</button>
+  </form>
 
 
-<hr>
-<hr>
 
-<h2>
-{% if form.instance.pk %}
-    <p>{% trans "Ви РЕДАГУЄТЕ пост, який вже існує на сьогодні." %}</p>
-{% else %}
-    <p>{% trans "Це твій Новий пост на сьогодні: СТВОРЮЙ :" %}</p>
-{% endif %}
-</h2>
-<hr>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">{% trans "Зберегти" %}</button>
-</form>
-<hr>
-<hr>
-{% if messages %}
-  {% for message in messages %}
-    <div>{{ message }}</div>
-  {% endfor %}
-{% endif %}
-<hr>
-<hr>
-<a href="{% url 'mainapp:post_history' %}">{% trans "До історії" %}</a>
+  <div class="back-link">
+    <a href="{% url 'mainapp:post_history' %}">{% trans "історія" %}</a>
+  </div>
+</div>
 {% endblock %}

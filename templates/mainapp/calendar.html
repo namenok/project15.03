@@ -1,109 +1,100 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block content %}
+<div class="calendar-page">
+  <h2 class="calendar-title">{% trans "календар" %} {{ month }}/{{ year }}</h2>
 
-{% load static %}
+  <div class="calendar-nav">
+    <a href="?year={{ year }}&month={{ month|add:-1 }}">&#8592; {% trans "попередній" %}</a>
+    <a href="?year={{ year }}&month={{ month|add:1 %}">{% trans "наступний" %} &#8594;</a>
+  </div>
 
-<h2 style="text-align:center;">{% trans "Календар" %} {{ month }}/{{ year }}</h2>
-<div style="text-align:center;">
-    <a href="?year={{ year }}&month={{ month|add:-1 }}" style="font-size: 1.5rem;">&#8592;{% trans "Попередній місяць" %}</a>
-    &nbsp;&nbsp;&nbsp;
-    <a href="?year={{ year }}&month={{ month|add:1 }}" style="font-size: 1.5rem;">{% trans "Наступний місяць" %} &#8594;</a>
-</div>
-
-<table style="width: 100%; font-size: 1.3rem; text-align: center; border-collapse: collapse;">
+  <table class="calendar-table">
     <tr>
-        {% for day in weekdays %}
-            <th style="padding: 10px;">{{ day }}</th>
-        {% endfor %}
+      {% for day in weekdays %}
+        <th>{{ day }}</th>
+      {% endfor %}
     </tr>
     {% for week in calendar_weeks %}
-        <tr>
-            {% for day in week %}
-                {% if day %}
-                    {% if day == today %}
-                        <td style="background-color: #ffd;">
-                            <a href="?year={{ year }}&month={{ month }}&date={{ day }}">
-                                <strong>{{ day.day }}</strong>
-                            </a>
-                        </td>
-                    {% elif day in data_dates %}
-                        <td style="background-color: #c8e6c9;">
-                            <a href="?year={{ year }}&month={{ month }}&date={{ day }}">{{ day.day }}</a>
-                        </td>
-                    {% else %}
-                        <td>{{ day.day }}</td>
-                    {% endif %}
-                {% else %}
-                    <td></td>
-                {% endif %}
-            {% endfor %}
-        </tr>
+      <tr>
+        {% for day in week %}
+          {% if day %}
+            {% if day == today %}
+              <td class="calendar-cell today">
+                <a href="?year={{ year }}&month={{ month }}&date={{ day }}"><strong>{{ day.day }}</strong></a>
+              </td>
+            {% elif day in data_dates %}
+              <td class="calendar-cell has-data">
+                <a href="?year={{ year }}&month={{ month }}&date={{ day }}">{{ day.day }}</a>
+              </td>
+            {% else %}
+              <td class="calendar-cell">{{ day.day }}</td>
+            {% endif %}
+          {% else %}
+            <td class="calendar-cell empty"></td>
+          {% endif %}
+        {% endfor %}
+      </tr>
     {% endfor %}
-</table>
+  </table>
 
-<hr>
-<p>{% trans "🟩 – є записи на цей день. Натисни на дату, щоб переглянути." %}</p>
-<hr>
-<form method="get" action="{% url 'mainapp:monthly_analytics' %}">
-  <button type="submit">{% trans "Отримати аналітику за місяць" %}</button>
-</form>
-<hr>
+  <form method="get" action="{% url 'mainapp:monthly_analytics' %}" class="analytics-form">
+    <button type="submit">{% trans "глянути аналітику за місяць" %}</button>
+  </form>
 
-<h2>{% trans "Дані за" %} {{ selected_date|date:"j E Y" }}</h2>
+  <h2>{% trans "інфа за" %} {{ selected_date|date:"j E Y" }}</h2>
 
-<h3>{% trans "📸 Фото" %}</h3>
-{% if gallery_items %}
-    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
-        {% for item in gallery_items %}
-            <div style="flex: 1 0 30%; text-align: center;">
-                <img src="{{ item.image.url }}" width="100%" style="max-width: 200px; border: 1px solid #ccc; border-radius: 8px;"><br>
-                <small>{{ item.description }}</small>
-            </div>
-        {% endfor %}
+  <h3>📸 {% trans "Фото" %}</h3>
+  {% if gallery_items %}
+    <div class="media-grid">
+      {% for item in gallery_items %}
+        <div class="media-item">
+          <img src="{{ item.image.url }}" alt="Фото">
+          <small>{{ item.description }}</small>
+        </div>
+      {% endfor %}
     </div>
-{% else %}
-    <p>{% trans "Немає фотографій за цю дату." %}</p>
-{% endif %}
+  {% else %}
+    <p>{% trans "немає фото на цю дату" %}</p>
+  {% endif %}
 
-<h3>{% trans "🎥 Відео" %}</h3>
-{% if video_items %}
-    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
-        {% for item in video_items %}
-            <div style="flex: 1 0 30%; text-align: center;">
-                <video width="100%" style="max-width: 250px;" controls>
-                    <source src="{{ item.video.url }}" type="video/mp4">
-                    <p>{% trans "Ваш браузер не підтримує відео." %}</p>
-                </video>
-                <br>
-                <small>{{ item.description }}</small>
-            </div>
-        {% endfor %}
+  <h3>🎥 {% trans "Відео" %}</h3>
+  {% if video_items %}
+    <div class="media-grid">
+      {% for item in video_items %}
+        <div class="media-item">
+          <video controls>
+            <source src="{{ item.video.url }}" type="video/mp4">
+            <p>{% trans "твій браузер не підтримує відео" %}</p>
+          </video>
+          <small>{{ item.description }}</small>
+        </div>
+      {% endfor %}
     </div>
-{% else %}
-    <p>{% trans "Немає відео за цю дату." %}</p>
-{% endif %}
+  {% else %}
+    <p>{% trans "немає відео за цю дату" %}</p>
+  {% endif %}
 
-<h3>{% trans "📝 Персональний пост" %}</h3>
-{% if personal_post %}
+  <h3>📝 {% trans "щоденні записи" %}</h3>
+  {% if personal_post %}
     <div>
-        <h4>{{ personal_post.title }}</h4>
-        <img src="{{ personal_post.poster }}" width="150"><br>
-        <p>{{ personal_post.content }}</p>
+      <h4>{{ personal_post.title }}</h4>
+      <img src="{{ personal_post.poster }}" width="150">
+      <p>{{ personal_post.content }}</p>
     </div>
-{% else %}
-    <p>{% trans "Посту за цю дату немає." %}</p>
-{% endif %}
+  {% else %}
+    <p>{% trans "записів за цю дату немає" %}</p>
+  {% endif %}
 
-<h3>{% trans "📋 Відповіді на опитування" %}</h3>
-{% if survey_answers %}
+  <h3>📋 {% trans "твої чекапи" %}</h3>
+  {% if survey_answers %}
     <ul>
-        {% for ans in survey_answers %}
-            <li><strong>{{ ans.survey.question }}</strong>: {{ ans.answer_choice.choice_text }}</li>
-        {% endfor %}
+      {% for ans in survey_answers %}
+        <li><strong>{{ ans.survey.question }}</strong>: {{ ans.answer_choice.choice_text }}</li>
+      {% endfor %}
     </ul>
-{% else %}
-    <p>{% trans "Немає відповідей за цю дату." %}</p>
-{% endif %}
-
+  {% else %}
+    <p>{% trans "немає інформації за цю дату" %}</p>
+  {% endif %}
+</div>
 {% endblock %}

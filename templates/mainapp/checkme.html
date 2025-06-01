@@ -1,39 +1,41 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load static %}
 {% block content %}
 
-<link href="{% static 'mainapp/new_check.css'%}" rel="stylesheet">
+<div class="survey-container">
+  <p><a href="{% url 'mainapp:survey_history' %}">{% trans "Переглянути свою історію відповідей на питування" %}</a></p>
 
-<p><a href="{% url 'mainapp:survey_history' %}">{% trans "Переглянути свою історію відповідей на питування" %}</a></p>
+  <h1>{% trans "Перевірити свій стан!" %}</h1>
 
-<h1>{% trans "Перевірити свій стан!" %}</h1>
-<p style="background-color:tomato;">{% trans "Опитування" %}</p>
+    <p class="survey-intro">
+  {% trans "Це коротке опитування допоможе краще зрозуміти твій стан, вибери одну відповідь на кожне запитання" %}
+</p>
 
+  {% if error %}
+      <p class="error">{{ error }}</p>
+  {% endif %}
 
-{% if error %}
-    <p style="color: red;">{{ error }}</p>
-{% endif %}
+  <form method="POST">
+      {% csrf_token %}
 
-<form method="POST">
-    {% csrf_token %}
-
-    {% for survey in surveys %}
-        <div style="margin-bottom: 20px;">
+      {% for survey in surveys %}
+          <div class="question-block">
             <h3>{{ survey.question }}</h3>
 
             {% for answer in survey.answers.all %}
-                <label>
-                    <input type="radio" name="survey_{{ survey.id }}" value="{{ answer.id }}" required>
-                    {{ answer.choice_text }}
-                </label><br>
+                <label class="radio-option" for="ans_{{ answer.id }}">
+                <input type="radio" id="ans_{{ answer.id }}" name="survey_{{ survey.id }}" value="{{ answer.id }}" required>
+                {{ answer.choice_text }}
+                </label>
             {% endfor %}
-        </div>
-    {% endfor %}
+          </div>
 
-    <button type="submit">{% trans "Зберегти відповіді" %}</button>
-</form>
+      {% endfor %}
 
+      <button type="submit" class="submit-button">{% trans "Зберегти відповіді" %}</button>
+  </form>
+</div>
 
 {% endblock %}
+
 

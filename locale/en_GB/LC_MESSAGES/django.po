@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-30 16:46+0000\n"
+"POT-Creation-Date: 2025-05-31 17:33+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -135,8 +135,6 @@ msgid "Мій текст належить до Категорії"
 msgstr "My text belongs to the Category"
 
 #: mainapp/models.py:90
-#, fuzzy
-#| msgid "постИ з адмінки для бібліотеки"
 msgid "пост з aдмінки для бібліотеки"
 msgstr "posts from the admin for the library"
 
@@ -283,8 +281,6 @@ msgid "Отримати аналітику за місяць"
 msgstr "Get analytics for the current month"
 
 #: templates/mainapp/calendar.html:53
-#, fuzzy
-#| msgid "Дані за "
 msgid "Дані за"
 msgstr "Data for "
 
@@ -336,27 +332,78 @@ msgstr "survey"
 msgid "Зберегти відповіді"
 msgstr "Save answers"
 
-#: templates/mainapp/home.html:10
-msgid ""
-"ця сторінка домашня , тут можуть бути новини чи щось з штучним інтелектом"
-msgstr ""
-"this is the homepage, there might be news or something with artificial "
-"intelligence"
+#: templates/mainapp/home.html:9
+msgid "Чат із психологічним AI-асистентом"
+msgstr "Chat with a mini therapist"
 
-#: templates/mainapp/index.html:8
-msgid ""
-"та тут сторінка початкова для користувача який вже зареєстрований, це "
-"індекс !"
-msgstr ""
-"and here is the home page for a user who is already registered, this is the "
-"index !"
+#: templates/mainapp/home.html:14
+msgid "Напиши щось..."
+msgstr "Write something..."
 
-#: templates/mainapp/index.html:10
+#: templates/mainapp/home.html:15
+msgid "Надіслати"
+msgstr "Send"
+
+#: templates/mainapp/home.html:47
+msgid "Ти"
+msgstr "You"
+
+#: templates/mainapp/home.html:61
+msgid "Бот"
+msgstr "Boat"
+
+#: templates/mainapp/home.html:63
+msgid "Сталася помилка"
+msgstr "An error occurred"
+
+#: templates/mainapp/index.html:12
+msgid "Ласкаво просимо назад"
+msgstr "Welcome back"
+
+#: templates/mainapp/index.html:14
+msgid "Зробіть глибокий вдих. Ви тут у безпеці."
+msgstr "Take a deep breath. You are safe here."
+
+#: templates/mainapp/index.html:20
+msgid "Відкрити календар"
+msgstr "Open calendar"
+
+#: templates/mainapp/index.html:23
+msgid "Записати в щоденник"
+msgstr "Write in a diary"
+
+#: templates/mainapp/index.html:26
+msgid "Пройти коротке опитування"
+msgstr "Take a short survey"
+
+#: templates/mainapp/index.html:29
+msgid "Завантажити в галерею"
+msgstr "Download files"
+
+#: templates/mainapp/index.html:48 templates/menu.html:45
+msgid "Вийти"
+msgstr "Log out"
+
+#: templates/mainapp/index.html:53
+msgid "Ласкаво просимо до MindSpace"
+msgstr "Welcome to MindSpace"
+
+#: templates/mainapp/index.html:55
 msgid ""
-"текст для незареєстрованого користувача і більше нічого немає бути, це індекс"
+"Затишний простір для роздумів, відпочинку та турботи про своє психічне "
+"благополуччя."
 msgstr ""
-"text for an unregistered user and there is nothing else to be, this is an "
-"index"
+"A cozy space for reflection, relaxation, and taking care of your mental well-"
+"being."
+
+#: templates/mainapp/index.html:59
+msgid "Зайти"
+msgstr "Log In"
+
+#: templates/mainapp/index.html:60 templates/menu.html:48
+#: templates/registration/login.html:24 templates/registration/register.html:73
+msgid "Зареєструватись"
+msgstr "Register"
 
 #: templates/mainapp/lib_user_post.html:5
 msgid "Створити пост"
@@ -508,18 +555,9 @@ msgstr "Welcome "
 msgid "Профіль"
 msgstr "Profile"
 
-#: templates/menu.html:45
-msgid "Вийти"
-msgstr "Log out"
-
 #: templates/menu.html:47
 msgid "Увійти"
 msgstr "Log in"
-
-#: templates/menu.html:48 templates/registration/login.html:24
-#: templates/registration/register.html:73
-msgid "Зареєструватись"
-msgstr "Register"
 
 #: templates/registration/change_password.html:10
 msgid "Змінити свій пароль"
@@ -717,12 +755,6 @@ msgid "Твій акаунт оновлено успішно!"
 msgstr "Your account has been updated successfully!"
 
 #: users/views.py:90
-#, fuzzy
-#| msgid ""
-#| "Ми надіслали вам інструкції для зміни пароля, якщо обліковий запис із "
-#| "введеною електронною адресою існує. Ви маєте отримати лист найближчим "
-#| "часом. Якщо ви не отримаєте листа, переконайтеся, що ввели адресу, з якою "
-#| "реєструвались, та перевірте папку зі спамом."
 msgid ""
 "Ми щойно надіслали інструкції для зміни пароля (якщо акаунт з цією адресою "
 "існує). Лист має прийти незабаром. Якщо його не буде — перевір спам і чи "
@@ -735,6 +767,14 @@ msgstr ""
 #: users/views.py:100
 msgid "Ваш пароль успішно змінено!"
 msgstr "Nice! Your password’s been changed."
+
+#, fuzzy
+#~| msgid ""
+#~| "ця сторінка домашня , тут можуть бути новини чи щось з штучним інтелектом"
+#~ msgid "Це домашня сторінка. Тут можуть бути новини або щось з ШІ."
+#~ msgstr ""
+#~ "this is the homepage, there might be news or something with artificial "
+#~ "intelligence"
 
 #~ msgid "пост зАдмінки для Бібліотеки"
 #~ msgstr "post fromAdmin for the Library"

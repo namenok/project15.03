@@ -1,52 +1,51 @@
 {% load i18n %}
-<style>
-  .nav-item.active > .nav-link {
-    background-color: #555;
-    color: #fff !important;
-    border-radius: 4px;
-  }
-</style>
+<nav class="main-navbar">
+  <div class="navbar-left">
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-left">
-  <a class="navbar-brand" href="#"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-          aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+    <ul class="navbar-menu">
+      {% if request.user.is_authenticated %}
+        <li class="navbar-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+          <a class="navbar-link" href="{% url 'mainapp:chat_page' %}">{% trans "чат" %}</a>
+        </li>
+        <li class="navbar-item {% if request.resolver_match.url_name == 'calendar_combined' %}active{% endif %}">
+          <a class="navbar-link" href="{% url 'mainapp:calendar_combined' %}">{% trans "календар" %}</a>
+        </li>
+        <li class="navbar-item {% if request.resolver_match.url_name == 'library_category_list' %}active{% endif %}">
+          <a class="navbar-link" href="{% url 'mainapp:library_category_list' %}">{% trans "бібліотека" %}</a>
+        </li>
+        <li class="navbar-item {% if request.resolver_match.url_name == 'checkme' %}active{% endif %}">
+          <a class="navbar-link" href="{% url 'mainapp:checkme' %}">{% trans "чекап" %}</a>
+        </li>
+        <li class="navbar-item {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">
+          <a class="navbar-link" href="{% url 'gallery:gallery' %}">{% trans "галерея" %}</a>
+        </li>
+        <li class="navbar-item {% if request.resolver_match.url_name == 'daily_post' %}active{% endif %}">
+          <a class="navbar-link" href="{% url 'mainapp:daily_post' %}">{% trans "запис" %}</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
 
-  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-  <ul class="navbar-nav mr-auto">
+  <div class="navbar-right">
     {% if request.user.is_authenticated %}
-      <li class="nav-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'mainapp:home' %}">{% trans "мійКабінет-домашня" %}</a>
-      </li>
-      <li class="nav-item {% if request.resolver_match.url_name == 'calendar_combined' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'mainapp:calendar_combined' %}">{% trans "Календар" %}</a>
-      </li>
-      <li class="nav-item {% if request.resolver_match.url_name == 'library_category_list' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'mainapp:library_category_list' %}">{% trans "Бібліотека" %}</a>
-      </li>
-      <li class="nav-item {% if request.resolver_match.url_name == 'checkme' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'mainapp:checkme' %}">{% trans "ПеревірСебе" %}</a>
-      </li>
-      <li class="nav-item {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'gallery:gallery' %}">{% trans "Галерея" %}</a>
-      </li>
-      <li class="nav-item {% if request.resolver_match.url_name == 'daily_post' %}active{% endif %}">
-        <a class="nav-link" href="{% url 'mainapp:daily_post' %}">{% trans "ЩоденніДумкиЗаписати" %}</a>
-      </li>
-    {% endif %}
-  </ul>
-
-  <nav class="nav">
-    {% if request.user.is_authenticated %}
-      <a href="#" class="nav-item nav-link">{% trans "Вітаю " %} {{ request.user|title }}</a>
-      <a href="{% url 'users:users_profile' %}" class="nav-item nav-link">{% trans "Профіль" %}</a>
-      <a href="{% url 'users:logout' %}" class="btn btn-outline">{% trans "Вийти" %}</a>
+      <span class="navbar-user">{% trans "Вітаю" %}, {{ request.user|title }}</span>
+      <a href="{% url 'users:users_profile' %}" class="navbar-link">{% trans "профіль" %}</a>
+      <a href="{% url 'users:logout' %}" class="navbar-button">{% trans "вийти" %}</a>
     {% else %}
-      <a href="{% url 'users:login' %}" class="btn btn-outline">{% trans "Увійти" %}</a>
-      <a href="{% url 'users:register' %}" class="btn btn-outline">{% trans "Зареєструватись" %}</a>
+      <a href="{% url 'users:login' %}" class="navbar-button">{% trans "увійти" %}</a>
+      <a href="{% url 'users:register' %}" class="navbar-button">{% trans "зареєструватись" %}</a>
     {% endif %}
-  </nav>
-</div>
+
+    <!-- Кнопка перемикання теми -->
+    <button id="theme-toggle" class="navbar-button theme-toggle">🌙</button>
+        <form action="{% url 'set_language' %}" method="post">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()">
+                <option value="uk" {% if LANGUAGE_CODE == "uk" %}selected{% endif %}>🇺🇦</option>
+                <option value="en-gb" {% if LANGUAGE_CODE == "en-gb" %}selected{% endif %}>🇬🇧</option>
+            </select>
+        </form>
+
+  </div>
 </nav>
+

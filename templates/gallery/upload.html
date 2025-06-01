@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load i18n %}
 {% block content %}
     <header>
-        <h1>{% trans "Завантажити файли" %}</h1>
-        <a href="{% url 'gallery:gallery' %}">{% trans "Переглянути галерею" %}</a>
+        <h1>{% trans "завантажити контент" %}</h1>
+        <a href="{% url 'gallery:gallery' %}">{% trans "переглянути галерею" %}</a>
     </header>
 
     <div class="upload-container">
@@ -36,7 +35,7 @@
                 <small>{{ form.videos.help_text }}</small>
             </div>
 
-            <button type="submit">{% trans "Завантажити" %}</button>
+            <button type="submit">{% trans "завантажити" %}</button>
         </form>
 
         {% if form.errors %}

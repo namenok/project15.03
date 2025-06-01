@@ -1,0 +1,49 @@
+body {
+  background-color: white;
+  color: black;
+}
+
+a {
+  color: #0077cc;
+}
+
+button {
+  background-color: #e0e0e0;
+  color: #111;
+}
+
+
+:root {
+  --navbar-bg: #f0f0f0;
+  --navbar-text: #222;
+  --navbar-link-hover: #007bff;
+  --navbar-active-bg: #d0d0d0;
+}
+
+.main-navbar {
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+}
+
+.navbar-link {
+  color: var(--navbar-text);
+}
+
+.navbar-link:hover {
+  color: var(--navbar-link-hover);
+}
+
+.navbar-item.active .navbar-link {
+  background-color: var(--navbar-active-bg);
+  color: var(--navbar-text);
+}
+
+.navbar-button {
+  border-color: #555;
+  color: #222;
+}
+
+.navbar-button:hover {
+  background-color: #ddd;
+  color: black;
+}

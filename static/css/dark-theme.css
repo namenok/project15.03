@@ -1,0 +1,49 @@
+body {
+  background-color: #121212;
+  color: white;
+}
+
+a {
+  color: #90caf9; /* світлий блакитний */
+}
+
+button {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Темні значення змінних */
+:root {
+  --navbar-bg: #1e1e1e;
+  --navbar-text: #ddd;
+  --navbar-link-hover: #64b5f6;
+  --navbar-active-bg: #333;
+}
+
+.main-navbar {
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+}
+
+.navbar-link {
+  color: var(--navbar-text);
+}
+
+.navbar-link:hover {
+  color: var(--navbar-link-hover);
+}
+
+.navbar-item.active .navbar-link {
+  background-color: var(--navbar-active-bg);
+  color: var(--navbar-text);
+}
+
+.navbar-button {
+  border-color: #ccc;
+  color: #fff;
+}
+
+.navbar-button:hover {
+  background-color: #444;
+  color: white;
+}

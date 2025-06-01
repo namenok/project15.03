@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 ]
 
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -79,9 +78,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'websiteProject.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
 
@@ -144,7 +140,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 
 # MEDIA_URL = '/media/'
@@ -170,3 +167,5 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'comfykh810@gmail.com'
 EMAIL_HOST_PASSWORD = 'jrbs rtsa gbgx zjln'
 
+
+OLLAMA_API_URL = "http://host.docker.internal:11434"

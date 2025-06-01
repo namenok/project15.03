@@ -2,113 +2,99 @@
 {% load i18n %}
 {% block content %}
 
-{% load static %}
+<div class="container">
 
-<link href="{% static 'mainapp/for_lib.css'%}" rel="stylesheet">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h4 class="mb-3">{% trans "пошук" %}</h4>
+      <form method="GET" action="{% url 'mainapp:search' %}" class="input-group mb-4">
+        <input
+          type="search"
+          name="query"
+          class="form-control"
+          placeholder="{% trans 'Введіть ключове слово...' %}"
+          value="{{ query|default:'' }}"
+          aria-label="{% trans 'Пошук' %}"
+        >
+        <button class="btn btn-primary" type="submit">
+          {% trans "шукати" %}
+        </button>
+      </form>
 
-
-
-<hr>
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-    <h4 class="mb-3">{% trans "Пошук по бібліотеці" %}</h4>
-    <form method="GET" action="{% url 'mainapp:search' %}" class="input-group mb-4">
-      <input
-        type="search"
-        name="query"
-        class="form-control"
-        placeholder="{% trans 'Введіть ключове слово...' %}"
-        value="{{ query|default:'' }}"
-        aria-label="{% trans 'Пошук' %}"
-      >
-      <button class="btn btn-primary" type="submit">
-        {% trans "Шукати" %}
-      </button>
-    </form>
-
-    {% if query == "" %}
-      <div class="alert alert-warning" role="alert">
-        {% trans "Ви не ввели ключове слово для пошуку." %}
-      </div>
-    {% endif %}
+      {% if query == "" %}
+        <div class="alert alert-warning" role="alert">
+          {% trans "не введене ключове слово для пошуку" %}
+        </div>
+      {% endif %}
+    </div>
   </div>
-</div>
 
-<hr>
-<hr>
-<hr>
 
-<hr>
-<h2>{% trans "Категорії" %}</h2>
-<ul>
+  <h4>{% trans "категорії" %}</h4>
+  <div class="category-list">
+    <ul>
       {% for category in categories %}
-            <li>
-              <a href="{% url 'mainapp:library_posts_by_category' slug=category.slug %}">
-                {{ category.name }}
-              </a>
-            </li>
+        <li>
+          <a href="{% url 'mainapp:library_posts_by_category' slug=category.slug %}">
+            {{ category.name }}
+          </a>
+        </li>
       {% endfor %}
-</ul>
+    </ul>
+  </div>
 
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-# результат пошуку по категоріям
-{% if selected_category %}
-    <p>{% trans "Пости в категорії(написані користувачем):" %} "{{selected_category.name}}"</p>
-        {% if posts %}
-            {% for post in posts %}
-            <p class="page-header"> <a>{{post.title}} </a></p>
-            <p> {{ post.content }} </p>
 
-            {% endfor %}
-        {% else %}
-            <p>{% trans "У цій категорії ще немає постів." %}</p>
-        {% endif %}
-{% else %}
-  <p>{% trans "Оберіть категорію, щоб побачити пости." %}</p>
-{% endif %}
-<hr>
-<hr>
-<hr>
-<hr>
-
-# результат пошуку по слову
-{% if query %}
-    <h2>{% trans "Результати пошуку по записах користувача:" %}</h2>
-    {% for post in post_blog_list %}
-        <div class="search-result">
-            <p><strong>{{ post.title }}</strong></p>
+  {% if selected_category %}
+    <p>{% trans "результат по категоріям серед твоїх постів:" %} "{{ selected_category.name }}"</p>
+    {% if posts %}
+      <div class="search-results">
+        {% for post in posts %}
+          <div class="search-result">
+            <p class="page-header"><a>{{ post.title }}</a></p>
             <p>{{ post.content }}</p>
-        </div>
-    {% empty %}
-        <p>{% trans "Нічого не знайдено!" %}</p>
-    {% endfor %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>{% trans "у цій категорії ще немає постів." %}</p>
+    {% endif %}
+  {% else %}
+    <p>{% trans "обери категорію, щоб побачити пости." %}</p>
+  {% endif %}
+  <hr><hr>
 
-    <h2>{% trans "Результати пошуку по бібліотеці (з адмінпанелі):" %}</h2>
-    {% for lib in my_posts_list %}
+  {% if query %}
+    <h2>{% trans "результати пошуку:" %}</h2>
+    <div class="search-results">
+      {% for post in post_blog_list %}
         <div class="search-result">
-            <p><strong>{{ lib.title }}</strong></p>
-            <p>{{ lib.content }}</p>
+          <p><strong>{{ post.title }}</strong></p>
+          <p>{{ post.content }}</p>
         </div>
-    {% empty %}
-        <p>{% trans "Нічого не знайдено!" %}</p>
-    {% endfor %}
-{% endif %}
+      {% empty %}
+        <p>{% trans "Ннічого не знайдено" %}</p>
+      {% endfor %}
+    </div>
 
-
-<hr>
-<hr>
-
-<p>{% trans "СТВОРИТИ ЗАПИС В БІБЛІОТЕКУ, ЦІКАВОЇ ІНФОРМАЦІЇ ЯКУ ДЕСЬ ЗНАЙШЛА І ХОЧЕШ СОБІ ЗАФІКСУВАТИ" %}</p>
-<form action="{% url 'mainapp:create' %}" method="POST">
+    <h2>{% trans "результати пошуку по бібліотеці:" %}</h2>
+    <div class="search-results">
+      {% for lib in my_posts_list %}
+        <div class="search-result">
+          <p><strong>{{ lib.title }}</strong></p>
+          <p>{{ lib.content }}</p>
+        </div>
+      {% empty %}
+        <p>{% trans "нічого не знайдено" %}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+  <hr>
+  <p>{% trans "маєш цікаву інформацію ? запиши собі в бібліотека щоб не загубити" %}</p>
+  <form action="{% url 'mainapp:create' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value=" {% trans 'Створити' %}" class="btn btn-default">
-</form>
-
+    <input type="submit" value="{% trans 'Створити' %}" class="btn btn-primary">
+  </form>
+</div>
 
 {% endblock content %}

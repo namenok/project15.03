@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load i18n %}
 {% block content %}
@@ -5,9 +6,21 @@
 
 
 {% if user.is_authenticated %}
-    <p>{% trans "та тут сторінка початкова для користувача який вже зареєстрований, це індекс !" %} </p>
+
+<div class="container text-center py-5">
+  <h2 class="mb-3">{% trans "Ласкаво просимо назад" %}, {{ request.user|title }} 🌿</h2>
+  <p class="lead text-muted">{% trans "Зробіть глибокий вдих. Ви тут у безпеці." %}</p>
+
 {% else %}
-    <p>{% trans "текст для незареєстрованого користувача і більше нічого немає бути, це індекс" %}</p>
+
+<div class="container text-center py-5">
+  <h2 class="mb-3">{% trans "Ласкаво просимо до MindSpace" %} 🌸</h2>
+  <p class="lead text-muted">
+    {% trans "Затишний простір для роздумів, відпочинку та турботи про своє психічне благополуччя." %}
+  </p>
+
+</div>
+
 {% endif %}
 
 {% endblock %}

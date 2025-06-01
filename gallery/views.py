@@ -36,7 +36,7 @@ def upload(request):
         images = images[:5]
 
         if form.is_valid():
-            gallery_day, _ = GalleryDay.objects.get_or_create(
+            gallery_day, created = GalleryDay.objects.get_or_create(
                 user=request.user,
                 date=date.today()
             )

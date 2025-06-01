@@ -198,9 +198,12 @@ def search(request):
     query = request.GET.get('query', '')
     post_blog_list = Post.objects.filter(Q(content__icontains=query) | Q(title__icontains=query)).order_by("-published_date")
     my_posts_list = LibText.objects.filter(content__icontains=query )
+    categories = Category.objects.all()
+
     context = {'post_blog_list': post_blog_list,
                'my_posts_list': my_posts_list,
-               'query': query}
+               'query': query,
+               'categories': categories,}
     return render(request, 'mainapp/library.html', context=context)
 
 
@@ -219,7 +222,7 @@ def create(request):
             post.user = request.user
             post.save()
             form.save_m2m()  # ← для ManyToMany поля "teg"(в тг
-            return redirect('mainapp:library_category_list')
+            return redirect('mainapp:library_history')
     form = PostForm()
     context = {"form": form}
     return render(request, 'mainapp/create.html', context=context)
@@ -288,3 +291,45 @@ def post_history_view(request):
     posts = PersonalPost.objects.filter(user=request.user).order_by('-date')
     return render(request, 'mainapp/personal_post_history.html', {'posts': posts})
 
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings   # ← Ось тут ти підключаєш те, що ти зберегла в settings.py
+import json
+import requests
+
+# Відображає сторінку з чатом
+def chat_page(request):
+    return render(request, 'mainapp/home.html')
+
+# Обробляє запит від форми (чат)
+@csrf_exempt
+def ai_assistant(request):
+
+    if request.method == 'POST':
+        try:
+
+            data = json.loads(request.body)
+            message = data.get('message')
+            print("🔵 Отримано повідомлення:", message)
+            print("📡 Звертаємось до Ollama...")
+
+            response = requests.post(
+                f"{settings.OLLAMA_API_URL}/api/generate",
+                json={
+                    "model": "mistral",
+                    "prompt": message,
+                }
+            )
+            result = response.json()
+            print("🟢 Відповідь від Ollama:", result)
+            return JsonResponse({'reply': result.get('response', 'Вибач, не можу відповісти.')})
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+def library_users_history(request):
+    posts = Post.objects.filter(user=request.user).order_by('-published_date')
+    return render(request, 'mainapp/lib_user_post_history.html', {'posts': posts})

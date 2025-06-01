@@ -1,15 +1,133 @@
 {% extends 'base.html' %}
-{% load i18n %}
-
-
 {% block content %}
-{% load static %}
+<h2 style="text-align: center;">Chat with a mini therapist</h2>
+<div id="chat-window">
+    <div id="chat-messages"></div>
+</div>
+<form id="chat-form" autocomplete="off" action="javascript:void(0);">
+    <input type="text" id="chat-input" placeholder="Напиши щось..." required />
+    <button type="submit">Надіслати</button>
 
+</form>
+{% endblock %}
+{% block extra_scripts %}
+<style>
+#chat-window {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    height: 400px;
+    padding: 10px;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    margin-bottom: 15px;
+}
 
-<link href="{% static 'mainapp/for_home.css'%}" rel="stylesheet">
-<h2>{% trans "ця сторінка домашня , тут можуть бути новини чи щось з штучним інтелектом"%}</h2>
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
+.message {
+    padding: 8px 12px;
+    border-radius: 10px;
+    max-width: 70%;
+    word-wrap: break-word;
+    font-size: 14px;
+}
 
+.user {
+    align-self: flex-end;
+    background-color: #d1e7dd;
+    border: 1px solid #badbcc;
+}
+
+.ai {
+    align-self: flex-start;
+    background-color: #e2e3e5;
+    border: 1px solid #d3d6d8;
+}
+
+#chat-form {
+    display: flex;
+    gap: 10px;
+}
+
+#chat-input {
+    flex-grow: 1;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#chat-form button {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+}
+
+#chat-form button:hover {
+    background-color: #218838;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userMessage = input.value.trim();
+        if (!userMessage) return;
+
+        appendMessage('user', userMessage);
+        input.value = '';
+
+        fetch("/chat/ask/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": getCSRFToken()
+            },
+            body: JSON.stringify({ message: userMessage })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.reply) {
+                appendMessage('ai', data.reply.trim());
+            } else {
+                appendMessage('ai', '⚠️ No response from AI');
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            appendMessage('ai', '❌ Connection error');
+        });
+    });
+
+    function appendMessage(sender, text) {
+        const message = document.createElement('div');
+        message.classList.add('message', sender);
+        message.textContent = text;
+        chatMessages.appendChild(message);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function getCSRFToken() {
+        return document.cookie.split('; ')
+            .find(row => row.startsWith('csrftoken='))
+            ?.split('=')[1];
+    }
+});
+    console.log("✅ JS loaded");
+</script>
 
 
 

@@ -1,16 +1,70 @@
 {% extends 'base.html' %}
+
 {% block content %}
 <h2 style="text-align: center;">Chat with a mini therapist</h2>
 <div id="chat-window">
     <div id="chat-messages"></div>
 </div>
-<form id="chat-form" autocomplete="off" action="javascript:void(0);">
+<form id="chat-form" autocomplete="off">
+    {% csrf_token %}
     <input type="text" id="chat-input" placeholder="Напиши щось..." required />
     <button type="submit">Надіслати</button>
-
 </form>
 {% endblock %}
+
 {% block extra_scripts %}
+<script>
+const socket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+
+socket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    console.log('Reply from server:', data.reply);
+    appendMessage('ai', data.reply.trim());
+};
+
+socket.onopen = function(e) {
+    console.log('WebSocket connection opened');
+};
+
+socket.onerror = function(e) {
+    console.error('WebSocket error', e);
+};
+
+socket.onclose = function(e) {
+    console.log('WebSocket closed', e);
+};
+
+function sendMessage(msg) {
+    socket.send(JSON.stringify({'message': msg}));
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userMessage = input.value.trim();
+        if (!userMessage) return;
+
+        appendMessage('user', userMessage);
+        sendMessage(userMessage);
+        input.value = '';
+    });
+
+    function appendMessage(sender, text) {
+        const message = document.createElement('div');
+        message.classList.add('message', sender);
+        message.textContent = text;
+        chatMessages.appendChild(message);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+});
+</script>
+{% endblock %}
+
+{% block styles %}
 <style>
 #chat-window {
     border: 1px solid #ccc;
@@ -75,60 +129,5 @@
     background-color: #218838;
 }
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const chatMessages = document.getElementById('chat-messages');
-    const form = document.getElementById('chat-form');
-    const input = document.getElementById('chat-input');
-
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const userMessage = input.value.trim();
-        if (!userMessage) return;
-
-        appendMessage('user', userMessage);
-        input.value = '';
-
-        fetch("/chat/ask/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": getCSRFToken()
-            },
-            body: JSON.stringify({ message: userMessage })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.reply) {
-                appendMessage('ai', data.reply.trim());
-            } else {
-                appendMessage('ai', '⚠️ No response from AI');
-            }
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            appendMessage('ai', '❌ Connection error');
-        });
-    });
-
-    function appendMessage(sender, text) {
-        const message = document.createElement('div');
-        message.classList.add('message', sender);
-        message.textContent = text;
-        chatMessages.appendChild(message);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-    }
-
-    function getCSRFToken() {
-        return document.cookie.split('; ')
-            .find(row => row.startsWith('csrftoken='))
-            ?.split('=')[1];
-    }
-});
-    console.log("✅ JS loaded");
-</script>
-
-
-
 {% endblock %}
+

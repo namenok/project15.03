@@ -9,6 +9,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   web:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     build: .
     command: >
       sh -c "python manage.py wait_for_db && 

@@ -1,3 +1,4 @@
+import traceback
 from itertools import chain
 
 from django.contrib import messages
@@ -294,40 +295,58 @@ def post_history_view(request):
 
 
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
 from django.conf import settings   # ← Ось тут ти підключаєш те, що ти зберегла в settings.py
 import json
 import requests
 
 # Відображає сторінку з чатом
+@login_required
 def chat_page(request):
     return render(request, 'mainapp/home.html')
 
-# Обробляє запит від форми (чат)
-@csrf_exempt
+import traceback
+import aiohttp
+import asyncio
+import json
+from asgiref.sync import async_to_sync
+
+async def query_ollama(ollama_url, payload):
+    async with aiohttp.ClientSession() as session:
+        async with session.post(ollama_url, json=payload) as resp:
+            full_response = ""
+            async for line in resp.content:
+                data = json.loads(line.decode())
+                full_response += data.get("response", "")
+                if data.get("done"):
+                    break
+            return full_response
+
+@login_required
 def ai_assistant(request):
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-    if request.method == 'POST':
-        try:
+    try:
+        data = json.loads(request.body)
+        message = data.get('message', '').strip()
 
-            data = json.loads(request.body)
-            message = data.get('message')
-            print("🔵 Отримано повідомлення:", message)
-            print("📡 Звертаємось до Ollama...")
+        if not message:
+            return JsonResponse({'error': 'Empty message'}, status=400)
 
-            response = requests.post(
-                f"{settings.OLLAMA_API_URL}/api/generate",
-                json={
-                    "model": "mistral",
-                    "prompt": message,
-                }
-            )
-            result = response.json()
-            print("🟢 Відповідь від Ollama:", result)
-            return JsonResponse({'reply': result.get('response', 'Вибач, не можу відповісти.')})
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-    return JsonResponse({'error': 'Invalid request method'}, status=405)
+        # Викликаємо асинхронну функцію, передаючи повідомлення користувача
+        response_text = async_to_sync(query_ollama)("http://localhost:11434/api/generate", {"prompt": message})
+
+        return JsonResponse({'reply': response_text})
+
+    except aiohttp.ClientError as net_err:
+        print("❌ Network error connecting to Ollama:", net_err)
+        return JsonResponse({'error': 'Could not connect to Ollama.'}, status=502)
+
+    except Exception as e:
+        print("❌ Internal server error:")
+        traceback.print_exc()
+        return JsonResponse({'error': 'Internal server error.'}, status=500)
 
 
 def library_users_history(request):

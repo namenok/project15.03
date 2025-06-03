@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'modeltranslation',
     'mainapp',
     'users',
@@ -169,3 +170,6 @@ EMAIL_HOST_PASSWORD = 'jrbs rtsa gbgx zjln'
 
 
 OLLAMA_API_URL = "http://host.docker.internal:11434"
+
+ASGI_APPLICATION = "websiteProject.asgi.application"
+

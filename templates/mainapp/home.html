@@ -3,43 +3,37 @@
 {% block content %}
 <h2 style="text-align: center;">Chat with a mini therapist</h2>
 <div id="chat-window">
-    <div id="chat-messages"></div>
+  <div id="chat-messages"></div>
 </div>
 <form id="chat-form" autocomplete="off">
-    {% csrf_token %}
-    <input type="text" id="chat-input" placeholder="Напиши щось..." required />
-    <button type="submit">Надіслати</button>
+  <input id="chat-input" type="text" placeholder="Напиши щось..." required />
+  <button type="submit">Надіслати</button>
 </form>
+
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
 const socket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
 
-socket.onmessage = function(e) {
-    const data = JSON.parse(e.data);
-    console.log('Reply from server:', data.reply);
-    appendMessage('ai', data.reply.trim());
-};
-
-socket.onopen = function(e) {
-    console.log('WebSocket connection opened');
-};
-
-socket.onerror = function(e) {
-    console.error('WebSocket error', e);
-};
-
-socket.onclose = function(e) {
-    console.log('WebSocket closed', e);
-};
+let chatMessages;
+let aiMessageDiv;
+let fullResponse = '';
 
 function sendMessage(msg) {
     socket.send(JSON.stringify({'message': msg}));
 }
 
+function appendMessage(sender, text) {
+    const message = document.createElement('div');
+    message.classList.add('message', sender);
+    message.textContent = text;
+    chatMessages.appendChild(message);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    const chatMessages = document.getElementById('chat-messages');
+    chatMessages = document.getElementById('chat-messages');
     const form = document.getElementById('chat-form');
     const input = document.getElementById('chat-input');
 
@@ -51,35 +45,61 @@ document.addEventListener('DOMContentLoaded', function() {
         appendMessage('user', userMessage);
         sendMessage(userMessage);
         input.value = '';
-    });
 
-    function appendMessage(sender, text) {
-        const message = document.createElement('div');
-        message.classList.add('message', sender);
-        message.textContent = text;
-        chatMessages.appendChild(message);
+        // Показуємо "генерується відповідь"
+        aiMessageDiv = document.createElement('div');
+        aiMessageDiv.classList.add('message', 'ai');
+        aiMessageDiv.textContent = '🤖 Генерується відповідь...';
+        chatMessages.appendChild(aiMessageDiv);
+        fullResponse = '';
+    });
+});
+
+socket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    const chunk = data.reply;
+
+    if (chunk) {
+        fullResponse += chunk;
+        aiMessageDiv.textContent = fullResponse;
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-});
+};
+
+socket.onopen = function() {
+    console.log('WebSocket connection opened');
+};
+
+socket.onerror = function(e) {
+    console.error('WebSocket error', e);
+};
+
+socket.onclose = function(e) {
+    console.log('WebSocket closed', e);
+};
 </script>
+
 {% endblock %}
 
 {% block styles %}
 <style>
 #chat-window {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 15px auto; /* центр по горизонталі */
     border: 1px solid #ccc;
     border-radius: 10px;
     height: 400px;
     padding: 10px;
     overflow-y: auto;
     background-color: #f9f9f9;
-    margin-bottom: 15px;
 }
 
 #chat-messages {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    height: 100%;
 }
 
 .message {
@@ -105,6 +125,8 @@ document.addEventListener('DOMContentLoaded', function() {
 #chat-form {
     display: flex;
     gap: 10px;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 #chat-input {
@@ -128,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function() {
 #chat-form button:hover {
     background-color: #218838;
 }
+
 </style>
 {% endblock %}
 

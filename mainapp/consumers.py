@@ -1,35 +1,53 @@
-
-import json
-from channels.generic.websocket import AsyncWebsocketConsumer
-from asgiref.sync import sync_to_async
 import aiohttp
+import json
+import logging
+
+from channels.generic.websocket import AsyncWebsocketConsumer
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        await self.accept()
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.room_group_name = f'chat_{self.room_name}'
 
-    async def disconnect(self, close_code):
-        pass
+        # Додаткові налаштування для підключення
 
     async def receive(self, text_data):
-        data = json.loads(text_data)
-        message = data.get('message', '')
+        try:
+            payload = json.loads(text_data)
+            user_message = payload.get('message', '')
 
-        if not message:
-            await self.send(text_data=json.dumps({'error': 'Empty message'}))
-            return
+            if user_message:
+                await self.send(text_data=json.dumps({"reply": "⏳ Обробляємо ваше повідомлення..."}))
 
-        response_text = await self.query_ollama("http://localhost:11434/api/generate", {"prompt": message})
+                try:
+                    async with aiohttp.ClientSession() as session:
+                        async with session.post(
+                            "http://host.docker.internal:11434/api/chat",
+                            json={
+                                "model": "llama3.1",
+                                "messages": [{"role": "user", "content": user_message}],
+                                "stream": True
+                            }
+                        ) as resp:
+                            if resp.status == 200:
+                                async for line in resp.content:
+                                    if line:
+                                        try:
+                                            json_line = json.loads(line.decode("utf-8"))
+                                            chunk = json_line.get("message", {}).get("content", "")
+                                            if chunk:
+                                                await self.send(text_data=json.dumps({"reply": chunk}))
+                                            if json_line.get("done", False):
+                                                break
+                                        except json.JSONDecodeError as e:
+                                            logging.error(f"JSON decode error: {e}")
+                            else:
+                                logging.error(f"API returned status code {resp.status}")
+                except Exception as e:
+                    logging.error(f"Stream error: {e}")
+                    await self.send(text_data=json.dumps({"reply": "⚠️ Сталася помилка при зверненні до моделі."}))
 
-        await self.send(text_data=json.dumps({'reply': response_text}))
-
-    async def query_ollama(self, url, payload):
-        async with aiohttp.ClientSession() as session:
-            async with session.post(url, json=payload) as resp:
-                full_response = ""
-                async for line in resp.content:
-                    data = json.loads(line.decode())
-                    full_response += data.get("response", "")
-                    if data.get("done"):
-                        break
-                return full_response
+        except json.JSONDecodeError as e:
+            logging.error(f"Received invalid JSON: {e}")
+            await self.send(text_data=json.dumps({"reply": "⚠️ Невірний формат повідомлення."}))

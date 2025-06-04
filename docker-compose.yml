@@ -15,7 +15,7 @@ services:
     command: >
       sh -c "python manage.py wait_for_db && 
              python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+             uvicorn websiteProject.asgi:application --host 0.0.0.0 --port 8000 --log-level debug"
     volumes:
       - .:/app
     ports:

@@ -168,7 +168,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'comfykh810@gmail.com'
 EMAIL_HOST_PASSWORD = 'jrbs rtsa gbgx zjln'
 
-
 OLLAMA_API_URL = "http://host.docker.internal:11434"
 
 ASGI_APPLICATION = "websiteProject.asgi.application"

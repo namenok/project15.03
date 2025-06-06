@@ -64,7 +64,7 @@
   <hr><hr>
 
   {% if query %}
-    <h2>{% trans "результати пошуку:" %}</h2>
+    <h2>{% trans "результати пошуку по твоїм записам:" %}</h2>
     <div class="search-results">
       {% for post in post_blog_list %}
         <div class="search-result">
@@ -72,7 +72,7 @@
           <p>{{ post.content }}</p>
         </div>
       {% empty %}
-        <p>{% trans "Ннічого не знайдено" %}</p>
+        <p>{% trans "нічого не знайдено" %}</p>
       {% endfor %}
     </div>
 

@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from datetime import date
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as gettext
 import os
 
 from moviepy import VideoFileClip
@@ -31,7 +31,7 @@ class PhotoGallery(models.Model):
 
     def clean(self):
         if self.gallery_day.photos.count() >= 5:
-            raise ValidationError(_("На день можна додати лише 5 фото."))
+            raise ValidationError(gettext("На день можна додати лише 5 фото."))
 
 
 class VideoGallery(models.Model):
@@ -40,5 +40,5 @@ class VideoGallery(models.Model):
     description = models.CharField(max_length=100, blank=True)
     def clean(self):
         if self.gallery_day.videos.count() >= 2:
-            raise ValidationError(_("На день можна додати лише 2 відео."))
+            raise ValidationError(gettext("На день можна додати лише 2 відео."))
 

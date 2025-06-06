@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h2 style="text-align: center;">Chat with a mini therapist</h2>
+
+<h2 style="text-align: center;">чат з міні-терапевтом</h2>
+<p>при перезавантаженні чи зміні сторінки чат очищується*</p>>
 <div id="chat-window">
   <div id="chat-messages"></div>
 </div>
 <form id="chat-form" autocomplete="off">
-  <input id="chat-input" type="text" placeholder="Напиши щось..." required />
+  <input id="chat-input" type="text" placeholder="{{ _('напиши щось...') }}" required />
   <button type="submit">Надіслати</button>
 </form>
 

@@ -3,12 +3,12 @@
 {% block content %}
 
 <div class="survey-container">
-  <p><a href="{% url 'mainapp:survey_history' %}">{% trans "Переглянути свою історію відповідей на питування" %}</a></p>
+  <p><a href="{% url 'mainapp:survey_history' %}">{% trans "переглянути свою історію відповідей на питування" %}</a></p>
 
-  <h1>{% trans "Перевірити свій стан!" %}</h1>
+  <h1>{% trans "перевірити свій стан!" %}</h1>
 
     <p class="survey-intro">
-  {% trans "Це коротке опитування допоможе краще зрозуміти твій стан, вибери одну відповідь на кожне запитання" %}
+  {% trans "це коротке опитування допоможе краще зрозуміти твій стан, вибери одну відповідь на кожне запитання" %}
 </p>
 
   {% if error %}
@@ -32,7 +32,7 @@
 
       {% endfor %}
 
-      <button type="submit" class="submit-button">{% trans "Зберегти відповіді" %}</button>
+      <button type="submit" class="submit-button">{% trans "зберегти відповіді" %}</button>
   </form>
 </div>
 

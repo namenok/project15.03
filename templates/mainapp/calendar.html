@@ -44,7 +44,7 @@
 
   <h2>{% trans "інфа за" %} {{ selected_date|date:"j E Y" }}</h2>
 
-  <h3>📸 {% trans "Фото" %}</h3>
+  <h3>📸 {% trans "фото" %}</h3>
   {% if gallery_items %}
     <div class="media-grid">
       {% for item in gallery_items %}
@@ -58,7 +58,7 @@
     <p>{% trans "немає фото на цю дату" %}</p>
   {% endif %}
 
-  <h3>🎥 {% trans "Відео" %}</h3>
+  <h3>🎥 {% trans "відео" %}</h3>
   {% if video_items %}
     <div class="media-grid">
       {% for item in video_items %}

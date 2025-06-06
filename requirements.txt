@@ -8,3 +8,4 @@ django-modeltranslation
 channels>=4.0
 aiohttp
 uvicorn[standard]
+watchgod

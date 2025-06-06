@@ -1,16 +1,16 @@
 import aiohttp
 import json
 import logging
-
 from channels.generic.websocket import AsyncWebsocketConsumer
-
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = f'chat_{self.room_name}'
+        # Просто приймаємо з'єднання
+        await self.accept()
 
-        # Додаткові налаштування для підключення
+    async def disconnect(self, close_code):
+        # Тут нічого не потрібно, бо ми не підписані на групи
+        pass
 
     async def receive(self, text_data):
         try:
@@ -25,7 +25,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         async with session.post(
                             "http://host.docker.internal:11434/api/chat",
                             json={
-                                "model": "llama3.1",
+                                "model": "mistral:latest",
                                 "messages": [{"role": "user", "content": user_message}],
                                 "stream": True
                             }

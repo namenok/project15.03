@@ -83,74 +83,104 @@ socket.onclose = function(e) {
 
 {% block styles %}
 <style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+}
+
 #chat-window {
     width: 100%;
     max-width: 600px;
-    margin: 0 auto 15px auto; /* центр по горизонталі */
+    margin: 20px auto;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 12px;
     height: 400px;
-    padding: 10px;
+    padding: 12px;
     overflow-y: auto;
-    background-color: #f9f9f9;
+    background-color: #f0f2f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 #chat-messages {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
     height: 100%;
+    overflow-y: auto;
 }
 
 .message {
-    padding: 8px 12px;
-    border-radius: 10px;
-    max-width: 70%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    max-width: 80%;
     word-wrap: break-word;
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 1.4;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .user {
     align-self: flex-end;
-    background-color: #d1e7dd;
-    border: 1px solid #badbcc;
+    background-color: #dcf8c6;
+    border: 1px solid #b2ebc5;
 }
 
 .ai {
     align-self: flex-start;
-    background-color: #e2e3e5;
-    border: 1px solid #d3d6d8;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+}
+
+.ai::before {
+    content: "🤖";
+    position: absolute;
+    left: -26px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.user::before {
+    content: "🧑";
+    position: absolute;
+    right: -26px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 #chat-form {
     display: flex;
     gap: 10px;
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto 40px;
+    padding: 10px;
 }
 
 #chat-input {
     flex-grow: 1;
-    padding: 8px;
-    font-size: 14px;
-    border-radius: 6px;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 8px;
     border: 1px solid #ccc;
 }
 
 #chat-form button {
-    padding: 8px 16px;
-    font-size: 14px;
-    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 8px;
     border: none;
     background-color: #28a745;
     color: white;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 #chat-form button:hover {
     background-color: #218838;
 }
-
 </style>
 {% endblock %}
 

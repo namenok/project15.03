@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-
 {% block content %}
 
 <header>
@@ -16,7 +15,7 @@
             {% for item in media_items %}
                 <div class="gallery-item">
                     {% if item.image %}
-                        <img src="{{ item.image.url }}" alt="Фото" class="gallery-photo">
+                        <img src="{{ item.image.url }}" alt="фото" class="gallery-photo">
                     {% endif %}
                     {% if item.video %}
                         <video controls class="gallery-video">

@@ -4,12 +4,10 @@
 
 <div class="survey-container">
   <p><a href="{% url 'mainapp:survey_history' %}">{% trans "переглянути свою історію відповідей на питування" %}</a></p>
-
-  <h1>{% trans "перевірити свій стан!" %}</h1>
-
+  <h1>{% trans "перевірити свій стан" %}</h1>
     <p class="survey-intro">
-  {% trans "це коротке опитування допоможе краще зрозуміти твій стан, вибери одну відповідь на кожне запитання" %}
-</p>
+        {% trans "це коротке опитування допоможе краще зрозуміти твій стан, вибери одну відповідь на кожне запитання" %}
+    </p>
 
   {% if error %}
       <p class="error">{{ error }}</p>
@@ -17,11 +15,9 @@
 
   <form method="POST">
       {% csrf_token %}
-
       {% for survey in surveys %}
           <div class="question-block">
             <h3>{{ survey.question }}</h3>
-
             {% for answer in survey.answers.all %}
                 <label class="radio-option" for="ans_{{ answer.id }}">
                 <input type="radio" id="ans_{{ answer.id }}" name="survey_{{ survey.id }}" value="{{ answer.id }}" required>
@@ -29,9 +25,22 @@
                 </label>
             {% endfor %}
           </div>
+            <style>
+              .question-block {
+                margin-bottom: 20px;
+              }
 
+              .radio-option {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+              }
+
+              .radio-option input[type="radio"] {
+                margin-right: 10px;
+              }
+            </style>
       {% endfor %}
-
       <button type="submit" class="submit-button">{% trans "зберегти відповіді" %}</button>
   </form>
 </div>

@@ -12,11 +12,11 @@
           type="search"
           name="query"
           class="form-control"
-          placeholder="{% trans 'Введіть ключове слово...' %}"
+          placeholder="{% trans 'введи ключове слово...' %}"
           value="{{ query|default:'' }}"
-          aria-label="{% trans 'Пошук' %}"
+          aria-label="{% trans 'пошук' %}"
         >
-        <button class="btn btn-primary" type="submit">
+        <button class="btn btn-primary btn-sm" type="submit">
           {% trans "шукати" %}
         </button>
       </form>
@@ -45,7 +45,7 @@
 
 
   {% if selected_category %}
-    <p>{% trans "результат по категоріям серед твоїх постів:" %} "{{ selected_category.name }}"</p>
+    <p>{% trans "результат пошуку по категорії серед твоїх постів" %} "{{selected_category.name}}"</p>
     {% if posts %}
       <div class="search-results">
         {% for post in posts %}
@@ -56,15 +56,15 @@
         {% endfor %}
       </div>
     {% else %}
-      <p>{% trans "у цій категорії ще немає постів." %}</p>
+      <p>{% trans "у цій категорії ще немає постів" %}</p>
     {% endif %}
   {% else %}
-    <p>{% trans "обери категорію, щоб побачити пости." %}</p>
+    <p>{% trans "обери категорію, щоб побачити пости" %}</p>
   {% endif %}
   <hr><hr>
 
   {% if query %}
-    <h2>{% trans "результати пошуку по твоїм записам:" %}</h2>
+    <h2>{% trans "результати пошуку по твоїм записам" %}</h2>
     <div class="search-results">
       {% for post in post_blog_list %}
         <div class="search-result">
@@ -76,7 +76,7 @@
       {% endfor %}
     </div>
 
-    <h2>{% trans "результати пошуку по бібліотеці:" %}</h2>
+    <h2>{% trans "результати пошуку по бібліотеці" %}</h2>
     <div class="search-results">
       {% for lib in my_posts_list %}
         <div class="search-result">
@@ -89,11 +89,11 @@
     </div>
   {% endif %}
   <hr>
-  <p>{% trans "маєш цікаву інформацію ? запиши собі в бібліотека щоб не загубити" %}</p>
+  <p>{% trans "маєш цікаву інформацію ? запиши в бібліотеку, щоб не загубити" %}</p>
   <form action="{% url 'mainapp:create' %}" method="POST">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="{% trans 'Створити' %}" class="btn btn-primary">
+    <input type="submit" value="{% trans 'створити' %}" class="btn btn-primary">
   </form>
 </div>
 

@@ -18,15 +18,28 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user_message = payload.get('message', '')
 
             if user_message:
-                await self.send(text_data=json.dumps({"reply": "⏳ Обробляємо ваше повідомлення..."}))
+                await self.send(text_data=json.dumps({"reply": "⏳ assistant is typing... "}))
+                #  системний промпт
+                system_prompt = """
+                                Ти - емпатичний психологічний помічник, який спеціалізується на підтримці користувачів українською та англійською мовами.
+                                Твоє завдання - уважно слухати, надавати співчутливі відповіді, пропонувати загальні стратегії для покращення ментального здоров'я та, за потреби, перенаправляти до фахівців.
+                                Ніколи не надавай медичних діагнозів чи конкретних лікувальних рекомендацій.
+                                Будь завжди доброзичливим, неупередженим та конфіденційним.
+                                """
+                # Створіть список повідомлень, включаючи системний промпт
+                # Системний промпт завжди йде першим у списку messages
+                messages = [
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_message}
+                ]
 
                 try:
                     async with aiohttp.ClientSession() as session:
                         async with session.post(
                             "http://host.docker.internal:11434/api/chat",
                             json={
-                                "model": "mistral:latest",
-                                "messages": [{"role": "user", "content": user_message}],
+                                "model": "gemma:2b",
+                                "messages": messages,
                                 "stream": True
                             }
                         ) as resp:
@@ -43,7 +56,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                                         except json.JSONDecodeError as e:
                                             logging.error(f"JSON decode error: {e}")
                             else:
-                                logging.error(f"API returned status code {resp.status}")
+                                logging.error(f"API returned status code {resp.status}: {await resp.text()}")
                 except Exception as e:
                     logging.error(f"Stream error: {e}")
                     await self.send(text_data=json.dumps({"reply": "⚠️ Сталася помилка при зверненні до моделі."}))

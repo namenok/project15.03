@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<h2 class="mb-4">{% trans "Історія твоїх постів бібліотечних" %}</h2>
+<h2 class="mb-4">{% trans "історія твоїх особистих постів в бібліотеку" %}</h2>
 
 <div class="post-history">
     {% for post in posts %}
@@ -14,13 +14,13 @@
         </div>
     {% empty %}
         <div class="alert alert-info" role="alert">
-            {% trans "Поки що немає постів." %}
+            {% trans "постів немає" %}
         </div>
     {% endfor %}
 </div>
 
 <a href="{% url 'mainapp:library_category_list' %}" class="btn btn-outline-primary mt-4">
-    ← {% trans "Назад у бібліотеку" %}
+    ← {% trans "назад до бібліотеки" %}
 </a>
 
 {% endblock %}

@@ -2,7 +2,7 @@
 {% load i18n %}
 {% block content %}
 
-<h2 class="mb-4">{% trans "Історія твоїх постів" %}</h2>
+<h2 class="mb-4">{% trans "історія твоїх постів" %}</h2>
 
 <div class="post-history">
   {% for post in posts %}
@@ -12,7 +12,7 @@
       <p class="post-date text-muted small">{{ post.date }}</p>
     </div>
   {% empty %}
-    <p>{% trans "Поки що немає постів." %}</p>
+    <p>{% trans "постів немає" %}</p>
   {% endfor %}
 </div>
 

@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load i18n %}
+
 {% block content %}
+
     <header>
         <h1>{% trans "завантажити контент" %}</h1>
         <a href="{% url 'gallery:gallery' %}">{% trans "переглянути галерею" %}</a>
@@ -10,8 +12,9 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group">
-                <label for="images">{% trans "Фото (до 5 файлів)" %}</label>
+                <label for="id_images">{% trans "до 5 фотографій на день" %}</label>
                 {{ form.images }}
+                <div id="image-previews" class="file-previews"></div>
                 {% if form.images.errors %}
                     <div class="error-list">
                         {% for error in form.images.errors %}
@@ -23,8 +26,9 @@
             </div>
 
             <div class="form-group">
-                <label for="videos">{% trans "Відео (до 2 файлів):" %}</label>
+                <label for="id_videos">{% trans "до 2 відеороликів на день" %}</label>
                 {{ form.videos }}
+                <div id="video-previews" class="file-previews"></div>
                 {% if form.videos.errors %}
                     <div class="error-list">
                         {% for error in form.videos.errors %}
@@ -38,30 +42,84 @@
             <button type="submit">{% trans "завантажити" %}</button>
         </form>
 
-        {% if form.errors %}
-            <div class="form-errors">
-                <ul>
-                    {% for field, errors in form.errors.items %}
-                        <li><strong>{{ field|capfirst }}:</strong>
-                            <ul>
-                                {% for error in errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endif %}
-
-        {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <p class="message">{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+        {# ... (rest of your form errors and messages) ... #}
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('id_images');
+            const imagePreviewsContainer = document.getElementById('image-previews');
+            const videoInput = document.getElementById('id_videos');
+            const videoPreviewsContainer = document.getElementById('video-previews');
+
+            // Зберігаємо вже вибрані файли (якщо користувач додав, потім додав ще)
+            let selectedImages = new DataTransfer();
+            let selectedVideos = new DataTransfer();
+
+            function displayFilePreviews(inputElement, previewsContainer, fileType) {
+                // Очищаємо попередні попередні перегляди, щоб не дублювати їх
+                previewsContainer.innerHTML = '';
+
+                let currentFiles = inputElement.files;
+                let dataTransfer = (fileType === 'image') ? selectedImages : selectedVideos;
+
+                // Додаємо нові файли до DataTransfer об'єкту
+                for (let i = 0; i < currentFiles.length; i++) {
+                    let file = currentFiles[i];
+                    // Перевіряємо, чи файл вже не був доданий (за іменем і розміром, це не ідеально, але працює для простих випадків)
+                    let alreadyAdded = Array.from(dataTransfer.files).some(
+                        existingFile => existingFile.name === file.name && existingFile.size === file.size
+                    );
+                    if (!alreadyAdded) {
+                        dataTransfer.items.add(file);
+                    }
+                }
+
+                // Оновлюємо файли в інпуті, щоб вони відображали всі вибрані файли
+                inputElement.files = dataTransfer.files;
+
+                // Відображаємо всі файли з DataTransfer об'єкту
+                if (dataTransfer.files.length > 0) {
+                    const fileList = document.createElement('ul');
+                    Array.from(dataTransfer.files).forEach(file => {
+                        const listItem = document.createElement('li');
+                        // Показуємо ім'я файлу (це і є "адреса", яку браузер дозволяє показати)
+                        listItem.textContent = file.name;
+                        fileList.appendChild(listItem);
+                    });
+                    previewsContainer.appendChild(fileList);
+                }
+            }
+
+            // Прикріплюємо обробники подій
+            if (imageInput) {
+                imageInput.addEventListener('change', () => displayFilePreviews(imageInput, imagePreviewsContainer, 'image'));
+            }
+            if (videoInput) {
+                videoInput.addEventListener('change', () => displayFilePreviews(videoInput, videoPreviewsContainer, 'video'));
+            }
+        });
+    </script>
+    <style>
+        /* Додайте ваші стилі, якщо вони потрібні для оформлення списку файлів */
+        .file-previews {
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            min-height: 50px; /* Для видимості */
+        }
+        .file-previews ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .file-previews li {
+            padding: 5px 0;
+            border-bottom: 1px dotted #eee;
+        }
+        .file-previews li:last-child {
+            border-bottom: none;
+        }
+    </style>
 
 {% endblock %}

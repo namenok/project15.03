@@ -44,11 +44,11 @@ class Teg(models.Model):
 
 # від юзера в бібліотеку
 class Post(models.Model):
-    title = models.CharField(max_length=30, verbose_name=_("Заголовок посту"))
-    content = models.TextField(verbose_name=_("Опис посту"))
-    published_date = models.DateTimeField(auto_created=True, verbose_name=_("Дата та час посту"))
-    category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, verbose_name=_("Категорія"))
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("Автор"))
+    title = models.CharField(max_length=30, verbose_name=_("заголовок"))
+    content = models.TextField(verbose_name=_("опис"))
+    published_date = models.DateTimeField(auto_created=True, verbose_name=_("дата та час"))
+    category = models.ForeignKey(Category, related_name='posts', on_delete=models.CASCADE, verbose_name=_("категорія"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("автор"))
     teg = models.ManyToManyField(Teg, blank=True, related_name='posts', verbose_name=_("Хештеги"))
 
     def __str__(self):
@@ -61,10 +61,10 @@ class Post(models.Model):
 
 #персональний юзера в його щоденник
 class PersonalPost(models.Model):
-    title = models.CharField(max_length=30, verbose_name = _("Заголовок посту"))
-    content = models.TextField(verbose_name = _("Опис посту"))
-    published_date = models.DateTimeField(auto_now_add=True, verbose_name = _("Дата та час посту"))
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = _("Автор"))
+    title = models.CharField(max_length=30, verbose_name = _("заголовок"))
+    content = models.TextField(verbose_name = _("опис"))
+    published_date = models.DateTimeField(auto_now_add=True, verbose_name = _("дата та час"))
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name = _("автор"))
 
     date = models.DateField()
 
@@ -79,9 +79,9 @@ class PersonalPost(models.Model):
 
 #з адмінки в бібліотеку
 class LibText(models.Model):
-    title = models.CharField(max_length=30, verbose_name=_("Заголовок мого поля з текстом"))
+    title = models.CharField(max_length=30, verbose_name=_("заголовок"))
     content = models.TextField(verbose_name=_("Зміст"))
-    to_category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name = "libtexts", verbose_name=_("Мій текст належить до Категорії"))
+    to_category = models.ForeignKey(Category, on_delete=models.CASCADE,related_name = "libtexts", verbose_name=_("категорія"))
 
     def __str__(self):
         return self.title
@@ -125,7 +125,7 @@ class UserAnswer(models.Model):
         unique_together = ('user', 'survey', 'date')  # Унікальна комбінація користувача, опитування і дати
 
     def __str__(self):
-        return _("Відповідь %(username)s на %(question)s %(date)s") % {
+        return _("відповідь %(username)s на %(question)s %(date)s") % {
             'username': self.user.username,
             'question': self.survey.question,
             'date': self.date,

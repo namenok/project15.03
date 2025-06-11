@@ -1,14 +1,15 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load i18n %}
 
-<h2 style="text-align: center;">чат з міні-терапевтом</h2>
-<p>при перезавантаженні чи зміні сторінки чат очищується*</p>>
+<h2 style="text-align: center;">{% trans "поспілкуватись з ші-асистентом" %}</h2>
+<p>{% trans "при перезавантаженні чи зміні сторінки чат очищується*" %}</p>
 <div id="chat-window">
   <div id="chat-messages"></div>
 </div>
 <form id="chat-form" autocomplete="off">
-  <input id="chat-input" type="text" placeholder="{{ _('напиши щось...') }}" required />
-  <button type="submit">Надіслати</button>
+  <input id="chat-input" type="text" placeholder="{{ _('введи текст...') }}" required />
+  <button type="submit">{% trans "надіслати" %}</button>
 </form>
 
 {% endblock %}
@@ -94,7 +95,7 @@ body {
 
 #chat-window {
     width: 100%;
-    max-width: 600px;
+    max-width: 800px;
     margin: 20px auto;
     border: 1px solid #ccc;
     border-radius: 12px;

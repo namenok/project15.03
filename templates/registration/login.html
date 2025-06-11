@@ -5,7 +5,7 @@
   <div class="center">
 	  <form method="post" class="card" novalidate>
 	  	{% csrf_token %}
-	    <h2 class="text-center">{% trans "Увійди в сві акаунт" %}</h2>
+	    <h2 class="text-center">{% trans "увійти в акаунт" %}</h2>
 		{% for field in form %}
 			<label for="{{ field.id_for_label }}">{% trans field.label %}</label>
 			{{ field }}
@@ -15,11 +15,9 @@
 		{% endfor %}
 		
 		<input type="submit" value="{% trans 'увійти' %}" class="btn btn-primary full-width">
-
 		<hr>
-
-		<p class="text-center"><a href="{% url 'users:password_reset' %}" class="btn btn-outline">{% trans "Забув пароль?" %}</a></p>
-		<p class="text-center"><a href="{% url 'users:register' %}" class="btn btn-outline">{% trans "Зареєструватись" %}</a></p>
+		<p class="text-center"><a href="{% url 'users:password_reset' %}" class="btn btn-outline">{% trans "пароль втрачено?" %}</a></p>
+		<p class="text-center"><a href="{% url 'users:register' %}" class="btn btn-outline">{% trans "зареєструватись" %}</a></p>
 
 	</form>
 </div>

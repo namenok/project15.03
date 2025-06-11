@@ -2,7 +2,8 @@
 {% load i18n %}
 
 {% block content %}
-<h2>{% trans "Створити пост" %}</h2>
+
+<h2>{% trans "створити пост" %}</h2>
 
 <form action="{% url 'mainapp:lib_user_post' %}" method="POST">
     {% csrf_token %}
@@ -10,10 +11,10 @@
 
     {% if form.errors %}
         <div style="color: red;">
-            <strong>{% trans "Помилки:" %}</strong>
+            <strong>{% trans "помилки:" %}</strong>
             <ul>
             {% for field in form %}
-                {% for error in field.errors %}
+                {% for error in field.errors%}
                     <li>{{ field.label }}: {{ error }}</li>
                 {% endfor %}
             {% endfor %}
@@ -21,6 +22,6 @@
         </div>
     {% endif %}
 
-    <input type="submit" value="{% trans 'Створити' %}">
+    <input type="submit" value="{% trans 'створити' %}">
 </form>
 {% endblock %}

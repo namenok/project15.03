@@ -1,26 +1,21 @@
-
 {% extends 'base.html' %}
 {% load i18n %}
 {% block content %}
 
-
-
 {% if user.is_authenticated %}
 
 <div class="container text-center py-5">
-  <h2 class="mb-3">{% trans "Ласкаво просимо назад" %}, {{ request.user|title }} 🌿</h2>
-  <p class="lead text-muted">{% trans "Зробіть глибокий вдих. Ви тут у безпеці." %}</p>
-
-{% else %}
-
-<div class="container text-center py-5">
-  <h2 class="mb-3">{% trans "Ласкаво просимо до MindSpace" %} 🌸</h2>
-  <p class="lead text-muted">
-    {% trans "Затишний простір для роздумів, відпочинку та турботи про своє психічне благополуччя." %}
-  </p>
-
+  <h2 class="mb-3">{% trans "ласкаво просимо назад" %}, {{ request.user|title }} 🌿</h2>
+  <p class="lead text-muted">{% trans "зроби глибокий вдих, ти тут у безпеці" %}</p>
 </div>
 
+{% else %}
+<div class="container text-center py-5">
+  <h2 class="mb-3">{% trans "ласкаво просимо до MindSpace" %} 🌸</h2>
+  <p class="lead text-muted">
+    {% trans "затишний простір для роздумів, відпочинку та турботи про своє психологічне благополуччя" %}
+  </p>
+</div>
 {% endif %}
 
 {% endblock %}

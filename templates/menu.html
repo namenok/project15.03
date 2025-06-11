@@ -1,7 +1,7 @@
 {% load i18n %}
 <nav class="main-navbar">
-  <div class="navbar-left">
 
+  <div class="navbar-left">
     <ul class="navbar-menu">
       {% if request.user.is_authenticated %}
         <li class="navbar-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
@@ -28,15 +28,13 @@
 
   <div class="navbar-right">
     {% if request.user.is_authenticated %}
-      <span class="navbar-user">{% trans "Вітаю" %}, {{ request.user|title }}</span>
+      <span class="navbar-user">{% trans "вітаю" %}, {{ request.user|title }}</span>
       <a href="{% url 'users:users_profile' %}" class="navbar-link">{% trans "профіль" %}</a>
       <a href="{% url 'users:logout' %}" class="navbar-button">{% trans "вийти" %}</a>
     {% else %}
       <a href="{% url 'users:login' %}" class="navbar-button">{% trans "увійти" %}</a>
       <a href="{% url 'users:register' %}" class="navbar-button">{% trans "зареєструватись" %}</a>
     {% endif %}
-
-    <!-- Кнопка перемикання теми -->
     <button id="theme-toggle" class="navbar-button theme-toggle">🌙</button>
         <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
@@ -45,7 +43,7 @@
                 <option value="en-gb" {% if LANGUAGE_CODE == "en-gb" %}selected{% endif %}>🇬🇧</option>
             </select>
         </form>
-
   </div>
+
 </nav>
 

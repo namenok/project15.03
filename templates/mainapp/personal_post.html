@@ -3,9 +3,11 @@
 
 {% block content %}
 <div class="post-form-container">
+    <p>{% trans "один день- один пост!" %}</p>
+    <hr>
   <h2 class="post-form-title">
     {% if form.instance.pk %}
-        {% trans "ти редагуєш пост, який вже існує на сьогодні." %}
+        {% trans "ти редагуєш створений сьогодні пост" %}
     {% else %}
         {% trans "новий запис на сьогодні" %}
     {% endif %}

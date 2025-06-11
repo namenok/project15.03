@@ -5,9 +5,10 @@
   <h2 class="calendar-title">{% trans "календар" %} {{ month }}/{{ year }}</h2>
 
   <div class="calendar-nav">
-    <a href="?year={{ year }}&month={{ month|add:-1 }}">&#8592; {% trans "попередній" %}</a>
-    <a href="?year={{ year }}&month={{ month|add:1 %}">{% trans "наступний" %} &#8594;</a>
-  </div>
+  <a href="?year={% if month == 1 %}{{ year|add:-1 }}{% else %}{{ year }}{% endif %}&month={% if month == 1 %}12{% else %}{{ month|add:-1 }}{% endif %}">&#8592; {% trans "попередній" %}</a>
+
+  <a href="?year={% if month == 12 %}{{ year|add:1 }}{% else %}{{ year }}{% endif %}&month={% if month == 12 %}1{% else %}{{ month|add:1 }}{% endif %}">{% trans "наступний" %} &#8594;</a>
+</div>
 
   <table class="calendar-table">
     <tr>
@@ -21,11 +22,11 @@
           {% if day %}
             {% if day == today %}
               <td class="calendar-cell today">
-                <a href="?year={{ year }}&month={{ month }}&date={{ day }}"><strong>{{ day.day }}</strong></a>
+                <a href="?year={{ year }}&month={{ month }}&date={{ day|date:"Y-m-d" }}"><strong>{{ day.day }}</strong></a>
               </td>
             {% elif day in data_dates %}
               <td class="calendar-cell has-data">
-                <a href="?year={{ year }}&month={{ month }}&date={{ day }}">{{ day.day }}</a>
+                <a href="?year={{ year }}&month={{ month }}&date={{ day|date:"Y-m-d" }}">{{ day.day }}</a>
               </td>
             {% else %}
               <td class="calendar-cell">{{ day.day }}</td>
@@ -39,12 +40,12 @@
   </table>
 
   <form method="get" action="{% url 'mainapp:monthly_analytics' %}" class="analytics-form">
-    <button type="submit">{% trans "глянути аналітику за місяць" %}</button>
+    <button type="submit">{% trans "переглянути аналітику за місяць" %}</button>
   </form>
 
   <h2>{% trans "інфа за" %} {{ selected_date|date:"j E Y" }}</h2>
 
-  <h3>📸 {% trans "фото" %}</h3>
+  <h3>{% trans "фото" %}</h3>
   {% if gallery_items %}
     <div class="media-grid">
       {% for item in gallery_items %}
@@ -58,7 +59,7 @@
     <p>{% trans "немає фото на цю дату" %}</p>
   {% endif %}
 
-  <h3>🎥 {% trans "відео" %}</h3>
+  <h3>{% trans "відео" %}</h3>
   {% if video_items %}
     <div class="media-grid">
       {% for item in video_items %}
@@ -75,7 +76,7 @@
     <p>{% trans "немає відео за цю дату" %}</p>
   {% endif %}
 
-  <h3>📝 {% trans "щоденні записи" %}</h3>
+  <h3>{% trans "щоденні записи" %}</h3>
   {% if personal_post %}
     <div>
       <h4>{{ personal_post.title }}</h4>
@@ -83,10 +84,10 @@
       <p>{{ personal_post.content }}</p>
     </div>
   {% else %}
-    <p>{% trans "записів за цю дату немає" %}</p>
+    <p>{% trans "немає записів за цю дату" %}</p>
   {% endif %}
 
-  <h3>📋 {% trans "твої чекапи" %}</h3>
+  <h3>{% trans "твої чекапи" %}</h3>
   {% if survey_answers %}
     <ul>
       {% for ans in survey_answers %}

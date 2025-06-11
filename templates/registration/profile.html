@@ -12,7 +12,6 @@
                 {% endfor %}
             </div>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
             </button>
         </div>
     {% endif %}
@@ -22,23 +21,21 @@
             <div class="form-row">
                 <div class="col-md-5">
                     <div class="form-group">
-                        <label class="small mb-1">{% trans "Ім'я користувача:" %}</label>
-                            {{ user_form.username }}
-                        <label class="small mb-1">{% trans "Імейл:" %}</label>
-                            {{ user_form.email }}
+
+                        <label class="small mb-1">{% trans "електронна пошта" %}</label>
+                            {{user_form.email}}
                     </div>
                     <div class="form-group">
-                        <a href="{% url 'users:password_change' %}">{% trans "Змінити пароль" %}</a>
+                        <a href="{% url 'users:password_change' %}">{% trans "оновити пароль" %}</a>
                         <hr>
-                        <label class="small mb-1">{% trans "Змінити аватарку:" %}</label>
+                        <label class="small mb-1">{% trans "оновити фотографію" %}</label>
                         {{ profile_form.avatar }}
                     </div>
                     <label class="small mb-1">Bio:</label> {{ profile_form.bio }}
                 </div>
             </div>
             <br><br>
-            <button type="submit" class="btn btn-dark btn-lg">{% trans "Зберегти зміни" %}</button>
-            <button type="reset" class="btn btn-dark btn-lg">{% trans "Змінити" %}</button>
+            <button type="submit" class="btn btn-dark btn-lg">{% trans "застосувати зміни" %}</button>
         </form>
     </div>
 {% endblock content %}

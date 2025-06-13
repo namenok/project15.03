@@ -374,45 +374,6 @@ async def query_ollama(ollama_url, payload):
 
 
 
-logger = logging.getLogger(__name__)
-@login_required
-def ai_assistant(request):
-    if request.method != 'POST':
-        return JsonResponse({'error': _('метод запиту не підтримується')}, status=405)
-
-    try:
-        data = json.loads(request.body)
-        message = data.get('message', '').strip()
-
-        if not message:
-            return JsonResponse({'error': _('порожнє повідомлення')}, status=400)
-
-        # Спроба запиту до Ollama
-        response_text = async_to_sync(query_ollama)(
-            "http://localhost:11434/api/generate",
-            {"prompt": message}
-        )
-
-        return JsonResponse({'reply': response_text})
-
-    except aiohttp.ClientError as net_err:
-        logger.warning("Ollama недоступна: %s", net_err)
-        return JsonResponse({
-            'reply': _('🔌 вибач, зараз я недоступний... спробуй ще раз пізніше')
-        }, status=200)
-
-    except asyncio.TimeoutError:
-        return JsonResponse({
-            'reply': _('⏳ я трохи задумався... спробуй ще раз за мить')
-        }, status=200)
-
-    except Exception as e:
-        logger.error("Помилка в обробці чату:", exc_info=True)
-        return JsonResponse({
-            'reply': _('⚠️ вибач, щось пішло не так... я скоро відновлюсь')
-        }, status=200)
-
-
 def library_users_history(request):
     posts = Post.objects.filter(user=request.user).order_by('-published_date')
     return render(request, 'mainapp/lib_user_post_history.html', {'posts': posts})

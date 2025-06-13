@@ -1,8 +1,5 @@
-
 from django.urls import path
 from . import views
-from .views import chat_page, ai_assistant
-
 
 
 app_name = 'mainapp'
@@ -14,7 +11,6 @@ urlpatterns = [
     path('survey/history/', views.survey_history, name='survey_history'),
 
     path('calendar/', views.calendar_combined_view, name='calendar_combined'),
-
 
 path('library/history/', views.library_users_history, name='library_history'),
 
@@ -30,5 +26,5 @@ path('library/history/', views.library_users_history, name='library_history'),
     path('analytics/', views.monthly_analytics_view, name='monthly_analytics'),
 
     path('chat/', views.chat_page, name='chat_page'),
-    path('chat/ask/', views.ai_assistant, name='ai_assistant'),
+
 ]

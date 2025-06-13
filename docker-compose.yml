@@ -8,12 +8,26 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  ollama:
+    image: ollama/ollama:latest
+    platform: linux/amd64 # <-- Додано цей рядок
+    command: serve
+    volumes:
+      - ollama_models:/root/.ollama
+    environment:
+      OLLAMA_HOST: 0.0.0.0
+      OLLAMA_ORIGINS: "*"
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 20s # Збільшуємо інтервал
+      timeout: 10s  # Збільшуємо таймаут
+      retries: 10   # Збільшуємо кількість спроб
+      start_period: 60s
+
   web:
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     build: .
     command: >
-      sh -c "python manage.py wait_for_db && 
+      sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
              uvicorn websiteProject.asgi:application --host 0.0.0.0 --port 8000 --reload --log-level debug"
     volumes:
@@ -21,9 +35,27 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - db
+       db:
+        condition: service_started # Залишимо service_started для db, оскільки у вас є wait_for_db в команді web
+                                   # Якщо ви хочете повний healthcheck для db, його потрібно додати до db сервісу.
+       ollama:
+        condition: service_healthy # Ось так вірно
     env_file:
       - .env
+    environment:
+      OLLAMA_API_BASE_URL: http://ollama:11434/api/
+
+
+
+
+  test:
+    build: .
+    command: pytest
+    volumes:
+      - .:/app
+    depends_on:
+      - web
 
 volumes:
   postgres_data:
+  ollama_models:

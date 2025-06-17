@@ -40,7 +40,6 @@ class MediaUploadForm(forms.Form):
     videos = MultipleFileField( # Assuming videos uses the same logic
         required=False,
         label="Videos",
-
     )
 
 

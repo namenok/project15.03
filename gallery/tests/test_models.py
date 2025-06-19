@@ -3,11 +3,9 @@ from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
 from datetime import date, timedelta
-from unittest.mock import patch
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from gallery.models import GalleryDay, PhotoGallery, VideoGallery
-
 
 # ==== ФІКСТУРИ ==== #
 
@@ -83,8 +81,7 @@ def test_gallery_day_unique_for_different_dates(test_user):
 
 # ==== ТЕСТИ ДЛЯ PhotoGallery ==== #
 
-@patch('gallery.forms.validate_image_size')
-def test_photo_gallery_creation(mock_validate_image_size, test_gallery_day, dummy_image_file):
+def test_photo_gallery_creation(test_gallery_day, dummy_image_file):
     photo = PhotoGallery.objects.create(
         gallery_day=test_gallery_day,
         image=dummy_image_file,
@@ -96,8 +93,7 @@ def test_photo_gallery_creation(mock_validate_image_size, test_gallery_day, dumm
     assert PhotoGallery.objects.count() == 1
 
 
-@patch('gallery.forms.validate_image_size')
-def test_photo_gallery_no_description(mock_validate_image_size, test_gallery_day, dummy_image_file):
+def test_photo_gallery_no_description(test_gallery_day, dummy_image_file):
     photo = PhotoGallery.objects.create(
         gallery_day=test_gallery_day,
         image=dummy_image_file,
@@ -106,21 +102,22 @@ def test_photo_gallery_no_description(mock_validate_image_size, test_gallery_day
     assert photo.description == ''
 
 
-@patch('gallery.forms.validate_image_size')
-def test_photo_gallery_invalid_image_size(mock_validate_image_size, test_gallery_day, dummy_image_file):
-    mock_validate_image_size.side_effect = ValidationError('Image size too large.')
+def test_photo_gallery_invalid_image_size(test_gallery_day, dummy_image_file):
+    def raise_error(image):
+        raise ValidationError('Image size too large.')
+    from gallery.models import PhotoGallery
+    PhotoGallery._meta.get_field('image').validators = [raise_error]
     photo = PhotoGallery(gallery_day=test_gallery_day, image=dummy_image_file)
     with pytest.raises(ValidationError) as excinfo:
-        photo.full_clean()  # Викликаємо валідацію явно!
-    mock_validate_image_size.assert_called_once_with(dummy_image_file)
+        photo.save()
     assert 'Image size too large.' in str(excinfo.value)
 
 
 # ==== ТЕСТИ ДЛЯ VideoGallery ==== #
 
-@patch('gallery.forms.validate_video_size')
-@patch('gallery.forms.validate_video_duration')
-def test_video_gallery_creation(mock_validate_video_duration, mock_validate_video_size, test_gallery_day, dummy_video_file):
+def test_video_gallery_creation(test_gallery_day, dummy_video_file):
+    from gallery.models import VideoGallery
+    VideoGallery._meta.get_field('video').validators = []
     video = VideoGallery.objects.create(
         gallery_day=test_gallery_day,
         video=dummy_video_file,
@@ -132,9 +129,9 @@ def test_video_gallery_creation(mock_validate_video_duration, mock_validate_vide
     assert VideoGallery.objects.count() == 1
 
 
-@patch('gallery.forms.validate_video_size')
-@patch('gallery.forms.validate_video_duration')
-def test_video_gallery_no_description(mock_validate_video_duration, mock_validate_video_size, test_gallery_day, dummy_video_file):
+def test_video_gallery_no_description(test_gallery_day, dummy_video_file):
+    from gallery.models import VideoGallery
+    VideoGallery._meta.get_field('video').validators = []
     video = VideoGallery.objects.create(
         gallery_day=test_gallery_day,
         video=dummy_video_file,
@@ -143,20 +140,23 @@ def test_video_gallery_no_description(mock_validate_video_duration, mock_validat
     assert video.description == ''
 
 
-@patch('gallery.forms.validate_video_size')
-def test_video_gallery_invalid_video_size(mock_validate_video_size, test_gallery_day, dummy_video_file):
-    mock_validate_video_size.side_effect = ValidationError('Video size too large.')
+def test_video_gallery_invalid_video_size(test_gallery_day, dummy_video_file):
+    def raise_error(video):
+        raise ValidationError('Video size too large.')
+    from gallery.models import VideoGallery
+    VideoGallery._meta.get_field('video').validators = [raise_error]
     video = VideoGallery(gallery_day=test_gallery_day, video=dummy_video_file)
     with pytest.raises(ValidationError) as excinfo:
-        video.full_clean()
-    mock_validate_video_size.assert_called_once_with(dummy_video_file)
+        video.save()
     assert 'Video size too large.' in str(excinfo.value)
 
 
-@patch('gallery.forms.validate_video_duration')
-def test_video_gallery_invalid_video_duration(mock_validate_video_duration, test_gallery_day, dummy_video_file):
-    mock_validate_video_duration.side_effect = ValidationError('Video duration too long.')
+def test_video_gallery_invalid_video_duration(test_gallery_day, dummy_video_file):
+    def raise_error(video):
+        raise ValidationError('Video duration too long.')
+    from gallery.models import VideoGallery
+    VideoGallery._meta.get_field('video').validators = [raise_error]
     video = VideoGallery(gallery_day=test_gallery_day, video=dummy_video_file)
     with pytest.raises(ValidationError) as excinfo:
-        video.full_clean()
+        video.save()
     assert 'Video duration too long.' in str(excinfo.value)

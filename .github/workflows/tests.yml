@@ -18,6 +18,8 @@ jobs:
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          ports:
+            - 5432:5432
           options: >-
             --health-cmd pg_isready
             --health-interval 10s
@@ -25,11 +27,11 @@ jobs:
             --health-retries 5
 
     env:
-      DATABASE_HOST: postgres
-      DATABASE_PORT: 5432
-      DATABASE_NAME: ${{ secrets.POSTGRES_DB }}
-      DATABASE_USER: ${{ secrets.POSTGRES_USER }}
-      DATABASE_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       DJANGO_SETTINGS_MODULE: websiteProject.settings
 
 
@@ -45,6 +47,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+
+      - name: Wait for Postgres to be ready
+        run: |
+          until pg_isready -h ${{ env.POSTGRES_HOST }} -p ${{ env.POSTGRES_PORT }}; do
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
 
       - name: Run migrations
         run: python manage.py migrate

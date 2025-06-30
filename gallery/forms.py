@@ -45,13 +45,37 @@ class MediaUploadForm(forms.Form):
 
 def validate_image_size(image):
     max_size = 10 * 1024 * 1024  # 10MB
-    if image.size > max_size:
-        raise ValidationError(gettext("максимальний розмір фото – 10MB"))
+
+    # Спроба отримати розмір з image.size або image.file.size
+    size = getattr(image, 'size', None)
+    if size is None and hasattr(image, 'file'):
+        size = getattr(image.file, 'size', None)
+
+    # Якщо досі невідомо — пробуємо через seek/tell
+    if size is None and hasattr(image, 'tell') and hasattr(image, 'seek'):
+        pos = image.tell()
+        image.seek(0, 2)  # Перейти в кінець
+        size = image.tell()
+        image.seek(pos)
+
+    # DEBUG
+    print(f"DEBUG validate_image_size: {getattr(image, 'name', '')} — {size} байт")
+
+    if size is not None:
+        if size > max_size:
+            raise ValidationError(gettext("максимальний розмір фото – 10MB"))
+    else:
+        raise ValidationError(gettext("Не вдалося визначити розмір файлу."))
+
+
 
 def validate_video_size(video):
     max_size = 100 * 1024 * 1024  # 100MB
-    if video.size > max_size:
-        raise ValidationError(gettext("максимальний розмір відео – 100MB"))
+    if hasattr(video, 'size'):
+        if video.size > max_size:
+            raise ValidationError(gettext("максимальний розмір відео – 100MB"))
+    else:
+        raise ValidationError(gettext("Не вдалося визначити розмір файлу."))
 
 
 ALLOWED_VIDEO_TYPES = ['video/mp4', 'video/quicktime']
@@ -68,11 +92,10 @@ def validate_video_duration(video):
 
     # Перевірка розширення файлу
     if ext not in ALLOWED_VIDEO_EXTENSIONS:
-        raise ValidationError(gettext("неправильне розширення відеофайлу, має бути .mp4 або .mov"))
+        raise ValidationError({'videos': [gettext("неправильне розширення відеофайлу, має бути .mp4 або .mov")]})
 
-    # Перевірка типу файлу (можна опустити цю перевірку, якщо хочеш)
     if content_type not in ALLOWED_VIDEO_TYPES:
-        raise ValidationError(gettext("непідтримуваний формат відео, дозволено лише MP4 або MOV"))
+        raise ValidationError({'videos': [gettext("непідтримуваний формат відео, дозволено лише MP4 або MOV")]})
 
     tmp_file_path = None
     try:
@@ -85,9 +108,9 @@ def validate_video_duration(video):
         clip = VideoFileClip(tmp_file_path)
 
         if clip.duration > 30:
-            raise ValidationError(gettext("нажаль відео не має бути довше 30 секунд"))
+            raise ValidationError({'videos': [gettext("нажаль відео не має бути довше 30 секунд")]})
     except Exception as e:
-        raise ValidationError(gettext("помилка при перевірці відео") + str(e))
+        raise ValidationError({'videos': [gettext("помилка при перевірці відео") + str(e)]})
     finally:
         if 'clip' in locals():
             clip.close()
@@ -95,5 +118,3 @@ def validate_video_duration(video):
             os.remove(tmp_file_path)
         if hasattr(video, 'seek'):
             video.seek(0)
-
-

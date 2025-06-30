@@ -17,7 +17,7 @@ class GalleryDay(models.Model):
 
 class PhotoGallery(models.Model):
     gallery_day = models.ForeignKey(GalleryDay, on_delete=models.CASCADE, related_name='photos')
-    image = models.ImageField(upload_to='photos/', validators=[validate_image_size])
+    image = models.ImageField(upload_to='photos/')
     description = models.CharField(max_length=100, blank=True)
 
     def save(self, *args, **kwargs):

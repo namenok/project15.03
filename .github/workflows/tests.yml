@@ -50,6 +50,9 @@ jobs:
             echo "Waiting for Postgres..."
             sleep 2
           done
+        env:
+          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+          POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
 
       - name: Run migrations
         run: python manage.py migrate

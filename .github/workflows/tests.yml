@@ -46,6 +46,17 @@ jobs:
       - name: Wait for Postgres
         run: |
           echo "Waiting for Postgres to be ready..."
-          until pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER; do
+          for i in $(seq 1 10); do
+            pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER && break
+            echo "Postgres not ready yet, waiting 2 seconds..."
             sleep 2
           done
+          pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER
+          
+      - name: Run Django Migrations
+        run: |
+            python manage.py migrate
+          
+      - name: Run Django Tests
+        run: |
+            python manage.py test

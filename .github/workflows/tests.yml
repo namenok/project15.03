@@ -46,7 +46,7 @@ jobs:
 
       - name: Wait for Postgres to be ready
         run: |
-          until nc -zv ${{ env.POSTGRES_HOST }} ${{ env.POSTGRES_PORT }}; do
+          until nc -zv $POSTGRES_HOST $POSTGRES_PORT; do
             echo "Waiting for Postgres..."
             sleep 2
           done

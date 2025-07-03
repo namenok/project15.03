@@ -47,26 +47,15 @@ jobs:
           
           pip install psycopg2-binary # Додайте це на випадок, якщо його немає в requirements.txt
 
-      - name: Wait for Postgres to be fully ready
+      - name: Wait for Postgres to be ready
         run: |
-          echo "Waiting for Postgres to be ready and accept connections..."
-          
-          sleep 5 
-          
-          for i in $(seq 1 30); do
+          for i in {1..30}; do
             
-            if pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -q; then
-              echo "Postgres is ready!"
-              break
-            fi
-            echo "Postgres not ready yet, waiting 2 seconds... (Attempt $i/30)"
-            sleep 2
-            
-            if [ $i -eq 30 ]; then
-              echo "Error: Postgres did not become ready within the allotted time."
-              exit 1
-            fi
-          done
+            for i in {1..30}; do
+              pg_isready -h postgres -U testuser && break
+              echo "Postgres not ready yet, waiting 2 seconds... (Attempt $i/30)"
+              sleep 2
+            done
           
       - name: Run Django Migrations
         run: |

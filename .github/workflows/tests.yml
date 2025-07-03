@@ -54,6 +54,9 @@ jobs:
               echo "Postgres not ready yet, waiting 2 seconds... (Attempt $i/30)"
               sleep 2
             done
+
+      - name: Show Postgres logs
+        run: docker logs $(docker ps -q --filter "ancestor=postgres:15")
           
       - name: Run Django Migrations
         run: |

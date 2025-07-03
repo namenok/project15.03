@@ -51,7 +51,6 @@ jobs:
           
           sleep 5 
           
-         
           for i in $(seq 1 30); do
             
             if pg_isready -h $POSTGRES_HOST -p $POSTGRES_PORT -U $POSTGRES_USER -q; then

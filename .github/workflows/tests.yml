@@ -49,8 +49,6 @@ jobs:
 
       - name: Wait for Postgres to be ready
         run: |
-          for i in {1..30}; do
-            
             for i in {1..30}; do
               pg_isready -h postgres -U testuser && break
               echo "Postgres not ready yet, waiting 2 seconds... (Attempt $i/30)"

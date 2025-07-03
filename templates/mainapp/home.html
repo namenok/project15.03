@@ -1,16 +1,188 @@
 {% extends 'base.html' %}
+{% block content %}
 {% load i18n %}
 
-
-{% block content %}
-{% load static %}
-
-
-<link href="{% static 'mainapp/for_home.css'%}" rel="stylesheet">
-<h2>{% trans "ця сторінка домашня , тут можуть бути новини чи щось з штучним інтелектом"%}</h2>
-
-
-
-
+<h2 style="text-align: center;">{% trans "поспілкуватись з ші-асистентом" %}</h2>
+<p>{% trans "при перезавантаженні чи зміні сторінки чат очищується*" %}</p>
+<div id="chat-window">
+  <div id="chat-messages"></div>
+</div>
+<form id="chat-form" autocomplete="off">
+  <input id="chat-input" type="text" placeholder="{{ _('введи текст...') }}" required />
+  <button type="submit">{% trans "надіслати" %}</button>
+</form>
 
 {% endblock %}
+
+{% block extra_scripts %}
+<script>
+const socket = new WebSocket('ws://' + window.location.host + '/ws/chat/');
+
+let chatMessages;
+let aiMessageDiv;
+let fullResponse = '';
+
+function sendMessage(msg) {
+    socket.send(JSON.stringify({'message': msg}));
+}
+
+function appendMessage(sender, text) {
+    const message = document.createElement('div');
+    message.classList.add('message', sender);
+    message.textContent = text;
+    chatMessages.appendChild(message);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    chatMessages = document.getElementById('chat-messages');
+    const form = document.getElementById('chat-form');
+    const input = document.getElementById('chat-input');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const userMessage = input.value.trim();
+        if (!userMessage) return;
+
+        appendMessage('user', userMessage);
+        sendMessage(userMessage);
+        input.value = '';
+
+        // Показуємо "генерується відповідь"
+        aiMessageDiv = document.createElement('div');
+        aiMessageDiv.classList.add('message', 'ai');
+        aiMessageDiv.textContent = '🤖 Генерується відповідь...';
+        chatMessages.appendChild(aiMessageDiv);
+        fullResponse = '';
+    });
+});
+
+socket.onmessage = function(e) {
+    const data = JSON.parse(e.data);
+    const chunk = data.reply;
+
+    if (chunk) {
+        fullResponse += chunk;
+        aiMessageDiv.textContent = fullResponse;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+};
+
+socket.onopen = function() {
+    console.log('WebSocket connection opened');
+};
+
+socket.onerror = function(e) {
+    console.error('WebSocket error', e);
+};
+
+socket.onclose = function(e) {
+    console.log('WebSocket closed', e);
+};
+</script>
+
+{% endblock %}
+
+{% block styles %}
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+#chat-window {
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    height: 400px;
+    padding: 12px;
+    overflow-y: auto;
+    background-color: #f0f2f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+#chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.message {
+    padding: 10px 14px;
+    border-radius: 14px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 15px;
+    line-height: 1.4;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.user {
+    align-self: flex-end;
+    background-color: #dcf8c6;
+    border: 1px solid #b2ebc5;
+}
+
+.ai {
+    align-self: flex-start;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+}
+
+.ai::before {
+    content: "🤖";
+    position: absolute;
+    left: -26px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.user::before {
+    content: "🧑";
+    position: absolute;
+    right: -26px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#chat-form {
+    display: flex;
+    gap: 10px;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    padding: 10px;
+}
+
+#chat-input {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+#chat-form button {
+    padding: 10px 20px;
+    font-size: 15px;
+    border-radius: 8px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#chat-form button:hover {
+    background-color: #218838;
+}
+</style>
+{% endblock %}
+

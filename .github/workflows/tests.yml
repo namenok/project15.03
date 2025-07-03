@@ -1,0 +1,70 @@
+name: Django Tests
+
+on:
+  push:
+    branches: [ master, tests ]
+  pull_request:
+    branches: [ master, tests ]
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: testuser
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpassword
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U testuser"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 15
+
+    env:
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: testuser
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpassword
+      DJANGO_SETTINGS_MODULE: websiteProject.settings
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          
+          pip install psycopg2-binary # Додайте це на випадок, якщо його немає в requirements.txt
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Wait for Postgres to be ready
+        run: |
+          for i in {1..30}; do
+            pg_isready -h 127.0.0.1 -U testuser && break
+            echo "Postgres not ready yet, waiting 2 seconds... (Attempt $i/30)"
+            sleep 2
+          done
+
+      - name: Show Postgres logs
+        run: docker logs $(docker ps -q --filter "ancestor=postgres:15")
+          
+      - name: Run Django Migrations
+        run: |
+            python manage.py migrate
+          
+      - name: Run Pytest
+        run: pytest

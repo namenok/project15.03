@@ -1,0 +1,172 @@
+body {
+  background-color: #121212; /* Загальний фон темної теми */
+  color: white; /* Загальний колір тексту */
+}
+
+a {
+  color: #90caf9; /* Світлий блакитний для посилань */
+}
+
+button {
+  background-color: #333; /* Темний фон для кнопок */
+  color: #fff; /* Білий текст на кнопках */
+}
+
+/* Темні значення змінних */
+:root {
+  --navbar-bg: #1e1e1e; /* Фон навігаційної панелі */
+  --navbar-text: #ddd; /* Колір тексту навігації */
+  --navbar-link-hover: #64b5f6; /* Колір посилань навігації при наведенні */
+  --navbar-active-bg: #333; /* Фон активного елемента навігації */
+
+  /* Додані змінні для карток та секцій у нічному режимі */
+  --card-bg-night: #282828; /* Темніший фон для карток/секцій */
+  --card-border-night: #444; /* Темніша рамка для карток/секцій */
+  --card-text-night: #e0e0e0; /* Світлий колір тексту всередині карток/секцій */
+  --card-date-night: #aaa; /* Колір дати всередині карток */
+}
+
+.main-navbar {
+  background-color: var(--navbar-bg);
+  color: var(--navbar-text);
+}
+
+.navbar-link {
+  color: var(--navbar-text);
+}
+
+.navbar-link:hover {
+  color: var(--navbar-link-hover);
+}
+
+.navbar-item.active .navbar-link {
+  background-color: var(--navbar-active-bg);
+  color: var(--navbar-text);
+}
+
+.navbar-button {
+  border-color: #ccc; /* Колір рамки кнопки навігації */
+  color: #fff;
+}
+
+.navbar-button:hover {
+  background-color: #444;
+  color: white;
+}
+
+/* === СТИЛІ ДЛЯ КАРТОК ПОСТІВ У НІЧНОМУ РЕЖИМІ === */
+/* Застосовуємо стилі до елементів, коли 'body' має клас 'night' */
+.post-card {
+  /* Ці стилі застосовуються тільки в нічному режимі, оскільки цей файл CSS
+     завантажується лише для нічної теми.
+     Якщо у вас є базові стилі для .post-card у base.css,
+     ці стилі перезапишуть їх у нічному режимі. */
+  background-color: var(--card-bg-night);
+  border-color: var(--card-border-night);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Додаємо тінь для об'ємності */
+}
+
+.post-title {
+  color: var(--card-text-night); /* Колір заголовка посту */
+}
+
+.post-content {
+  color: var(--card-text-night); /* Колір основного контенту посту */
+}
+
+.post-date {
+  color: var(--card-date-night); /* Колір дати посту */
+}
+
+/* === СТИЛІ ДЛЯ РЕЗУЛЬТАТІВ ПОШУКУ У НІЧНОМУ РЕЖИМІ (якщо вони схожі на картки) === */
+.search-result {
+  background-color: var(--card-bg-night);
+  border-color: var(--card-border-night);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.search-result p {
+  color: var(--card-text-night); /* Колір тексту в результатах пошуку */
+}
+
+/* === СТИЛІ ДЛЯ ЗАГАЛЬНИХ СЕКЦІЙ-КАРТОК У НІЧНОМУ РЕЖИМІ === */
+/* Якщо ви використовували .card-section або схожі класи для візуального розділення,
+   їх також потрібно адаптувати для нічного режиму. */
+.card-section {
+  background-color: var(--card-bg-night);
+  border-color: var(--card-border-night);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+  color: var(--card-text-night); /* Колір заголовків секцій */
+}
+.section-title::after {
+  background-color: #90caf9; /* Колір підкреслення заголовків секцій */
+}
+
+/* Також, якщо у вас є стилі для .alert або .info-alert, їх теж треба адаптувати */
+.alert.warning-alert {
+  background-color: #5e4a00; /* Темніший фон для попереджень */
+  color: #ffda6a; /* Світліший текст для попереджень */
+  border-color: #ccb000;
+}
+
+.alert.info-alert {
+  background-color: #1e3a51; /* Темніший фон для інформаційних сповіщень */
+  color: #90caf9; /* Світліший текст для інформаційних сповіщень */
+  border-color: #3f7fae;
+}
+
+/* Стилі для елементів форм у нічному режимі */
+input[type="search"],
+input[type="text"],
+textarea,
+select {
+  background-color: #333; /* Темний фон для полів вводу */
+  color: #fff; /* Білий текст у полях вводу */
+  border-color: #555; /* Темніша рамка */
+}
+/* Переконайтеся, що ваш base.css також містить змінну --input-bg та --input-text */
+/* Наприклад:
+:root {
+  --input-bg: #fff;
+  --input-text: #000;
+}
+body.night {
+  --input-bg: #333;
+  --input-text: #fff;
+}
+Тоді у вашому файлі нічної теми можна просто змінити значення цих змінних.
+*/
+
+/* Стилі для списків категорій */
+.category-list li a {
+  background-color: var(--card-bg-night);
+  border-color: var(--card-border-night);
+  color: var(--card-text-night);
+}
+.category-list li a:hover {
+  background-color: #3a3a3a; /* Трохи світліше при наведенні */
+  border-color: #5a5a5a;
+}
+
+/* Стилі для кнопок вкладок */
+.tabs-nav {
+  border-bottom-color: var(--card-border-night);
+}
+
+.tab-button {
+  background-color: #3a3a3a;
+  border-color: #5a5a5a;
+  color: var(--card-text-night);
+}
+.tab-button:hover {
+  background-color: #4a4a4a;
+}
+.tab-button.active {
+  background-color: var(--card-bg-night); /* Активна вкладка має фон картки */
+  border-color: var(--card-border-night);
+  border-bottom-color: var(--card-bg-night); /* "Вирізаємо" нижню рамку */
+  color: #90caf9; /* Колір тексту активної вкладки */
+}

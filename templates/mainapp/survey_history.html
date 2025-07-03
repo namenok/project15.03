@@ -1,19 +1,30 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load static %}
-{% block content %}<h2>{% trans "Моя історія відповідей" %}</h2>
 
+{% block content %}
 
-{% if history %}
-    {% for date, answers in history.items %}
-        <h3>{{ date }}</h3>
-        <ul>
-            {% for answer in answers %}
-                <li><strong>{{ answer.survey.question }}</strong>: {{ answer.answer_choice.choice_text }}</li>
-            {% endfor %}
+<div class="history-container">
+  <h2 class="history-title mb-4">{% trans "історія" %}</h2>
+
+  {% if history %}
+    {% for date, answers in history.items%}
+      <div class="history-day card mb-4 p-3 shadow-sm">
+        <h5 class="history-date mb-3 text-primary">{{ date }}</h5>
+        <ul class="list-unstyled history-list">
+          {% for answer in answers %}
+            <li class="mb-2">
+              <strong>{{ answer.survey.question }}</strong><br>
+              <span class="text-muted">→ {{ answer.answer_choice.choice_text }}</span>
+            </li>
+          {% endfor %}
         </ul>
+      </div>
     {% endfor %}
-{% else %}
-    <p>{% trans "Ви ще не проходили жодне опитування." %}</p>
-{% endif %}
+  {% else %}
+    <div class="alert alert-info">
+      {% trans "немає пройдених опитувань" %}
+    </div>
+  {% endif %}
+</div>
+
 {% endblock %}

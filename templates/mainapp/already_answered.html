@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block content %}
-{% load static %}
-<h2>{% trans "Опитування вже пройдено" %}</h2>
-<p>{% trans "Дякуємо! Ви вже відповідали на сьогоднішнє опитування. Спробуйте завтра 😊" %}</p>
-<p><a href="{% url 'mainapp:survey_history' %}">{% trans "Переглянути свою історію відповідей на опрос" %}</a></p>
+
+<div class="survey-container">
+  <h2 class="completed-heading">{% trans "опитування вже пройдено" %}</h2>
+  <p class="completed-message">
+    {% trans "дякуємо за щирі відповіді 💙" %}
+  </p>
+  <p class="history-link">
+    <a href="{% url 'mainapp:survey_history' %}">{% trans "переглянути історію відповідей на опитування" %}</a>
+  </p>
+</div>
 {% endblock %}
 

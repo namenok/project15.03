@@ -1,3 +1,6 @@
+import logging
+import traceback
+from itertools import chain
 
 from django.contrib import messages
 from django.shortcuts import  redirect, get_object_or_404
@@ -13,8 +16,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from .models import PersonalPost, UserAnswer
 from dateutil import parser
-from django.utils.translation import gettext as _
-
+from django.utils.translation import gettext as _, gettext
 
 
 # Користувача персональний
@@ -61,7 +63,7 @@ def survey_view(request):
             UserAnswer.objects.bulk_create(answers_to_save)# Зберігаємо всі відповіді разом
             return render(request, 'mainapp/survey_thanks.html')
         else:
-            error = _("Будь ласка, дайте відповідь на всі питання.")
+            error = _("будь ласка, дай відповідь на кожне питання")
             return render(request, 'mainapp/checkme.html', {
                 'surveys': surveys,
                 'error': error})
@@ -99,13 +101,13 @@ def get_monthly_analytics(user):
     max_value = max(counts.values())
 
     if list(counts.values()).count(max_value) > 1:
-        return _("немає вектору в конкретну сторону, в цьому місяці ти ні там ні там")
+        return _("немає вектору в конкретну сторону, цього місяця ми по середині")
     elif counts['good'] == max_value:
-        return _("у цьому місяці динаміка супер крута")
+        return _("цього місяця динаміка позитивна")
     elif counts['neutral'] == max_value:
         return _("цього місяця тримаємось середнього")
     else:
-        return _("в цьому місяці усе погано")
+        return _("цього місяця динаміка негативна")
 
 
 def monthly_analytics_view(request):
@@ -114,30 +116,19 @@ def monthly_analytics_view(request):
 
 
 def get_daily_data(user, selected_date):
-    # Дати, коли щось є в будь-якій з моделей
-    data_dates = set(
-        GalleryDay.objects.filter(user=user).values_list("date", flat=True)
-    ) | set(
-        PersonalPost.objects.filter(user=user).values_list("date", flat=True)
-    ) | set(
-        UserAnswer.objects.filter(user=user).values_list("date", flat=True)
-    )
 
-    # Галерея — фото і відео через GalleryDay
     gallery_day = GalleryDay.objects.filter(user=user, date=selected_date).first()
     if gallery_day:
-        gallery_items = gallery_day.photos.all()  # пов’язано через related_name='photos'
-        video_items = gallery_day.videos.all()    # пов’язано через related_name='videos'
+        gallery_items = gallery_day.photos.all()
+        video_items = gallery_day.videos.all()
     else:
         gallery_items = []
         video_items = []
 
-    # Пости й опитування
     personal_post = PersonalPost.objects.filter(user=user, date=selected_date).first()
     survey_answers = UserAnswer.objects.filter(user=user, date=selected_date).select_related('survey', 'answer_choice')
 
     return {
-        "data_dates": data_dates,
         "gallery_items": gallery_items,
         "video_items": video_items,
         "personal_post": personal_post,
@@ -149,42 +140,73 @@ def get_daily_data(user, selected_date):
 @login_required
 def calendar_combined_view(request):
     today = timezone.now().date()
+    user = request.user # Get the user early
+
     year = int(request.GET.get('year', today.year))
     month = int(request.GET.get('month', today.month))
-    selected_date = request.GET.get('date')
-    if 'month' in request.GET:# Перемикання місяця назад вперед
-        month = int(request.GET.get('month'))
-        if month < 1:
-            month = 12
-            year -= 1
-        elif month > 12:
-            month = 1
-            year += 1
-    start_day = date(year, month, 1)
-    start_weekday = start_day.weekday()
-    start_blank_days = start_weekday
-    if selected_date:# Формування тижнів
+
+    if month < 1:
+        month = 12
+        year -= 1
+    elif month > 12:
+        month = 1
+        year += 1
+
+    selected_date_str = request.GET.get('date') # Get the 'date' parameter as a string
+    if selected_date_str:
         try:
-            selected_date = parser.parse(selected_date).date()
+            selected_date = parser.parse(selected_date_str).date()
         except ValueError:
             selected_date = today
     else:
         selected_date = today
-    start_day_of_week, days_in_month = calendar.monthrange(year, month)
-    calendar_days = [start_day + timedelta(days=i) for i in range(days_in_month)]
-    all_days = [None] * start_blank_days + calendar_days
+
+    start_day_of_month = date(year, month, 1)
+    start_weekday = start_day_of_month.weekday() # 0 for Monday, 6 for Sunday
+
+    _, days_in_month = calendar.monthrange(year, month)
+
+    calendar_days = [start_day_of_month + timedelta(days=i) for i in range(days_in_month)]
+
+    all_days = [None] * start_weekday + calendar_days
+
     weeks = [all_days[i:i + 7] for i in range(0, len(all_days), 7)]
-    user = request.user
+
+    start_of_current_month = date(year, month, 1)
+    end_of_current_month = date(year, month, calendar.monthrange(year, month)[1])
+
+    all_dates_with_data_in_month = set(
+        GalleryDay.objects.filter(
+            user=user,
+            date__gte=start_of_current_month,
+            date__lte=end_of_current_month
+        ).values_list("date", flat=True)
+    ) | set(
+        PersonalPost.objects.filter(
+            user=user,
+            date__gte=start_of_current_month,
+            date__lte=end_of_current_month
+        ).values_list("date", flat=True)
+    ) | set(
+        UserAnswer.objects.filter(
+            user=user,
+            date__gte=start_of_current_month,
+            date__lte=end_of_current_month
+        ).values_list("date", flat=True)
+    )
+
     daily_data = get_daily_data(user, selected_date)
+
     context = {
         "year": year,
         "month": month,
         "calendar_days": calendar_days,
         "today": today,
         "selected_date": selected_date,
-        "weekdays": [_("Пн"), _("Вт"), _("Ср"), _("Чт"), _("Пт"), _("Сб"), _("Нд")],
-        "start_blank_days": range(start_blank_days),
+        "weekdays": [gettext("Пн"), gettext("Вт"), gettext("Ср"), gettext("Чт"), gettext("Пт"), gettext("Сб"), gettext("Нд")], # Weekday names
+        "start_blank_days": range(start_weekday),
         "calendar_weeks": weeks,
+        "data_dates": all_dates_with_data_in_month,
         **daily_data,
     }
     return render(request, "mainapp/calendar.html", context)
@@ -197,9 +219,12 @@ def search(request):
     query = request.GET.get('query', '')
     post_blog_list = Post.objects.filter(Q(content__icontains=query) | Q(title__icontains=query)).order_by("-published_date")
     my_posts_list = LibText.objects.filter(content__icontains=query )
+    categories = Category.objects.all()
+
     context = {'post_blog_list': post_blog_list,
                'my_posts_list': my_posts_list,
-               'query': query}
+               'query': query,
+               'categories': categories,}
     return render(request, 'mainapp/library.html', context=context)
 
 
@@ -218,7 +243,7 @@ def create(request):
             post.user = request.user
             post.save()
             form.save_m2m()  # ← для ManyToMany поля "teg"(в тг
-            return redirect('mainapp:library_category_list')
+            return redirect('mainapp:library_history')
     form = PostForm()
     context = {"form": form}
     return render(request, 'mainapp/create.html', context=context)
@@ -246,7 +271,14 @@ def library_view(request, slug=None):
     selected_category = None
     if slug:
         selected_category = get_object_or_404(Category, slug=slug)
-        posts = selected_category.posts.all()
+        user_posts = selected_category.posts.all()
+        admin_posts = selected_category.libtexts.all()
+
+        posts = sorted(
+            chain(user_posts, admin_posts),
+            key=lambda x: getattr(x, 'published_date', timezone.now()),
+            reverse=True
+        )
     return render(request, 'mainapp/library.html', {
         'categories': categories,
         'selected_category': selected_category,
@@ -257,21 +289,51 @@ def library_view(request, slug=None):
 
 @login_required
 def daily_post_view(request):
-    today = timezone.now().date()
+    # Отримуємо поточну дату. Використовуйте .date() для порівняння з DateField.
+    today = timezone.localdate() # timezone.localdate() є кращим за timezone.now().date()
+                                # коли ви працюєте з датами без часу, оскільки враховує локальний часовий пояс.
+
+    # Спробуйте знайти пост користувача за сьогоднішню дату
+    # .first() поверне перший об'єкт або None, якщо таких немає
     post = PersonalPost.objects.filter(user=request.user, date=today).first()
 
     if request.method == 'POST':
-        form = PersonalPostForm(request.POST, instance=post) if post else PersonalPostForm(request.POST)
+        # Якщо пост існує, передаємо його як instance, щоб оновити
+        # Інакше створюємо нову форму
+        form = PersonalPostForm(request.POST, instance=post)
         if form.is_valid():
-            post = form.save(commit=False)
-            if not post.user_id:
-                post.user = request.user
-            post.save()
-            messages.success(request, _("Запис успішно збережено!"))
-            return redirect('mainapp:post_history')
-    else:
-        form = PersonalPostForm(instance=post) if post else PersonalPostForm()
+            # Зберігаємо форму, але не зберігаємо в базу даних одразу.
+            # Це дозволяє нам маніпулювати об'єктом PersonalPost перед остаточним збереженням.
+            personal_post_instance = form.save(commit=False)
 
+            # Встановлюємо користувача, якщо він ще не встановлений (для нового посту)
+            if not personal_post_instance.user_id: # Перевірка user_id є більш ефективною
+                personal_post_instance.user = request.user
+
+            # Встановлюємо дату на сьогоднішню.
+            # ЦЕ КЛЮЧОВИЙ РЯДОК, ЯКИЙ ПОТРІБЕН, ОСКІЛЬКИ 'date' ВИКЛЮЧЕНО З ФОРМИ.
+            personal_post_instance.date = today
+
+            try:
+                # Зберігаємо об'єкт PersonalPost у базу даних
+                personal_post_instance.save()
+                messages.success(request, _("запис успішно збережено"))
+                # Перенаправляємо на сторінку історії постів
+                return redirect('mainapp:post_history')
+            except Exception as e:
+                # Обробка можливих помилок під час збереження (наприклад, порушення unique_together)
+                messages.error(request, _("виникла помилка при збереженні"))
+                # Залогіюйте помилку для дебагу, якщо потрібно
+                # logger.error(f"Error saving personal post: {e}")
+                # Якщо ви хочете відобразити помилку у формі, можна додати:
+                # form.add_error(None, _("Цей запис вже існує для сьогоднішньої дати з цим контентом."))
+
+    else: # GET-запит (коли сторінка завантажується вперше або оновлюється)
+        # Якщо пост існує, заповнюємо форму його даними
+        # Інакше створюємо порожню форму
+        form = PersonalPostForm(instance=post)
+
+    # Рендеримо шаблон, передаючи форму
     return render(request, 'mainapp/personal_post.html', {'form': form})
 
 
@@ -280,3 +342,38 @@ def post_history_view(request):
     posts = PersonalPost.objects.filter(user=request.user).order_by('-date')
     return render(request, 'mainapp/personal_post_history.html', {'posts': posts})
 
+
+
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.conf import settings   # ← Ось тут ти підключаєш те, що ти зберегла в settings.py
+import json
+import requests
+
+# Відображає сторінку з чатом
+@login_required
+def chat_page(request):
+    return render(request, 'mainapp/home.html')
+
+import traceback
+import aiohttp
+import asyncio
+import json
+from asgiref.sync import async_to_sync
+
+async def query_ollama(ollama_url, payload):
+    async with aiohttp.ClientSession() as session:
+        async with session.post(ollama_url, json=payload) as resp:
+            full_response = ""
+            async for line in resp.content:
+                data = json.loads(line.decode())
+                full_response += data.get("response", "")
+                if data.get("done"):
+                    break
+            return full_response
+
+
+
+def library_users_history(request):
+    posts = Post.objects.filter(user=request.user).order_by('-published_date')
+    return render(request, 'mainapp/lib_user_post_history.html', {'posts': posts})

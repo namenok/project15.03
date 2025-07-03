@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load static %}
+
 {% block content %}
 
-<h2>{% trans "Історія твоїх постів бібліотечних" %}</h2>
-<ul>
+<h2 class="mb-4">{% trans "історія твоїх особистих постів в бібліотеку" %}</h2>
+
+<div class="post-history">
     {% for post in posts %}
-        <p>{{ post.title }}</p>
-        <p>{{ post.content }}</p>
-        <p>{{ post.date }}</p>
+        <div class="post-card mb-4 p-3 border rounded shadow-sm bg-light">
+            <h4 class="post-title">{{ post.title }}</h4>
+            <p class="post-content">{{ post.content }}</p>
+            <p class="text-muted small">{{ post.date }}</p>
+        </div>
     {% empty %}
-        <li>{% trans "Поки що немає постів." %}</li>
+        <div class="alert alert-info" role="alert">
+            {% trans "постів немає" %}
+        </div>
     {% endfor %}
-</ul>
+</div>
+
+<a href="{% url 'mainapp:library_category_list' %}" class="btn btn-outline-primary mt-4">
+    ← {% trans "назад до бібліотеки" %}
+</a>
 
 {% endblock %}

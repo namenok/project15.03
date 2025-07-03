@@ -1,5 +1,10 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% block content %}
- <p>{% trans "дякую що пройшов опитування !" %}</p>
+  <p class="completed-message">
+    {% trans "дякуємо за щирі відповіді 💙" %}
+  </p>
+  <p class="history-link">
+    <a href="{% url 'mainapp:survey_history' %}">{% trans "переглянути історію опитувань" %}</a>
+  </p>
 {% endblock %}

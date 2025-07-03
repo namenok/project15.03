@@ -113,8 +113,6 @@ def test_photo_gallery_invalid_image_size(test_gallery_day, dummy_image_file):
     assert 'Image size too large.' in str(excinfo.value)
 
 
-# ==== ТЕСТИ ДЛЯ VideoGallery ==== #
-
 def test_video_gallery_creation(test_gallery_day, dummy_video_file):
     from gallery.models import VideoGallery
     VideoGallery._meta.get_field('video').validators = []

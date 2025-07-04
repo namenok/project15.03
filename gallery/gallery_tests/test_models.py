@@ -1,13 +1,14 @@
+from datetime import date, timedelta
+
 import pytest
 from django.contrib.auth.models import User
-from django.db.utils import IntegrityError
 from django.core.exceptions import ValidationError
-from datetime import date, timedelta
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.utils import IntegrityError
+from unittest.mock import patch
 
 from gallery.models import GalleryDay, PhotoGallery, VideoGallery
 
-# ==== ФІКСТУРИ ==== #
 
 @pytest.fixture
 def test_user(db):
@@ -41,8 +42,6 @@ def dummy_video_file():
         content_type='video/mp4'
     )
 
-
-# ==== ТЕСТИ ДЛЯ GalleryDay ==== #
 
 def test_gallery_day_creation(test_user):
     today = date.today()
@@ -79,8 +78,6 @@ def test_gallery_day_unique_for_different_dates(test_user):
     assert GalleryDay.objects.count() == 2
 
 
-# ==== ТЕСТИ ДЛЯ PhotoGallery ==== #
-
 def test_photo_gallery_creation(test_gallery_day, dummy_image_file):
     photo = PhotoGallery.objects.create(
         gallery_day=test_gallery_day,
@@ -102,20 +99,7 @@ def test_photo_gallery_no_description(test_gallery_day, dummy_image_file):
     assert photo.description == ''
 
 
-def test_photo_gallery_invalid_image_size(test_gallery_day, dummy_image_file):
-    def raise_error(image):
-        raise ValidationError('Image size too large.')
-    from gallery.models import PhotoGallery
-    PhotoGallery._meta.get_field('image').validators = [raise_error]
-    photo = PhotoGallery(gallery_day=test_gallery_day, image=dummy_image_file)
-    with pytest.raises(ValidationError) as excinfo:
-        photo.save()
-    assert 'Image size too large.' in str(excinfo.value)
-
-
 def test_video_gallery_creation(test_gallery_day, dummy_video_file):
-    from gallery.models import VideoGallery
-    VideoGallery._meta.get_field('video').validators = []
     video = VideoGallery.objects.create(
         gallery_day=test_gallery_day,
         video=dummy_video_file,
@@ -128,8 +112,6 @@ def test_video_gallery_creation(test_gallery_day, dummy_video_file):
 
 
 def test_video_gallery_no_description(test_gallery_day, dummy_video_file):
-    from gallery.models import VideoGallery
-    VideoGallery._meta.get_field('video').validators = []
     video = VideoGallery.objects.create(
         gallery_day=test_gallery_day,
         video=dummy_video_file,
@@ -138,23 +120,4 @@ def test_video_gallery_no_description(test_gallery_day, dummy_video_file):
     assert video.description == ''
 
 
-def test_video_gallery_invalid_video_size(test_gallery_day, dummy_video_file):
-    def raise_error(video):
-        raise ValidationError('Video size too large.')
-    from gallery.models import VideoGallery
-    VideoGallery._meta.get_field('video').validators = [raise_error]
-    video = VideoGallery(gallery_day=test_gallery_day, video=dummy_video_file)
-    with pytest.raises(ValidationError) as excinfo:
-        video.save()
-    assert 'Video size too large.' in str(excinfo.value)
 
-
-def test_video_gallery_invalid_video_duration(test_gallery_day, dummy_video_file):
-    def raise_error(video):
-        raise ValidationError('Video duration too long.')
-    from gallery.models import VideoGallery
-    VideoGallery._meta.get_field('video').validators = [raise_error]
-    video = VideoGallery(gallery_day=test_gallery_day, video=dummy_video_file)
-    with pytest.raises(ValidationError) as excinfo:
-        video.save()
-    assert 'Video duration too long.' in str(excinfo.value)

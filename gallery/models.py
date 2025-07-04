@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
 
-from gallery.forms import validate_video_duration, validate_image_size, validate_video_size
-
 
 class GalleryDay(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -20,10 +18,6 @@ class PhotoGallery(models.Model):
     image = models.ImageField(upload_to='photos/')
     description = models.CharField(max_length=100, blank=True)
 
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
-
     def __str__(self):
         return f"Photo for {self.gallery_day.date} by {self.gallery_day.user.username}"
 
@@ -31,14 +25,8 @@ class PhotoGallery(models.Model):
 class VideoGallery(models.Model):
     gallery_day = models.ForeignKey(GalleryDay, on_delete=models.CASCADE, related_name='videos')
     video = models.FileField(
-        upload_to='videos/',
-        validators=[validate_video_size, validate_video_duration]
-    )
+        upload_to='videos/',)
     description = models.CharField(max_length=100, blank=True)
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Video for {self.gallery_day.date} by {self.gallery_day.user.username}"

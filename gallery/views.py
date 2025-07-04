@@ -1,43 +1,93 @@
+import calendar
 from datetime import date
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-from django.shortcuts import render, redirect
-from django.utils.translation import gettext as gettext
-from .models import PhotoGallery, VideoGallery, GalleryDay
-from .forms import  validate_image_size, MediaUploadForm, validate_video_size, validate_video_duration
+from django.shortcuts import redirect, render
 from django.utils import timezone
-import calendar
+from django.utils.translation import gettext as gettext
+
+from .forms import (MediaUploadForm, validate_image_size,
+                    validate_video_duration, validate_video_size)
+from .models import GalleryDay, PhotoGallery, VideoGallery
+
+
+def get_month_date_range(today):
+    """Return the first and last day of the month for a given date."""
+    first_day = today.replace(day=1)
+    last_day = today.replace(day=calendar.monthrange(today.year, today.month)[1])
+    return first_day, last_day
+
+
+def get_media_for_month(user, first_day, last_day):
+    """Return all photos and videos for a user in a given month."""
+    gallery_days = GalleryDay.objects.filter(
+        user=user,
+        date__gte=first_day,
+        date__lte=last_day
+    ).order_by('-date')
+    all_photos = []
+    all_videos = []
+    for gallery_day in gallery_days:
+        all_photos.extend(PhotoGallery.objects.filter(gallery_day=gallery_day))
+        all_videos.extend(VideoGallery.objects.filter(gallery_day=gallery_day))
+    return list(all_photos) + list(all_videos)
+
+
+def handle_image_uploads(gallery_day, images, form):
+    existing_photos_count = gallery_day.photos.count()
+    available_image_slots = 5 - existing_photos_count
+    if available_image_slots <= 0:
+        form.add_error('images', gettext("сьогодні вже додано 5 фото"))
+        return 0
+    images_to_upload = images[:available_image_slots]
+    image_upload_success = 0
+    for image in images_to_upload:
+        try:
+            PhotoGallery.objects.create(gallery_day=gallery_day, image=image)
+            image_upload_success += 1
+        except ValidationError as e:
+            if hasattr(e, "error_dict") and "image" in e.error_dict:
+                for err in e.error_dict["image"]:
+                    form.add_error("images", err)
+            else:
+                form.add_error("images", e)
+    return image_upload_success
+
+
+def handle_video_uploads(gallery_day, videos, form):
+    existing_videos_count = gallery_day.videos.count()
+    available_video_slots = 2 - existing_videos_count
+    if available_video_slots <= 0:
+        form.add_error('videos', gettext("сьогодні вже додано 2 відео"))
+        return 0
+    videos_to_upload = videos[:available_video_slots]
+    video_upload_success = 0
+    for video in videos_to_upload:
+        try:
+            validate_video_size(video)
+            validate_video_duration(video)
+            VideoGallery.objects.create(gallery_day=gallery_day, video=video)
+            video_upload_success += 1
+        except ValidationError as e:
+            form.add_error('videos', e)
+    return video_upload_success
+
 
 @login_required()
 def gallery(request):
-    # Отримуємо поточну дату
     today = timezone.localdate() # Використовуємо timezone.localdate() для поточної дати з урахуванням локального часового поясу
 
-    first_day_of_month = today.replace(day=1)
+    first_day_of_month, last_day_of_month = get_month_date_range(today)
 
-    last_day_of_month = today.replace(day=calendar.monthrange(today.year, today.month)[1])
-
-    gallery_days_for_month = GalleryDay.objects.filter(
-        user=request.user,
-        date__gte=first_day_of_month, # Дата більша або дорівнює першому дню місяця
-        date__lte=last_day_of_month    # Дата менша або дорівнює останньому дню місяця
-    ).order_by('-date') # Сортуємо за датою у спадному порядку, якщо потрібно
-
-    # Ініціалізуємо порожні списки для фото та відео
-    all_photos_for_month = []
-    all_videos_for_month = []
-
-    # Перебираємо кожен GalleryDay за поточний місяць і збираємо всі фото та відео
-    for gallery_day in gallery_days_for_month:
-        all_photos_for_month.extend(PhotoGallery.objects.filter(gallery_day=gallery_day))
-        all_videos_for_month.extend(VideoGallery.objects.filter(gallery_day=gallery_day))
-
-    media_items = list(all_photos_for_month) + list(all_videos_for_month)
+    media_items = get_media_for_month(request.user, first_day_of_month, last_day_of_month)
 
     return render(request, 'gallery/index.html', {'media_items': media_items})
 
 
+
+from .services.upload_service import MediaUploadService
 
 @login_required()
 def upload(request):
@@ -48,50 +98,10 @@ def upload(request):
                 user=request.user,
                 date=date.today()
             )
+            service = MediaUploadService(gallery_day, form)
+            service.upload_images(request.FILES.getlist('images'))
+            service.upload_videos(request.FILES.getlist('videos'))
 
-            # Images
-            images_to_upload = request.FILES.getlist('images')
-            existing_photos_count = gallery_day.photos.count()
-            available_image_slots = 5 - existing_photos_count
-            if available_image_slots <= 0:
-                form.add_error('images', gettext("сьогодні вже додано 5 фото"))
-                images_to_upload = []
-            else:
-                images_to_upload = images_to_upload[:available_image_slots]
-
-            image_upload_success = 0
-            for image in images_to_upload:
-                try:
-
-                    PhotoGallery.objects.create(gallery_day=gallery_day, image=image)
-                    image_upload_success += 1
-                except ValidationError as e:
-                    # If the error is for the model field 'image', map it to the form field 'images'
-                    if hasattr(e, "error_dict") and "image" in e.error_dict:
-                        for err in e.error_dict["image"]:
-                            form.add_error("images", err)
-                    else:
-                        form.add_error("images", e)
-
-            # Videos
-            videos_to_upload = request.FILES.getlist('videos')
-            existing_videos_count = gallery_day.videos.count()
-            available_video_slots = 2 - existing_videos_count
-            if available_video_slots <= 0:
-                form.add_error('videos', gettext("сьогодні вже додано 2 відео"))
-                videos_to_upload = []
-            else:
-                videos_to_upload = videos_to_upload[:available_video_slots]
-
-            for video in videos_to_upload:
-                try:
-                    validate_video_size(video)
-                    validate_video_duration(video)
-                    VideoGallery.objects.create(gallery_day=gallery_day, video=video)
-                except ValidationError as e:
-                    form.add_error('videos', e)
-
-            # Final check
             if not form.errors:
                 messages.success(request, gettext("файли успішно завантажено"))
                 return redirect('gallery:gallery')

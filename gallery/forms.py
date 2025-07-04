@@ -1,16 +1,14 @@
+import io
 import mimetypes
+import os
 import tempfile
+
+from django import forms
 from django.core.exceptions import ValidationError
 from django.forms import FileField
+from django.forms.widgets import ClearableFileInput, FileInput
 from django.utils.translation import gettext as gettext
-from django.core.exceptions import ValidationError
-import io
-import os
-from django import forms
 from moviepy import VideoFileClip
-from django import forms
-from django.forms.widgets import ClearableFileInput
-from django.forms.widgets import FileInput
 
 
 # 1. Кастомний віджет
@@ -30,17 +28,36 @@ class MultipleFileField(forms.FileField):
             return []
         return data
 
-# 3. Форма
-class MediaUploadForm(forms.Form):
-    images = MultipleFileField(
-        required=False,
-        label="Images",
 
-    )
-    videos = MultipleFileField( # Assuming videos uses the same logic
-        required=False,
-        label="Videos",
-    )
+class MediaUploadForm(forms.Form):
+    images = MultipleFileField(required=False, label="Images")
+    videos = MultipleFileField(required=False, label="Videos")
+
+    def clean_images(self):
+        images = self.cleaned_data.get('images', [])
+        errors = []
+        for img in images:
+            try:
+                validate_image_size(img)
+            except ValidationError as e:
+                errors.append(e)
+        if errors:
+            raise ValidationError(errors)
+        return images
+
+    def clean_videos(self):
+        videos = self.cleaned_data.get('videos', [])
+        errors = []
+        for vid in videos:
+            try:
+                validate_video_size(vid)
+                validate_video_duration(vid)
+            except ValidationError as e:
+                errors.append(e)
+        if errors:
+            # Raise a combined ValidationError with all errors
+            raise ValidationError(errors)
+        return videos
 
 
 def validate_image_size(image):

@@ -6,6 +6,7 @@ from gallery.forms import validate_video_duration, validate_video_size
 MAX_IMAGES_PER_DAY = 5
 MAX_VIDEOS_PER_DAY = 2
 
+
 class MediaUploadService:
     def __init__(self, gallery_day, form):
         self.gallery_day = gallery_day

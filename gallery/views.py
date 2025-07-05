@@ -8,9 +8,13 @@ from django.shortcuts import redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as gettext
 
-from .forms import (MediaUploadForm, validate_image_size,
-                    validate_video_duration, validate_video_size)
+from .forms import (
+    MediaUploadForm,
+    validate_video_duration,
+    validate_video_size,
+)
 from .models import GalleryDay, PhotoGallery, VideoGallery
+from .services.upload_service import MediaUploadService
 
 
 def get_month_date_range(today):
@@ -23,10 +27,8 @@ def get_month_date_range(today):
 def get_media_for_month(user, first_day, last_day):
     """Return all photos and videos for a user in a given month."""
     gallery_days = GalleryDay.objects.filter(
-        user=user,
-        date__gte=first_day,
-        date__lte=last_day
-    ).order_by('-date')
+        user=user, date__gte=first_day, date__lte=last_day
+    ).order_by("-date")
     all_photos = []
     all_videos = []
     for gallery_day in gallery_days:
@@ -39,7 +41,7 @@ def handle_image_uploads(gallery_day, images, form):
     existing_photos_count = gallery_day.photos.count()
     available_image_slots = 5 - existing_photos_count
     if available_image_slots <= 0:
-        form.add_error('images', gettext("сьогодні вже додано 5 фото"))
+        form.add_error("images", gettext("сьогодні вже додано 5 фото"))
         return 0
     images_to_upload = images[:available_image_slots]
     image_upload_success = 0
@@ -60,7 +62,7 @@ def handle_video_uploads(gallery_day, videos, form):
     existing_videos_count = gallery_day.videos.count()
     available_video_slots = 2 - existing_videos_count
     if available_video_slots <= 0:
-        form.add_error('videos', gettext("сьогодні вже додано 2 відео"))
+        form.add_error("videos", gettext("сьогодні вже додано 2 відео"))
         return 0
     videos_to_upload = videos[:available_video_slots]
     video_upload_success = 0
@@ -71,23 +73,24 @@ def handle_video_uploads(gallery_day, videos, form):
             VideoGallery.objects.create(gallery_day=gallery_day, video=video)
             video_upload_success += 1
         except ValidationError as e:
-            form.add_error('videos', e)
+            form.add_error("videos", e)
     return video_upload_success
 
 
 @login_required()
 def gallery(request):
-    today = timezone.localdate() # Використовуємо timezone.localdate() для поточної дати з урахуванням локального часового поясу
+    today = (
+        timezone.localdate()
+    )  # Використовуємо timezone.localdate() для поточної дати з урахуванням локального часового поясу
 
     first_day_of_month, last_day_of_month = get_month_date_range(today)
 
-    media_items = get_media_for_month(request.user, first_day_of_month, last_day_of_month)
+    media_items = get_media_for_month(
+        request.user, first_day_of_month, last_day_of_month
+    )
 
-    return render(request, 'gallery/index.html', {'media_items': media_items})
+    return render(request, "gallery/index.html", {"media_items": media_items})
 
-
-
-from .services.upload_service import MediaUploadService
 
 @login_required()
 def upload(request):
@@ -95,19 +98,20 @@ def upload(request):
         form = MediaUploadForm(request.POST, request.FILES)
         if form.is_valid():
             gallery_day, _ = GalleryDay.objects.get_or_create(
-                user=request.user,
-                date=date.today()
+                user=request.user, date=date.today()
             )
             service = MediaUploadService(gallery_day, form)
-            service.upload_images(request.FILES.getlist('images'))
-            service.upload_videos(request.FILES.getlist('videos'))
+            service.upload_images(request.FILES.getlist("images"))
+            service.upload_videos(request.FILES.getlist("videos"))
 
             if not form.errors:
                 messages.success(request, gettext("файли успішно завантажено"))
-                return redirect('gallery:gallery')
+                return redirect("gallery:gallery")
             else:
-                messages.error(request, gettext("виникли помилки під час завантаження файлів"))
+                messages.error(
+                    request, gettext("виникли помилки під час завантаження файлів")
+                )
     else:
         form = MediaUploadForm()
 
-    return render(request, 'gallery/upload.html', {'form': form})
+    return render(request, "gallery/upload.html", {"form": form})

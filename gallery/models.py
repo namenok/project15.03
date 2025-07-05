@@ -7,15 +7,17 @@ class GalleryDay(models.Model):
     date = models.DateField()
 
     class Meta:
-        unique_together = ('user', 'date')
+        unique_together = ("user", "date")
 
     def __str__(self):
         return f"{self.user.username} - {self.date}"
 
 
 class PhotoGallery(models.Model):
-    gallery_day = models.ForeignKey(GalleryDay, on_delete=models.CASCADE, related_name='photos')
-    image = models.ImageField(upload_to='photos/')
+    gallery_day = models.ForeignKey(
+        GalleryDay, on_delete=models.CASCADE, related_name="photos"
+    )
+    image = models.ImageField(upload_to="photos/")
     description = models.CharField(max_length=100, blank=True)
 
     def __str__(self):
@@ -23,9 +25,12 @@ class PhotoGallery(models.Model):
 
 
 class VideoGallery(models.Model):
-    gallery_day = models.ForeignKey(GalleryDay, on_delete=models.CASCADE, related_name='videos')
+    gallery_day = models.ForeignKey(
+        GalleryDay, on_delete=models.CASCADE, related_name="videos"
+    )
     video = models.FileField(
-        upload_to='videos/',)
+        upload_to="videos/",
+    )
     description = models.CharField(max_length=100, blank=True)
 
     def __str__(self):

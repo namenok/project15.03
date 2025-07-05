@@ -11,8 +11,6 @@ uvicorn[standard]
 watchgod
 pytest
 pytest-django
-flake8
 ruff
 black
-isort
 bandit

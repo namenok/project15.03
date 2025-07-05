@@ -8,13 +8,19 @@ import gallery.forms
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('gallery', '0001_initial'),
+        ("gallery", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='videogallery',
-            name='video',
-            field=models.FileField(upload_to='videos/', validators=[gallery.forms.validate_video_size, gallery.forms.validate_video_duration]),
+            model_name="videogallery",
+            name="video",
+            field=models.FileField(
+                upload_to="videos/",
+                validators=[
+                    gallery.forms.validate_video_size,
+                    gallery.forms.validate_video_duration,
+                ],
+            ),
         ),
     ]

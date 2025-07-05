@@ -17,32 +17,88 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='GalleryDay',
+            name="GalleryDay",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date", models.DateField()),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('user', 'date')},
+                "unique_together": {("user", "date")},
             },
         ),
         migrations.CreateModel(
-            name='PhotoGallery',
+            name="PhotoGallery",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('image', models.ImageField(upload_to='photos/', validators=[gallery.forms.validate_image_size])),
-                ('description', models.CharField(blank=True, max_length=100)),
-                ('gallery_day', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='photos', to='gallery.galleryday')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        upload_to="photos/",
+                        validators=[gallery.forms.validate_image_size],
+                    ),
+                ),
+                ("description", models.CharField(blank=True, max_length=100)),
+                (
+                    "gallery_day",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="photos",
+                        to="gallery.galleryday",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='VideoGallery',
+            name="VideoGallery",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('video', models.FileField(upload_to='videos/', validators=[gallery.forms.validate_video_size])),
-                ('description', models.CharField(blank=True, max_length=100)),
-                ('gallery_day', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='videos', to='gallery.galleryday')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "video",
+                    models.FileField(
+                        upload_to="videos/",
+                        validators=[gallery.forms.validate_video_size],
+                    ),
+                ),
+                ("description", models.CharField(blank=True, max_length=100)),
+                (
+                    "gallery_day",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="videos",
+                        to="gallery.galleryday",
+                    ),
+                ),
             ],
         ),
     ]

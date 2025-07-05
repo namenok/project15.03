@@ -7,17 +7,17 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mainapp', '0001_initial'),
+        ("mainapp", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='personalpost',
-            unique_together={('user', 'date', 'content')},
+            name="personalpost",
+            unique_together={("user", "date", "content")},
         ),
         migrations.RemoveField(
-            model_name='personalpost',
-            name='poster',
+            model_name="personalpost",
+            name="poster",
         ),
     ]

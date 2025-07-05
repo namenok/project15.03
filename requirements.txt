@@ -11,3 +11,6 @@ uvicorn[standard]
 watchgod
 pytest
 pytest-django
+ruff
+black
+bandit

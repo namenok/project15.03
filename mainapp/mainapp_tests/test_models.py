@@ -1,0 +1,89 @@
+import pytest
+from django.contrib.auth.models import User
+from mainapp.models import (
+    Category,
+    Post,
+    PersonalPost,
+    LibText,
+    Survey,
+    Answers,
+    UserAnswer,
+)
+from django.utils import timezone
+from datetime import date
+
+
+@pytest.mark.django_db
+def test_category_str_and_slug():
+    cat = Category.objects.create(name="Test Category")  # nosec
+    assert str(cat) == "Test Category"  # nosec
+    assert cat.slug.startswith("test-category")  # nosec
+
+
+@pytest.mark.django_db
+def test_post_str_and_fields():
+    user = User.objects.create_user(username="testuser", password="pass")  # nosec
+    cat = Category.objects.create(name="Test Cat")  # nosec
+    post = Post.objects.create(  # nosec
+        title="Test Post",
+        content="Some content",
+        published_date=timezone.now(),
+        category=cat,
+        user=user,
+    )
+    assert str(post) == "Test Post"  # nosec
+    assert post.category == cat  # nosec
+    assert post.user == user  # nosec
+
+
+@pytest.mark.django_db
+def test_personal_post_str_and_unique():
+    user = User.objects.create_user(username="testuser2", password="pass")  # nosec
+    post = PersonalPost.objects.create(  # nosec
+        title="Diary", content="My day", user=user, date=date.today()
+    )
+    assert str(post) == f"{user.username} - {date.today()}"  # nosec
+    # unique_together: user, date, content
+    with pytest.raises(Exception):
+        PersonalPost.objects.create(
+            title="Diary", content="My day", user=user, date=date.today()
+        )
+
+
+@pytest.mark.django_db
+def test_libtext_str():
+    cat = Category.objects.create(name="LibCat")  # nosec
+    lib = LibText.objects.create(  # nosec
+        title="LibTitle", content="LibContent", to_category=cat
+    )
+    assert str(lib) == "LibTitle"  # nosec
+    assert lib.to_category == cat  # nosec
+
+
+@pytest.mark.django_db
+def test_survey_and_answers():
+    survey = Survey.objects.create(question="How are you?")  # nosec
+    ans = Answers.objects.create(
+        marker="good", survey=survey, choice_text="Good!"
+    )  # nosec
+    assert str(survey) == "How are you?"  # nosec
+    assert str(ans) == "Good!"  # nosec
+    assert ans.survey == survey  # nosec
+
+
+@pytest.mark.django_db
+def test_user_answer_str_and_unique():
+    user = User.objects.create_user(username="testuser3", password="pass")  # nosec
+    survey = Survey.objects.create(question="Q?")  # nosec
+    ans = Answers.objects.create(
+        marker="neutral", survey=survey, choice_text="Ok"
+    )  # nosec
+    ua = UserAnswer.objects.create(  # nosec
+        user=user, survey=survey, answer_choice=ans, date=date.today()
+    )
+    assert survey.question in str(ua)  # nosec
+    # unique_together: user, survey, date
+    with pytest.raises(Exception):
+        UserAnswer.objects.create(
+            user=user, survey=survey, answer_choice=ans, date=date.today()
+        )

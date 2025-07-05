@@ -4,13 +4,11 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from mainapp import routing  # це routing з додатку mainapp
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'websiteProject.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "websiteProject.settings")
 
-application = ProtocolTypeRouter({
-    "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(
-        URLRouter(
-            routing.websocket_urlpatterns
-        )
-    ),
-})
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),
+        "websocket": AuthMiddlewareStack(URLRouter(routing.websocket_urlpatterns)),
+    }
+)

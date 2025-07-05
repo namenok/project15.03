@@ -15,103 +15,264 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30, verbose_name='Назва')),
-                ('slug', models.SlugField(blank=True, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=30, verbose_name="Назва")),
+                ("slug", models.SlugField(blank=True, unique=True)),
             ],
             options={
-                'verbose_name': 'Категорія',
-                'verbose_name_plural': 'Категорії',
+                "verbose_name": "Категорія",
+                "verbose_name_plural": "Категорії",
             },
         ),
         migrations.CreateModel(
-            name='Survey',
+            name="Survey",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('question', models.CharField(max_length=100)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("question", models.CharField(max_length=100)),
             ],
         ),
         migrations.CreateModel(
-            name='Teg',
+            name="Teg",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.TextField(max_length=10)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.TextField(max_length=10)),
             ],
             options={
-                'verbose_name': 'Хештег',
-                'verbose_name_plural': 'Хештеги',
+                "verbose_name": "Хештег",
+                "verbose_name_plural": "Хештеги",
             },
         ),
         migrations.CreateModel(
-            name='LibText',
+            name="LibText",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=30, verbose_name='Заголовок мого поля з текстом')),
-                ('content', models.TextField(verbose_name='Зміст')),
-                ('to_category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mainapp.category', verbose_name='Мій текст належить до Категорії')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(
+                        max_length=30, verbose_name="Заголовок мого поля з текстом"
+                    ),
+                ),
+                ("content", models.TextField(verbose_name="Зміст")),
+                (
+                    "to_category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="mainapp.category",
+                        verbose_name="Мій текст належить до Категорії",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'пост зАдмінки для Бібліотеки',
-                'verbose_name_plural': 'постИ з адмінки для бібліотеки',
+                "verbose_name": "пост зАдмінки для Бібліотеки",
+                "verbose_name_plural": "постИ з адмінки для бібліотеки",
             },
         ),
         migrations.CreateModel(
-            name='Answers',
+            name="Answers",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('marker', models.CharField(choices=[('good', 'Добре'), ('neutral', 'Середнє'), ('bad', 'Погано')], max_length=10)),
-                ('choice_text', models.CharField(max_length=50)),
-                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='answers', to='mainapp.survey')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "marker",
+                    models.CharField(
+                        choices=[
+                            ("good", "Добре"),
+                            ("neutral", "Середнє"),
+                            ("bad", "Погано"),
+                        ],
+                        max_length=10,
+                    ),
+                ),
+                ("choice_text", models.CharField(max_length=50)),
+                (
+                    "survey",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="answers",
+                        to="mainapp.survey",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Post',
+            name="Post",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('published_date', models.DateTimeField(auto_created=True, verbose_name='Дата та час посту')),
-                ('title', models.CharField(max_length=30, verbose_name='Заголовок посту')),
-                ('content', models.TextField(verbose_name='Опис посту')),
-                ('poster', models.ImageField(upload_to='uploads')),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='posts', to='mainapp.category', verbose_name='Категорія')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
-                ('teg', models.ManyToManyField(blank=True, related_name='posts', to='mainapp.teg', verbose_name='Хештеги')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "published_date",
+                    models.DateTimeField(
+                        auto_created=True, verbose_name="Дата та час посту"
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(max_length=30, verbose_name="Заголовок посту"),
+                ),
+                ("content", models.TextField(verbose_name="Опис посту")),
+                ("poster", models.ImageField(upload_to="uploads")),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="posts",
+                        to="mainapp.category",
+                        verbose_name="Категорія",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Автор",
+                    ),
+                ),
+                (
+                    "teg",
+                    models.ManyToManyField(
+                        blank=True,
+                        related_name="posts",
+                        to="mainapp.teg",
+                        verbose_name="Хештеги",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'запис юзера в бібл',
-                'verbose_name_plural': 'записи юзера в бібл',
+                "verbose_name": "запис юзера в бібл",
+                "verbose_name_plural": "записи юзера в бібл",
             },
         ),
         migrations.CreateModel(
-            name='PersonalPost',
+            name="PersonalPost",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=30, verbose_name='Заголовок посту')),
-                ('content', models.TextField(verbose_name='Опис посту')),
-                ('published_date', models.DateTimeField(auto_now_add=True, verbose_name='Дата та час посту')),
-                ('poster', models.ImageField(upload_to='uploads', verbose_name='ПостерДоПерсональногоПосту')),
-                ('date', models.DateField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Автор')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "title",
+                    models.CharField(max_length=30, verbose_name="Заголовок посту"),
+                ),
+                ("content", models.TextField(verbose_name="Опис посту")),
+                (
+                    "published_date",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="Дата та час посту"
+                    ),
+                ),
+                (
+                    "poster",
+                    models.ImageField(
+                        upload_to="uploads", verbose_name="ПостерДоПерсональногоПосту"
+                    ),
+                ),
+                ("date", models.DateField()),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Автор",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'ОсобистийПост',
-                'verbose_name_plural': 'Особисті Пости',
-                'unique_together': {('user', 'poster', 'date', 'content')},
+                "verbose_name": "ОсобистийПост",
+                "verbose_name_plural": "Особисті Пости",
+                "unique_together": {("user", "poster", "date", "content")},
             },
         ),
         migrations.CreateModel(
-            name='UserAnswer',
+            name="UserAnswer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answered_at', models.DateTimeField(auto_now_add=True)),
-                ('date', models.DateField()),
-                ('answer_choice', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mainapp.answers')),
-                ('survey', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='mainapp.survey')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("answered_at", models.DateTimeField(auto_now_add=True)),
+                ("date", models.DateField()),
+                (
+                    "answer_choice",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="mainapp.answers",
+                    ),
+                ),
+                (
+                    "survey",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="mainapp.survey"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('user', 'survey', 'date')},
+                "unique_together": {("user", "survey", "date")},
             },
         ),
     ]

@@ -6,12 +6,15 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mainapp', '0004_alter_post_options_answers_choice_text_en_gb_and_more'),
+        ("mainapp", "0004_alter_post_options_answers_choice_text_en_gb_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='libtext',
-            options={'verbose_name': 'пост з aдмінки для бібліотеки', 'verbose_name_plural': 'постИ з адмінки для бібліотеки'},
+            name="libtext",
+            options={
+                "verbose_name": "пост з aдмінки для бібліотеки",
+                "verbose_name_plural": "постИ з адмінки для бібліотеки",
+            },
         ),
     ]

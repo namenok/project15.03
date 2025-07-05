@@ -6,62 +6,69 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mainapp', '0003_remove_post_poster'),
+        ("mainapp", "0003_remove_post_poster"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='post',
-            options={'verbose_name': 'запис користувача в бібліотеку', 'verbose_name_plural': 'записи користувача в бібліотеку'},
+            name="post",
+            options={
+                "verbose_name": "запис користувача в бібліотеку",
+                "verbose_name_plural": "записи користувача в бібліотеку",
+            },
         ),
         migrations.AddField(
-            model_name='answers',
-            name='choice_text_en_gb',
+            model_name="answers",
+            name="choice_text_en_gb",
             field=models.CharField(max_length=50, null=True),
         ),
         migrations.AddField(
-            model_name='answers',
-            name='choice_text_uk',
+            model_name="answers",
+            name="choice_text_uk",
             field=models.CharField(max_length=50, null=True),
         ),
         migrations.AddField(
-            model_name='category',
-            name='name_en_gb',
-            field=models.CharField(max_length=30, null=True, verbose_name='Назва'),
+            model_name="category",
+            name="name_en_gb",
+            field=models.CharField(max_length=30, null=True, verbose_name="Назва"),
         ),
         migrations.AddField(
-            model_name='category',
-            name='name_uk',
-            field=models.CharField(max_length=30, null=True, verbose_name='Назва'),
+            model_name="category",
+            name="name_uk",
+            field=models.CharField(max_length=30, null=True, verbose_name="Назва"),
         ),
         migrations.AddField(
-            model_name='libtext',
-            name='content_en_gb',
-            field=models.TextField(null=True, verbose_name='Зміст'),
+            model_name="libtext",
+            name="content_en_gb",
+            field=models.TextField(null=True, verbose_name="Зміст"),
         ),
         migrations.AddField(
-            model_name='libtext',
-            name='content_uk',
-            field=models.TextField(null=True, verbose_name='Зміст'),
+            model_name="libtext",
+            name="content_uk",
+            field=models.TextField(null=True, verbose_name="Зміст"),
         ),
         migrations.AddField(
-            model_name='libtext',
-            name='title_en_gb',
-            field=models.CharField(max_length=30, null=True, verbose_name='Заголовок мого поля з текстом'),
+            model_name="libtext",
+            name="title_en_gb",
+            field=models.CharField(
+                max_length=30, null=True, verbose_name="Заголовок мого поля з текстом"
+            ),
         ),
         migrations.AddField(
-            model_name='libtext',
-            name='title_uk',
-            field=models.CharField(max_length=30, null=True, verbose_name='Заголовок мого поля з текстом'),
+            model_name="libtext",
+            name="title_uk",
+            field=models.CharField(
+                max_length=30, null=True, verbose_name="Заголовок мого поля з текстом"
+            ),
         ),
         migrations.AddField(
-            model_name='survey',
-            name='question_en_gb',
+            model_name="survey",
+            name="question_en_gb",
             field=models.CharField(max_length=100, null=True),
         ),
         migrations.AddField(
-            model_name='survey',
-            name='question_uk',
+            model_name="survey",
+            name="question_uk",
             field=models.CharField(max_length=100, null=True),
         ),
     ]

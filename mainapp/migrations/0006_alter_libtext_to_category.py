@@ -7,13 +7,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('mainapp', '0005_alter_libtext_options'),
+        ("mainapp", "0005_alter_libtext_options"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='libtext',
-            name='to_category',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='libtexts', to='mainapp.category', verbose_name='Мій текст належить до Категорії'),
+            model_name="libtext",
+            name="to_category",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="libtexts",
+                to="mainapp.category",
+                verbose_name="Мій текст належить до Категорії",
+            ),
         ),
     ]

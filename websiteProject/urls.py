@@ -7,14 +7,14 @@ from django.conf.urls.i18n import i18n_patterns
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('set-language/', set_language, name='set_language'),
-    ]
+    path("admin/", admin.site.urls),
+    path("set-language/", set_language, name="set_language"),
+]
 
 urlpatterns += i18n_patterns(
-path('', include('mainapp.urls', namespace='mainapp')),
-    path('users/', include('users.urls', namespace='users')),
-    path('galleryapp/', include('gallery.urls', namespace='gallery')),
+    path("", include("mainapp.urls", namespace="mainapp")),
+    path("users/", include("users.urls", namespace="users")),
+    path("galleryapp/", include("gallery.urls", namespace="gallery")),
 )
 
 if settings.DEBUG:

@@ -261,6 +261,11 @@ def posts_by_category_view(request, slug):
         request, "mainapp/library.html", {"category": category, "posts": posts}
     )
 
+@login_required()
+def categories_overview(request):
+    categories = get_all_categories()  # Replace with your function
+    return render(request, "mainapp/library.html", {"categories": categories})
+
 
 @login_required()
 def library_users_history(request):

@@ -10,7 +10,7 @@ urlpatterns = [
     path("survey/history/", views.survey_history, name="survey_history"),
     path("calendar/", views.calendar_combined_view, name="calendar_combined"),
     path("library/history/", views.library_users_history, name="library_history"),
-    path("categories/", views.category_list_view, name="library_category_list"),
+    path("categories/", views.categories_overview, name="library_category_list"),
     path(
         "category/<slug:slug>/",
         views.category_list_view,

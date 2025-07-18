@@ -11,6 +11,9 @@ uvicorn[standard]
 watchgod
 pytest
 pytest-django
+pytest-asyncio
+aresponses
 ruff
 black
 bandit
+daphne

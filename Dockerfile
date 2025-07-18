@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     libxext6 \
     libgl1 \
     gettext \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Оновлення pip і встановлення бібліотек

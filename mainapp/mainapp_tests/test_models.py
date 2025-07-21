@@ -63,7 +63,9 @@ def test_libtext_str():
 @pytest.mark.django_db
 def test_survey_and_answers():
     survey = Survey.objects.create(question="How are you?")  # nosec
-    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good!")  # nosec
+    ans = Answers.objects.create(
+        marker="good", survey=survey, choice_text="Good!"
+    )  # nosec
     assert str(survey) == "How are you?"  # nosec
     assert str(ans) == "Good!"  # nosec
     assert ans.survey == survey  # nosec
@@ -73,7 +75,9 @@ def test_survey_and_answers():
 def test_user_answer_str_and_unique():
     user = User.objects.create_user(username="testuser3", password="pass")  # nosec
     survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(marker="neutral", survey=survey, choice_text="Ok")  # nosec
+    ans = Answers.objects.create(
+        marker="neutral", survey=survey, choice_text="Ok"
+    )  # nosec
     ua = UserAnswer.objects.create(  # nosec
         user=user, survey=survey, answer_choice=ans, date=date.today()
     )

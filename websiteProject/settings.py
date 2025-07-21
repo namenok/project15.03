@@ -132,3 +132,7 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 OLLAMA_API_URL = "http://host.docker.internal:11434"
 
 ASGI_APPLICATION = "websiteProject.asgi.application"
+
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = "DENY"

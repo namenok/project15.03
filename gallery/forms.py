@@ -8,6 +8,27 @@ from django.utils.translation import gettext as gettext
 from moviepy import VideoFileClip
 
 
+ALLOWED_IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif"]
+ALLOWED_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".gif"]
+
+ALLOWED_VIDEO_TYPES = ["video/mp4", "video/quicktime"]
+ALLOWED_VIDEO_EXTENSIONS = [".mp4", ".mov"]
+
+BLOCKED_EXTENSIONS = [
+    ".php",
+    ".exe",
+    ".sh",
+    ".bat",
+    ".py",
+    ".js",
+    ".pl",
+    ".cgi",
+    ".com",
+    ".dll",
+    ".scr",
+]
+
+
 class MultiFileInput(FileInput):
     allow_multiple_selected = True
 
@@ -33,6 +54,8 @@ class MediaUploadForm(forms.Form):
         errors = []
         for img in images:
             try:
+                validate_file_extension(img, allowed_exts=ALLOWED_IMAGE_EXTENSIONS)
+                validate_file_mime_type(img, allowed_types=ALLOWED_IMAGE_TYPES)
                 validate_image_size(img)
             except ValidationError as e:
                 errors.append(e)
@@ -45,6 +68,8 @@ class MediaUploadForm(forms.Form):
         errors = []
         for vid in videos:
             try:
+                validate_file_extension(vid, allowed_exts=ALLOWED_VIDEO_EXTENSIONS)
+                validate_file_mime_type(vid, allowed_types=ALLOWED_VIDEO_TYPES)
                 validate_video_size(vid)
                 validate_video_duration(vid)
             except ValidationError as e:
@@ -52,6 +77,26 @@ class MediaUploadForm(forms.Form):
         if errors:
             raise ValidationError(errors)
         return videos
+
+
+def validate_file_extension(file, allowed_exts):
+    ext = os.path.splitext(file.name)[1].lower()
+    if ext in BLOCKED_EXTENSIONS:
+        raise ValidationError(gettext(f"Заборонене розширення файлу: {ext}"))
+    if ext not in allowed_exts:
+        raise ValidationError(gettext(f"Недопустиме розширення файлу: {ext}"))
+
+
+def validate_file_mime_type(file, allowed_types):
+    try:
+        import magic
+
+        mime = magic.from_buffer(file.read(1024), mime=True)
+        file.seek(0)
+    except ImportError:
+        mime, _ = mimetypes.guess_type(file.name)
+    if mime not in allowed_types:
+        raise ValidationError(gettext(f"Недопустимий тип файлу: {mime}"))
 
 
 def validate_image_size(image):
@@ -83,10 +128,6 @@ def validate_video_size(video):
             raise ValidationError(gettext("максимальний розмір відео – 100MB"))
     else:
         raise ValidationError(gettext("Не вдалося визначити розмір файлу."))
-
-
-ALLOWED_VIDEO_TYPES = ["video/mp4", "video/quicktime"]
-ALLOWED_VIDEO_EXTENSIONS = [".mp4", ".mov"]
 
 
 def validate_video_duration(video):

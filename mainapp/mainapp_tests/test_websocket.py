@@ -37,19 +37,19 @@ async def test_chat_consumer_streaming_refactored():
         await communicator.send_to(text_data=json.dumps({"message": "hi"}))
 
         typing_response = await communicator.receive_from(timeout=5)
-        assert (
-            "⏳" in json.loads(typing_response)["reply"]
-        ), "Не отримано індикатор набору тексту."
+        assert "⏳" in json.loads(typing_response)["reply"], (
+            "Не отримано індикатор набору тексту."
+        )
 
         response_1 = await communicator.receive_from(timeout=5)
-        assert (
-            "Hello" in json.loads(response_1)["reply"]
-        ), "Не отримано фрагмент 'Hello'."
+        assert "Hello" in json.loads(response_1)["reply"], (
+            "Не отримано фрагмент 'Hello'."
+        )
 
         response_2 = await communicator.receive_from(timeout=5)
-        assert (
-            "there" in json.loads(response_2)["reply"]
-        ), "Не отримано фрагмент 'there'."
+        assert "there" in json.loads(response_2)["reply"], (
+            "Не отримано фрагмент 'there'."
+        )
 
         (
             MockOllamaHttpClientClass.assert_called_once_with(),
@@ -106,9 +106,9 @@ async def test_invalid_json_message():
 
     error_response = await communicator.receive_from(timeout=5)
     parsed_response = json.loads(error_response)
-    assert (
-        "⚠️ Невірний формат повідомлення від клієнта." in parsed_response["reply"]
-    ), "Не отримано очікуваного повідомлення про помилку JSON."
+    assert "⚠️ Невірний формат повідомлення від клієнта." in parsed_response["reply"], (
+        "Не отримано очікуваного повідомлення про помилку JSON."
+    )
 
     await communicator.disconnect()
 
@@ -152,9 +152,9 @@ async def test_ollama_api_error_handling():
         await communicator.send_to(text_data=json.dumps({"message": "test error"}))
 
         typing_response = await communicator.receive_from(timeout=5)
-        assert (
-            "⏳" in json.loads(typing_response)["reply"]
-        ), "Не отримано індикатор набору тексту перед помилкою API."
+        assert "⏳" in json.loads(typing_response)["reply"], (
+            "Не отримано індикатор набору тексту перед помилкою API."
+        )
 
         await communicator.disconnect()
 
@@ -195,8 +195,8 @@ async def test_network_error_handling():
         )
 
         typing_response = await communicator.receive_from(timeout=5)
-        assert (
-            "⏳" in json.loads(typing_response)["reply"]
-        ), "Не отримано індикатор набору тексту перед мережева помилкою."
+        assert "⏳" in json.loads(typing_response)["reply"], (
+            "Не отримано індикатор набору тексту перед мережева помилкою."
+        )
 
         await communicator.disconnect()

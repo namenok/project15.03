@@ -15,22 +15,22 @@ def test_upload_view_redirects_on_success(client, user, valid_image_file):
         },
         format="multipart",
     )
-    assert response.status_code == 302  # nosec
-    assert response.url == reverse("gallery:gallery")  # nosec
+    assert response.status_code == 302
+    assert response.url == reverse("gallery:gallery")
 
 
 def test_gallery_view_renders_media(client, user, gallery_day_factory, photo_factory):
     client.force_login(user)
     gallery_day = gallery_day_factory(user=user, date=timezone.localdate())
-    photo_factory(gallery_day=gallery_day)  # Create one photo
+    photo_factory(gallery_day=gallery_day)
 
     response = client.get(reverse("gallery:gallery"))
-    assert response.status_code == 200  # nosec
-    assert b"<img" in response.content  # nosec  # basic check
+    assert response.status_code == 200
+    assert b"<img" in response.content
 
 
 def test_get_month_date_range():
     today = date(2025, 7, 4)
     first, last = get_month_date_range(today)
-    assert first == date(2025, 7, 1)  # nosec
-    assert last == date(2025, 7, 31)  # nosec
+    assert first == date(2025, 7, 1)
+    assert last == date(2025, 7, 31)

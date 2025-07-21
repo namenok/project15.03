@@ -15,25 +15,25 @@ from datetime import date
 
 @pytest.mark.django_db
 def test_category_str_and_slug():
-    cat = Category.objects.create(name="Test Category")  # nosec
-    assert str(cat) == "Test Category"  # nosec
-    assert cat.slug.startswith("test-category")  # nosec
+    cat = Category.objects.create(name="Test Category")
+    assert str(cat) == "Test Category"
+    assert cat.slug.startswith("test-category")
 
 
 @pytest.mark.django_db
 def test_post_str_and_fields():
-    user = User.objects.create_user(username="testuser", password="pass")  # nosec
-    cat = Category.objects.create(name="Test Cat")  # nosec
-    post = Post.objects.create(  # nosec
+    user = User.objects.create_user(username="testuser", password="pass")
+    cat = Category.objects.create(name="Test Cat")
+    post = Post.objects.create(
         title="Test Post",
         content="Some content",
         published_date=timezone.now(),
         category=cat,
         user=user,
     )
-    assert str(post) == "Test Post"  # nosec
-    assert post.category == cat  # nosec
-    assert post.user == user  # nosec
+    assert str(post) == "Test Post"
+    assert post.category == cat
+    assert post.user == user
 
 
 @pytest.mark.django_db

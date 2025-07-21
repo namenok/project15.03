@@ -36,9 +36,8 @@ class UserLogoutView(LogoutView):
 
 
 def users_home(request):
-    # Очистити старі повідомлення, якщо треба
     storage = messages.get_messages(request)
-    list(storage)  # Цей рядок "витягує" всі повідомлення і очищає чергу
+    list(storage)
     return render(request, "registration/users_home.html")
 
 

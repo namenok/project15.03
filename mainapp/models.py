@@ -27,7 +27,7 @@ class Category(models.Model):
         verbose_name_plural = _("Категорії")
 
 
-# від юзера в бібліотеку
+# from user to library
 class Post(models.Model):
     title = models.CharField(max_length=30, verbose_name=_("заголовок"))
     content = models.TextField(verbose_name=_("опис"))
@@ -50,7 +50,6 @@ class Post(models.Model):
         verbose_name_plural = _("записи користувача в бібліотеку")
 
 
-# персональний юзера в його щоденник
 class PersonalPost(models.Model):
     title = models.CharField(max_length=30, verbose_name=_("заголовок"))
     content = models.TextField(verbose_name=_("опис"))
@@ -70,7 +69,7 @@ class PersonalPost(models.Model):
         unique_together = ("user", "date", "content")
 
 
-# з адмінки в бібліотеку
+# admin`s post to library
 class LibText(models.Model):
     title = models.CharField(max_length=30, verbose_name=_("заголовок"))
     content = models.TextField(verbose_name=_("Зміст"))

@@ -14,8 +14,8 @@ def test_get_libtext_by_id_found():
         title="LibTitle", content="LibContent", to_category=cat
     )
     result = get_libtext_by_id(lib.id)
-    assert result == lib  # nosec
-    assert result.title == "LibTitle"  # nosec
+    assert result == lib
+    assert result.title == "LibTitle"
 
 
 @pytest.mark.django_db
@@ -30,8 +30,8 @@ def test_get_all_libtexts():
     lib1 = LibText.objects.create(title="Lib1", content="C1", to_category=cat)
     lib2 = LibText.objects.create(title="Lib2", content="C2", to_category=cat)
     libs = get_all_libtexts()
-    assert set(libs) == {lib1, lib2}  # nosec
-    assert libs.count() == 2  # nosec
+    assert set(libs) == {lib1, lib2}
+    assert libs.count() == 2
 
 
 @pytest.mark.django_db
@@ -42,5 +42,5 @@ def test_get_libtexts_by_category():
     lib2 = LibText.objects.create(title="Lib2", content="C2", to_category=cat2)
     libs_cat1 = get_libtexts_by_category(cat1)
     libs_cat2 = get_libtexts_by_category(cat2)
-    assert list(libs_cat1) == [lib1]  # nosec
-    assert list(libs_cat2) == [lib2]  # nosec
+    assert list(libs_cat1) == [lib1]
+    assert list(libs_cat2) == [lib2]

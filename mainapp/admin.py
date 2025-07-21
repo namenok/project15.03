@@ -11,14 +11,9 @@ from .models import (
 )
 
 admin.site.register(Category)
-
 admin.site.register(LibText)
-
-
 admin.site.register(Survey)
 admin.site.register(Answers)
 admin.site.register(UserAnswer)
-
 admin.site.register(PersonalPost)
-
 admin.site.register(Post)

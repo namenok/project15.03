@@ -1,6 +1,5 @@
 import calendar
 from datetime import date
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
@@ -18,14 +17,12 @@ from .services.upload_service import MediaUploadService
 
 
 def get_month_date_range(today):
-    """Return the first and last day of the month for a given date."""
     first_day = today.replace(day=1)
     last_day = today.replace(day=calendar.monthrange(today.year, today.month)[1])
     return first_day, last_day
 
 
 def get_media_for_month(user, first_day, last_day):
-    """Return all photos and videos for a user in a given month."""
     gallery_days = GalleryDay.objects.filter(
         user=user, date__gte=first_day, date__lte=last_day
     ).order_by("-date")
@@ -79,7 +76,7 @@ def handle_video_uploads(gallery_day, videos, form):
 
 @login_required()
 def gallery(request):
-    today = timezone.localdate()  # Використовуємо timezone.localdate() для поточної дати з урахуванням локального часового поясу
+    today = timezone.localdate()
 
     first_day_of_month, last_day_of_month = get_month_date_range(today)
 

@@ -8,7 +8,7 @@ from datetime import date
 
 @pytest.mark.django_db
 def test_post_form_valid():
-    user = User.objects.create_user(username="testuser", password="pass")  # nosec
+    user = User.objects.create_user(username="testuser", password="pass")
     cat = Category.objects.create(name="Test Cat")
     data = {
         "title": "Test Post",
@@ -16,42 +16,42 @@ def test_post_form_valid():
         "category": cat.id,
     }
     form = PostForm(data)
-    assert form.is_valid()  # nosec
-    post = form.save(commit=False)  # nosec
+    assert form.is_valid()
+    post = form.save(commit=False)
     post.user = user
     post.published_date = timezone.now()
     post.save()
-    assert Post.objects.filter(title="Test Post").exists()  # nosec
+    assert Post.objects.filter(title="Test Post").exists()
 
 
 @pytest.mark.django_db
 def test_post_form_missing_fields():
-    form = PostForm({})  # nosec
-    assert not form.is_valid()  # nosec
-    assert "title" in form.errors  # nosec
-    assert "content" in form.errors  # nosec
-    assert "category" in form.errors  # nosec
+    form = PostForm({})
+    assert not form.is_valid()
+    assert "title" in form.errors
+    assert "content" in form.errors
+    assert "category" in form.errors
 
 
 @pytest.mark.django_db
 def test_personal_post_form_valid():
-    user = User.objects.create_user(username="testuser2", password="pass")  # nosec
+    user = User.objects.create_user(username="testuser2", password="pass")
     data = {
         "title": "Diary",
         "content": "My day",
     }
     form = PersonalPostForm(data)
-    assert form.is_valid()  # nosec
+    assert form.is_valid()
     post = form.save(commit=False)
     post.user = user
     post.date = date.today()
-    post.save()  # nosec
-    assert PersonalPost.objects.filter(title="Diary").exists()  # nosec
+    post.save()
+    assert PersonalPost.objects.filter(title="Diary").exists()
 
 
 @pytest.mark.django_db
 def test_personal_post_form_missing_fields():
     form = PersonalPostForm({})
-    assert not form.is_valid()  # nosec
-    assert "title" in form.errors  # nosec
-    assert "content" in form.errors  # nosec
+    assert not form.is_valid()
+    assert "title" in form.errors
+    assert "content" in form.errors

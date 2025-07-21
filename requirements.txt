@@ -15,5 +15,4 @@ pytest-asyncio
 aresponses
 ruff
 black
-bandit
 daphne

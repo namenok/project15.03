@@ -6,7 +6,6 @@ import gallery.forms
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("gallery", "0001_initial"),
     ]

@@ -79,9 +79,7 @@ def handle_video_uploads(gallery_day, videos, form):
 
 @login_required()
 def gallery(request):
-    today = (
-        timezone.localdate()
-    )  # Використовуємо timezone.localdate() для поточної дати з урахуванням локального часового поясу
+    today = timezone.localdate()  # Використовуємо timezone.localdate() для поточної дати з урахуванням локального часового поясу
 
     first_day_of_month, last_day_of_month = get_month_date_range(today)
 

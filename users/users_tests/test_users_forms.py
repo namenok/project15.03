@@ -25,7 +25,9 @@ def test_register_form_valid_data():
 def test_register_form_email_unique_validation():
     # Create user with email
     User.objects.create_user(
-        username="existing", email="john@example.com", password="12345"  # nosec
+        username="existing",
+        email="john@example.com",
+        password="12345",  # nosec
     )  # nosec
     form_data = {
         "first_name": "John",  # nosec
@@ -44,7 +46,9 @@ def test_register_form_email_unique_validation():
 @pytest.mark.django_db
 def test_update_user_form_valid_data():
     user = User.objects.create_user(
-        username="johndoe", email="john@example.com", password="12345"  # nosec
+        username="johndoe",
+        email="john@example.com",
+        password="12345",  # nosec
     )  # nosec
     form_data = {
         "username": "johnny",  # nosec
@@ -57,10 +61,14 @@ def test_update_user_form_valid_data():
 @pytest.mark.django_db
 def test_update_user_form_email_unique_validation():
     user1 = User.objects.create_user(
-        username="user1", email="user1@example.com", password="12345"  # nosec
+        username="user1",
+        email="user1@example.com",
+        password="12345",  # nosec
     )  # nosec
     user2 = User.objects.create_user(
-        username="user2", email="user2@example.com", password="12345"  # nosec
+        username="user2",
+        email="user2@example.com",
+        password="12345",  # nosec
     )  # nosec
 
     form_data = {
@@ -78,7 +86,9 @@ def test_update_user_form_email_unique_validation():
 @pytest.mark.django_db
 def test_update_profile_form_valid_data():
     user = User.objects.create_user(
-        username="testuser", email="test@example.com", password="12345"  # nosec
+        username="testuser",
+        email="test@example.com",
+        password="12345",  # nosec
     )  # nosec
 
     # Get profile created by signal instead of creating manually
@@ -90,7 +100,9 @@ def test_update_profile_form_valid_data():
         b"\x02\x00\x01\x00\x00\x02\x02\x4c\x01\x00\x3b"
     )  # nosec
     uploaded_file = SimpleUploadedFile(
-        "avatar.gif", image_content, content_type="image/gif"  # nosec
+        "avatar.gif",
+        image_content,
+        content_type="image/gif",  # nosec
     )  # nosec
 
     form_data = {
@@ -100,7 +112,9 @@ def test_update_profile_form_valid_data():
         "avatar": uploaded_file,  # nosec
     }
     form = UpdateProfileForm(
-        data=form_data, files=form_files, instance=profile  # nosec
+        data=form_data,
+        files=form_files,
+        instance=profile,  # nosec
     )  # nosec
     assert form.is_valid()  # nosec
     saved_profile = form.save()

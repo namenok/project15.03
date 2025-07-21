@@ -11,16 +11,12 @@ from gallery.models import GalleryDay, PhotoGallery, VideoGallery
 
 @pytest.fixture
 def test_user(db):
-    return User.objects.create_user(
-        username="testuser", password="password123"
-    )  # nosec
+    return User.objects.create_user(username="testuser", password="password123")  # nosec
 
 
 @pytest.fixture
 def another_user(db):
-    return User.objects.create_user(
-        username="anotheruser", password="password456"
-    )  # nosec
+    return User.objects.create_user(username="anotheruser", password="password456")  # nosec
 
 
 @pytest.fixture

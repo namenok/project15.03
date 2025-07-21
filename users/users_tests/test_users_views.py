@@ -10,7 +10,8 @@ def test_login_view(client):
     assert user.username == "testuser"  # nosec
     url = reverse("users:login")
     response = client.post(
-        url, {"username": "testuser", "password": "pass1234"}  # nosec
+        url,
+        {"username": "testuser", "password": "pass1234"},  # nosec
     )
     assert response.status_code == 302  # nosec
     assert response.url  # nosec
@@ -70,9 +71,7 @@ def test_register_view_post_invalid(client):
 
 @pytest.mark.django_db
 def test_profile_view_get(client):
-    user = User.objects.create_user(
-        username="profileuser", password="pass1234"
-    )  # nosec
+    user = User.objects.create_user(username="profileuser", password="pass1234")  # nosec
     assert user.username == "profileuser"  # nosec
     client.login(username="profileuser", password="pass1234")  # nosec
     url = reverse("users:users_profile")
@@ -84,9 +83,7 @@ def test_profile_view_get(client):
 
 @pytest.mark.django_db
 def test_profile_view_post_valid(client, tmp_path, settings):
-    user = User.objects.create_user(
-        username="profileuser2", password="pass1234"
-    )  # nosec
+    user = User.objects.create_user(username="profileuser2", password="pass1234")  # nosec
     client.login(username="profileuser2", password="pass1234")  # nosec
 
     avatar_path = tmp_path / "avatar.png"
@@ -113,9 +110,7 @@ def test_profile_view_post_valid(client, tmp_path, settings):
 
 @pytest.mark.django_db
 def test_profile_view_post_invalid(client):
-    user = User.objects.create_user(
-        username="profileuser3", password="pass1234"
-    )  # nosec
+    user = User.objects.create_user(username="profileuser3", password="pass1234")  # nosec
     assert user.username == "profileuser3"  # nosec
 
     client.login(username="profileuser3", password="pass1234")  # nosec
@@ -144,9 +139,7 @@ def test_password_reset_view_get(client):
 
 @pytest.mark.django_db
 def test_password_change_view_get(client):
-    user = User.objects.create_user(
-        username="changepassuser", password="pass1234"
-    )  # nosec
+    user = User.objects.create_user(username="changepassuser", password="pass1234")  # nosec
     assert user.username == "changepassuser"  # nosec
     client.login(username="changepassuser", password="pass1234")  # nosec
     url = reverse("users:password_change")

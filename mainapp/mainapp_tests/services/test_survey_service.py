@@ -23,9 +23,7 @@ def test_get_all_surveys():
 def test_has_user_answered_today():
     user = User.objects.create_user(username="testuser", password="pass")  # nosec
     survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(
-        marker="good", survey=survey, choice_text="Good"
-    )  # nosec
+    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good")  # nosec
     assert not has_user_answered_today(user)  # nosec
     UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=timezone.now().date()
@@ -37,9 +35,7 @@ def test_has_user_answered_today():
 def test_get_user_answers():
     user = User.objects.create_user(username="testuser2", password="pass")  # nosec
     survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(
-        marker="neutral", survey=survey, choice_text="Ok"
-    )  # nosec
+    ans = Answers.objects.create(marker="neutral", survey=survey, choice_text="Ok")  # nosec
     ua = UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=timezone.now().date()
     )
@@ -67,9 +63,7 @@ def test_get_answer_by_id_not_found():
 def test_save_user_answers_bulk():
     user = User.objects.create_user(username="testuser3", password="pass")  # nosec
     survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(
-        marker="good", survey=survey, choice_text="Good"
-    )  # nosec
+    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good")  # nosec
     ua1 = UserAnswer(
         user=user, survey=survey, answer_choice=ans, date=timezone.now().date()
     )

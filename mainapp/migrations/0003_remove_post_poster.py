@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("mainapp", "0002_alter_personalpost_unique_together_and_more"),
     ]

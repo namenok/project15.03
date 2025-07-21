@@ -166,12 +166,8 @@ def test_form_multiple_files_validation(
     assert not is_valid  # nosec
     assert "images" in form.errors  # nosec
     assert "videos" in form.errors  # nosec
-    assert any(
-        "максимальний розмір" in str(err) for err in form.errors["images"]
-    )  # nosec
-    assert any(
-        "максимальний розмір" in str(err) for err in form.errors["videos"]
-    )  # nosec
+    assert any("максимальний розмір" in str(err) for err in form.errors["images"])  # nosec
+    assert any("максимальний розмір" in str(err) for err in form.errors["videos"])  # nosec
 
 
 def test_form_invalid_video_wrong_mime_type():

@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("mainapp", "0007_alter_libtext_title_alter_libtext_title_en_gb_and_more"),
     ]

@@ -52,7 +52,6 @@ class MediaUploadForm(forms.Form):
             except ValidationError as e:
                 errors.append(e)
         if errors:
-
             raise ValidationError(errors)
         return videos
 
@@ -93,7 +92,6 @@ ALLOWED_VIDEO_EXTENSIONS = [".mp4", ".mov"]
 
 
 def validate_video_duration(video):
-
     ext = os.path.splitext(video.name)[1].lower()
 
     content_type, encoding = mimetypes.guess_type(video.name.lower())

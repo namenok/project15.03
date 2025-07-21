@@ -13,9 +13,7 @@ from datetime import date, timedelta
 def test_get_user_answers_for_date():
     user = User.objects.create_user(username="testuser", password="pass")  # nosec
     survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(
-        marker="good", survey=survey, choice_text="Good"
-    )  # nosec
+    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good")  # nosec
     ua = UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=date.today()
     )
@@ -28,9 +26,7 @@ def test_get_user_answers_for_date():
 def test_get_user_answers_in_month():
     user = User.objects.create_user(username="testuser2", password="pass")  # nosec
     survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(
-        marker="neutral", survey=survey, choice_text="Ok"
-    )  # nosec
+    ans = Answers.objects.create(marker="neutral", survey=survey, choice_text="Ok")  # nosec
     today = date.today()
     ua = UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=today
@@ -45,9 +41,7 @@ def test_get_user_answers_in_month():
 def test_get_user_answer_by_id_found():
     user = User.objects.create_user(username="testuser3", password="pass")  # nosec
     survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(
-        marker="bad", survey=survey, choice_text="Bad"
-    )  # nosec
+    ans = Answers.objects.create(marker="bad", survey=survey, choice_text="Bad")  # nosec
     ua = UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=date.today()
     )
@@ -65,9 +59,7 @@ def test_get_user_answer_by_id_not_found():
 def test_get_all_user_answers():
     user = User.objects.create_user(username="testuser4", password="pass")  # nosec
     survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(
-        marker="good", survey=survey, choice_text="Good"
-    )  # nosec
+    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good")  # nosec
     ua1 = UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=date.today()
     )

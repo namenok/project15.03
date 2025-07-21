@@ -11,17 +11,16 @@ OLLAMA_API_BASE_URL = os.environ.get(
 
 class HttpClient:
     async def stream_post(self, url: str, json_payload: dict, timeout: int):
-        raise NotImplementedError("stream_post method must be implemented by subclasses")
+        raise NotImplementedError(
+            "stream_post method must be implemented by subclasses"
+        )
 
 
 class OllamaHttpClient(HttpClient):
-
     def __init__(self, base_url: str = OLLAMA_API_BASE_URL):
-
         self.base_url = base_url
 
     async def stream_post(self, endpoint: str, json_payload: dict, timeout: int):
-
         full_url = f"{self.base_url}{endpoint}"
         async with aiohttp.ClientSession() as session:
             try:
@@ -38,9 +37,7 @@ class OllamaHttpClient(HttpClient):
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
-
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
         self.http_client = kwargs.get("http_client", OllamaHttpClient())
@@ -61,7 +58,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 logging.warning("Received empty message from client.")
                 return
 
-            await self.send(text_data=json.dumps({"reply": "⏳ assistant is typing..."}))
+            await self.send(
+                text_data=json.dumps({"reply": "⏳ assistant is typing..."})
+            )
 
             messages = self._build_ollama_messages(user_message)
 
@@ -71,14 +70,24 @@ class ChatConsumer(AsyncWebsocketConsumer):
             logging.error(f"Invalid JSON from client: {e}. Data: {text_data}")
             await self._send_error("⚠️ Невірний формат повідомлення від клієнта.")
         except aiohttp.ClientResponseError as e:
-            logging.error(f"Ollama API error {e.status}: {e.message}. URL: {e.request_info.url}")
-            await self._send_error(f"⚠️ Помилка AI: {e.status}. Деталі: {e.message[:100]}...")
+            logging.error(
+                f"Ollama API error {e.status}: {e.message}. URL: {e.request_info.url}"
+            )
+            await self._send_error(
+                f"⚠️ Помилка AI: {e.status}. Деталі: {e.message[:100]}..."
+            )
         except aiohttp.ClientError as e:
             logging.error(f"Network error during Ollama API call: {e}", exc_info=True)
-            await self._send_error("⚠️ Сталася мережева помилка при зверненні до моделі. Перевірте з'єднання.")
+            await self._send_error(
+                "⚠️ Сталася мережева помилка при зверненні до моделі. Перевірте з'єднання."
+            )
         except Exception as e:
-            logging.error(f"Unexpected error during message processing: {e}", exc_info=True)
-            await self._send_error("⚠️ Виникла непередбачена помилка обробки повідомлення.")
+            logging.error(
+                f"Unexpected error during message processing: {e}", exc_info=True
+            )
+            await self._send_error(
+                "⚠️ Виникла непередбачена помилка обробки повідомлення."
+            )
 
     def _build_system_prompt(self) -> str:
         return """
@@ -102,7 +111,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         async for line_bytes in self.http_client.stream_post(
             endpoint="chat",
             json_payload={"model": "gemma:2b", "messages": messages, "stream": True},
-            timeout=300
+            timeout=300,
         ):
             if line_bytes.strip():
                 try:
@@ -113,10 +122,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     if json_line.get("done", False):
                         break
                 except json.JSONDecodeError as e:
-                    logging.error(f"Stream decode error: {e}. Line: {line_bytes.decode('utf-8', errors='ignore')}")
+                    logging.error(
+                        f"Stream decode error: {e}. Line: {line_bytes.decode('utf-8', errors='ignore')}"
+                    )
             else:
                 logging.debug("Received empty line from stream.")
 
     async def _send_error(self, message: str):
         await self.send(text_data=json.dumps({"reply": message}))
-

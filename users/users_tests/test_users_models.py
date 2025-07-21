@@ -22,7 +22,8 @@ def test_profile_save_resizes_image(tmp_path, settings):
 
     # Get or create profile (in case signals or previous tests auto-create)
     profile, created = Profile.objects.get_or_create(
-        user=user, defaults={"bio": "Test bio"}  # nosec
+        user=user,
+        defaults={"bio": "Test bio"},  # nosec
     )
 
     # Create test image file
@@ -51,11 +52,13 @@ def test_profile_save_resizes_image(tmp_path, settings):
 @pytest.mark.django_db
 def test_profile_save_handles_missing_file(tmp_path, settings):
     user = User.objects.create_user(
-        username="missingfileuser", password="pass1234"  # nosec
+        username="missingfileuser",
+        password="pass1234",  # nosec
     )  # nosec
 
     profile, created = Profile.objects.get_or_create(
-        user=user, defaults={"bio": "Test bio"}  # nosec
+        user=user,
+        defaults={"bio": "Test bio"},  # nosec
     )
 
     profile.avatar.name = "profile_images/nonexistent.jpg"  # nosec

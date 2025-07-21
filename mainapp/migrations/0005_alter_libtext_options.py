@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("mainapp", "0004_alter_post_options_answers_choice_text_en_gb_and_more"),
     ]

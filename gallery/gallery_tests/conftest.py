@@ -7,7 +7,9 @@ from datetime import date
 
 @pytest.fixture
 def user(db):
-    return User.objects.create_user(username="testuser", password="password123")  # nosec
+    return User.objects.create_user(
+        username="testuser", password="password123"
+    )  # nosec
 
 
 @pytest.fixture

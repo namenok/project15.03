@@ -10,6 +10,7 @@ from .models import (
     Post,
 )
 
+
 admin.site.register(Category)
 admin.site.register(LibText)
 admin.site.register(Survey)

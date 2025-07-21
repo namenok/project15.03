@@ -32,24 +32,24 @@ async def test_chat_consumer_streaming_refactored():
 
         communicator = WebsocketCommunicator(application, "/ws/chat/")
         connected, _ = await communicator.connect()
-        assert connected, "WebSocket-з'єднання не вдалося."  # nosec
+        assert connected, "WebSocket-з'єднання не вдалося."
 
         await communicator.send_to(text_data=json.dumps({"message": "hi"}))
 
         typing_response = await communicator.receive_from(timeout=5)
         assert "⏳" in json.loads(typing_response)["reply"], (
             "Не отримано індикатор набору тексту."
-        )  # nosec
+        )
 
         response_1 = await communicator.receive_from(timeout=5)
         assert "Hello" in json.loads(response_1)["reply"], (
             "Не отримано фрагмент 'Hello'."
-        )  # nosec
+        )
 
         response_2 = await communicator.receive_from(timeout=5)
         assert "there" in json.loads(response_2)["reply"], (
             "Не отримано фрагмент 'there'."
-        )  # nosec
+        )
 
         (
             MockOllamaHttpClientClass.assert_called_once_with(),
@@ -82,7 +82,7 @@ async def test_chat_consumer_streaming_refactored():
 async def test_empty_message_skipped():
     communicator = WebsocketCommunicator(application, "/ws/chat/")
     connected, _ = await communicator.connect()
-    assert connected, "WebSocket-з'єднання не вдалося (порожнє повідомлення)."  # nosec
+    assert connected, "WebSocket-з'єднання не вдалося (порожнє повідомлення)."
 
     await communicator.send_to(text_data=json.dumps({"message": ""}))
 
@@ -100,7 +100,7 @@ async def test_empty_message_skipped():
 async def test_invalid_json_message():
     communicator = WebsocketCommunicator(application, "/ws/chat/")
     connected, _ = await communicator.connect()
-    assert connected, "WebSocket-з'єднання не вдалося (невалідний JSON)."  # nosec
+    assert connected, "WebSocket-з'єднання не вдалося (невалідний JSON)."
 
     await communicator.send_to(text_data="this is not json")
 
@@ -108,7 +108,7 @@ async def test_invalid_json_message():
     parsed_response = json.loads(error_response)
     assert "⚠️ Невірний формат повідомлення від клієнта." in parsed_response["reply"], (
         "Не отримано очікуваного повідомлення про помилку JSON."
-    )  # nosec
+    )
 
     await communicator.disconnect()
 
@@ -147,14 +147,14 @@ async def test_ollama_api_error_handling():
 
         communicator = WebsocketCommunicator(application, "/ws/chat/")
         connected, _ = await communicator.connect()
-        assert connected, "WebSocket-з'єднання не вдалося (помилка API)."  # nosec
+        assert connected, "WebSocket-з'єднання не вдалося (помилка API)."
 
         await communicator.send_to(text_data=json.dumps({"message": "test error"}))
 
         typing_response = await communicator.receive_from(timeout=5)
         assert "⏳" in json.loads(typing_response)["reply"], (
             "Не отримано індикатор набору тексту перед помилкою API."
-        )  # nosec
+        )
 
         await communicator.disconnect()
 
@@ -188,7 +188,7 @@ async def test_network_error_handling():
 
         communicator = WebsocketCommunicator(application, "/ws/chat/")
         connected, _ = await communicator.connect()
-        assert connected, "WebSocket-з'єднання не вдалося (мережева помилка)."  # nosec
+        assert connected, "WebSocket-з'єднання не вдалося (мережева помилка)."
 
         await communicator.send_to(
             text_data=json.dumps({"message": "test network error"})
@@ -197,6 +197,6 @@ async def test_network_error_handling():
         typing_response = await communicator.receive_from(timeout=5)
         assert "⏳" in json.loads(typing_response)["reply"], (
             "Не отримано індикатор набору тексту перед мережева помилкою."
-        )  # nosec
+        )
 
         await communicator.disconnect()

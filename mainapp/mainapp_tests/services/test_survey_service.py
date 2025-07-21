@@ -14,43 +14,43 @@ from django.utils import timezone
 def test_get_all_surveys():
     s1 = Survey.objects.create(question="Q1?")
     s2 = Survey.objects.create(question="Q2?")
-    surveys = list(get_all_surveys())  # nosec
-    assert s1 in surveys and s2 in surveys  # nosec
-    assert len(surveys) == 2  # nosec
+    surveys = list(get_all_surveys())
+    assert s1 in surveys and s2 in surveys
+    assert len(surveys) == 2
 
 
 @pytest.mark.django_db
 def test_has_user_answered_today():
-    user = User.objects.create_user(username="testuser", password="pass")  # nosec
-    survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good")  # nosec
-    assert not has_user_answered_today(user)  # nosec
+    user = User.objects.create_user(username="testuser", password="pass")
+    survey = Survey.objects.create(question="Q?")
+    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good")
+    assert not has_user_answered_today(user)
     UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=timezone.now().date()
     )
-    assert has_user_answered_today(user)  # nosec
+    assert has_user_answered_today(user)
 
 
 @pytest.mark.django_db
 def test_get_user_answers():
-    user = User.objects.create_user(username="testuser2", password="pass")  # nosec
-    survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(marker="neutral", survey=survey, choice_text="Ok")  # nosec
+    user = User.objects.create_user(username="testuser2", password="pass")
+    survey = Survey.objects.create(question="Q?")
+    ans = Answers.objects.create(marker="neutral", survey=survey, choice_text="Ok")
     ua = UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=timezone.now().date()
     )
-    answers = list(get_user_answers(user))  # nosec
-    assert ua in answers  # nosec
-    assert answers[0].survey == survey  # nosec
+    answers = list(get_user_answers(user))
+    assert ua in answers
+    assert answers[0].survey == survey
 
 
 @pytest.mark.django_db
 def test_get_answer_by_id_found():
     survey = Survey.objects.create(question="Q?")
     ans = Answers.objects.create(marker="bad", survey=survey, choice_text="Bad")
-    result = get_answer_by_id(ans.id)  # nosec
-    assert result == ans  # nosec
-    assert result.choice_text == "Bad"  # nosec
+    result = get_answer_by_id(ans.id)
+    assert result == ans
+    assert result.choice_text == "Bad"
 
 
 @pytest.mark.django_db
@@ -61,9 +61,9 @@ def test_get_answer_by_id_not_found():
 
 @pytest.mark.django_db
 def test_save_user_answers_bulk():
-    user = User.objects.create_user(username="testuser3", password="pass")  # nosec
-    survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good")  # nosec
+    user = User.objects.create_user(username="testuser3", password="pass")
+    survey = Survey.objects.create(question="Q?")
+    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good")
     ua1 = UserAnswer(
         user=user, survey=survey, answer_choice=ans, date=timezone.now().date()
     )
@@ -72,6 +72,6 @@ def test_save_user_answers_bulk():
         survey=survey,
         answer_choice=ans,
         date=timezone.now().date() - timezone.timedelta(days=1),
-    )  # Different date
-    save_user_answers_bulk([ua1, ua2])  # nosec
-    assert UserAnswer.objects.count() == 2  # nosec
+    )
+    save_user_answers_bulk([ua1, ua2])
+    assert UserAnswer.objects.count() == 2

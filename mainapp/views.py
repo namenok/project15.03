@@ -42,7 +42,7 @@ from mainapp.services.user_answer_service import (
 )
 
 
-# Користувача персональний
+# user`s personal post
 @login_required()
 def post(request, id=None):
     post = get_post_by_title(id)
@@ -171,7 +171,7 @@ def calendar_combined_view(request):
         month = 1
         year += 1
 
-    selected_date_str = request.GET.get("date")  # Get the 'date' parameter as a string
+    selected_date_str = request.GET.get("date")
     if selected_date_str:
         try:
             selected_date = parser.parse(selected_date_str).date()
@@ -181,7 +181,7 @@ def calendar_combined_view(request):
         selected_date = today
 
     start_day_of_month = date(year, month, 1)
-    start_weekday = start_day_of_month.weekday()  # 0 for Monday, 6 for Sunday
+    start_weekday = start_day_of_month.weekday()
 
     _, days_in_month = calendar.monthrange(year, month)
 
@@ -236,7 +236,7 @@ def calendar_combined_view(request):
             gettext("Пт"),
             gettext("Сб"),
             gettext("Нд"),
-        ],  # Weekday names
+        ],
         "start_blank_days": range(start_weekday),
         "calendar_weeks": weeks,
         "data_dates": all_dates_with_data_in_month,
@@ -264,7 +264,7 @@ def posts_by_category_view(request, slug):
 
 @login_required()
 def categories_overview(request):
-    categories = get_all_categories()  # Replace with your function
+    categories = get_all_categories()
     return render(request, "mainapp/library.html", {"categories": categories})
 
 
@@ -303,7 +303,7 @@ def create(request):
             post.published_date = timezone.now()
             post.user = request.user
             post.save()
-            form.save_m2m()  # ← для ManyToMany поля "teg"(в тг
+            form.save_m2m()
             return redirect("mainapp:library_history")
     form = PostForm()
     context = {"form": form}

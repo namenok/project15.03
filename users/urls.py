@@ -25,9 +25,9 @@ urlpatterns = [
     path("users_home/", views.users_home, name="users_home"),
     path("register/", RegisterView.as_view(), name="register"),
     path("profile/", ProfileView.as_view(), name="users_profile"),
-    # Забув пароль (відправка листа)
+    # forgot passw-mail send
     path("password-reset/", ResetPasswordView.as_view(), name="password_reset"),
-    # Повідомлення "лист надіслано"
+    # mail says "password reset link sent"
     path(
         "password-reset-sent/",
         auth_views.PasswordResetDoneView.as_view(
@@ -35,13 +35,13 @@ urlpatterns = [
         ),
         name="password_reset_sent",
     ),
-    # Ввід нового пароля з посилання в email
+    # email enter new password after got resent link
     path(
         "password-reset-confirm/<uidb64>/<token>/",
         CustomPasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),
-    # Після підтвердження нового пароля
+    # after new pass confirmed
     path(
         "password-reset-complete/",
         auth_views.PasswordResetCompleteView.as_view(
@@ -49,6 +49,6 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
-    # Зміна пароля (авторизований користувач)
+    # pass change for authorized user
     path("password-change/", ChangePasswordView.as_view(), name="password_change"),
 ]

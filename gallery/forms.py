@@ -1,10 +1,8 @@
 import mimetypes
 import os
 import tempfile
-
 from django import forms
 from django.core.exceptions import ValidationError
-
 from django.forms.widgets import FileInput
 from django.utils.translation import gettext as gettext
 from moviepy import VideoFileClip

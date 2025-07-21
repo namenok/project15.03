@@ -3,7 +3,7 @@ from .models import PersonalPost, Post
 from django.utils.translation import gettext_lazy as _
 
 
-# від юзера в бібліотеку
+# from user to library
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
@@ -13,7 +13,6 @@ class PostForm(forms.ModelForm):
         )
 
 
-# персональний юзера в його щоденник
 class PersonalPostForm(forms.ModelForm):
     class Meta:
         model = PersonalPost

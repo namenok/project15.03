@@ -21,4 +21,4 @@ class Profile(models.Model):
                 img.thumbnail((100, 100))
                 img.save(self.avatar.path)
         except (FileNotFoundError, UnidentifiedImageError):
-            pass  # Просто пропускає помилку
+            pass

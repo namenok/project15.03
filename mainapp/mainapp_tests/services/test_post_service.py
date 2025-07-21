@@ -11,8 +11,8 @@ from django.utils import timezone
 
 @pytest.mark.django_db
 def test_get_post_by_title_found():
-    user = User.objects.create_user(username="testuser", password="pass")  # nosec
-    cat = Category.objects.create(name="TestCat", slug="testcat")  # nosec
+    user = User.objects.create_user(username="testuser", password="pass")
+    cat = Category.objects.create(name="TestCat", slug="testcat")
     post = Post.objects.create(
         title="Test Post",
         content="Some content",
@@ -21,8 +21,8 @@ def test_get_post_by_title_found():
         user=user,
     )
     result = get_post_by_title("Test Post")
-    assert result == post  # nosec
-    assert result.title == "Test Post"  # nosec
+    assert result == post
+    assert result.title == "Test Post"
 
 
 @pytest.mark.django_db
@@ -33,9 +33,9 @@ def test_get_post_by_title_not_found():
 
 @pytest.mark.django_db
 def test_get_posts_by_category():
-    user = User.objects.create_user(username="testuser2", password="pass")  # nosec
-    cat1 = Category.objects.create(name="Cat1", slug="cat1")  # nosec
-    cat2 = Category.objects.create(name="Cat2", slug="cat2")  # nosec
+    user = User.objects.create_user(username="testuser2", password="pass")
+    cat1 = Category.objects.create(name="Cat1", slug="cat1")
+    cat2 = Category.objects.create(name="Cat2", slug="cat2")
     post1 = Post.objects.create(
         title="A", content="A", published_date=timezone.now(), category=cat1, user=user
     )
@@ -44,15 +44,15 @@ def test_get_posts_by_category():
     )
     posts_cat1 = list(get_posts_by_category(cat1))
     posts_cat2 = list(get_posts_by_category(cat2))
-    assert post1 in posts_cat1  # nosec
-    assert post2 in posts_cat2  # nosec
-    assert post2 not in posts_cat1  # nosec
+    assert post1 in posts_cat1
+    assert post2 in posts_cat2
+    assert post2 not in posts_cat1
 
 
 @pytest.mark.django_db
 def test_get_posts_by_user():
-    user1 = User.objects.create_user(username="user1", password="pass")  # nosec
-    user2 = User.objects.create_user(username="user2", password="pass")  # nosec
+    user1 = User.objects.create_user(username="user1", password="pass")
+    user2 = User.objects.create_user(username="user2", password="pass")
     cat = Category.objects.create(name="Cat", slug="cat")
     post1 = Post.objects.create(
         title="A", content="A", published_date=timezone.now(), category=cat, user=user1
@@ -62,15 +62,15 @@ def test_get_posts_by_user():
     )
     posts_user1 = list(get_posts_by_user(user1))
     posts_user2 = list(get_posts_by_user(user2))
-    assert post1 in posts_user1  # nosec
-    assert post2 in posts_user2  # nosec
-    assert post2 not in posts_user1  # nosec
+    assert post1 in posts_user1
+    assert post2 in posts_user2
+    assert post2 not in posts_user1
 
 
 @pytest.mark.django_db
 def test_search_posts():
-    user = User.objects.create_user(username="testuser3", password="pass")  # nosec
-    cat = Category.objects.create(name="Cat", slug="cat")  # nosec
+    user = User.objects.create_user(username="testuser3", password="pass")
+    cat = Category.objects.create(name="Cat", slug="cat")
     post1 = Post.objects.create(
         title="FindMe",
         content="Some content",
@@ -85,6 +85,6 @@ def test_search_posts():
         category=cat,
         user=user,
     )
-    results = list(search_posts("FindMe"))  # nosec
-    assert post1 in results  # nosec
-    assert post2 not in results  # nosec
+    results = list(search_posts("FindMe"))
+    assert post1 in results
+    assert post2 not in results

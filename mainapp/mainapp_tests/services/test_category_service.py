@@ -7,8 +7,8 @@ from mainapp.services.category_service import get_category_by_slug, get_all_cate
 def test_get_category_by_slug_found():
     cat = Category.objects.create(name="TestCat", slug="testcat")
     result = get_category_by_slug("testcat")
-    assert result == cat  # nosec
-    assert result.slug == "testcat"  # nosec
+    assert result == cat
+    assert result.slug == "testcat"
 
 
 @pytest.mark.django_db
@@ -22,5 +22,5 @@ def test_get_all_categories():
     cat1 = Category.objects.create(name="Cat1", slug="cat1")
     cat2 = Category.objects.create(name="Cat2", slug="cat2")
     cats = get_all_categories()
-    assert set(cats) == {cat1, cat2}  # nosec
-    assert cats.count() == 2  # nosec
+    assert set(cats) == {cat1, cat2}
+    assert cats.count() == 2

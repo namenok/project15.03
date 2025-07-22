@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-11 18:33+0300\n"
+"POT-Creation-Date: 2025-07-22 17:54+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,210 +18,201 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gallery/forms.py:50
+#: gallery/forms.py:85
+#, python-brace-format
+msgid "Заборонене розширення файлу: {ext}"
+msgstr "Forbidden file extension: {ext}"
+
+#: gallery/forms.py:87
+#, python-brace-format
+msgid "Недопустиме розширення файлу: {ext}"
+msgstr "Invalid file extension: {ext}"
+
+#: gallery/forms.py:99
+#, python-brace-format
+msgid "Недопустимий тип файлу: {mime}"
+msgstr "Invalid file type: {mime}"
+
+#: gallery/forms.py:119
 msgid "максимальний розмір фото – 10MB"
 msgstr "the maximum photo size is 10MB"
 
-#: gallery/forms.py:55
+#: gallery/forms.py:121 gallery/forms.py:130
+msgid "Не вдалося визначити розмір файлу."
+msgstr "The file size could not be determined."
+
+#: gallery/forms.py:128
 msgid "максимальний розмір відео – 100MB"
 msgstr "the maximum video size is 100MB"
 
-#: gallery/forms.py:72
+#: gallery/forms.py:146
 msgid "неправильне розширення відеофайлу, має бути .mp4 або .mov"
 msgstr "invalid video file extension, must be .mp4 or .mov"
 
-#: gallery/forms.py:76
+#: gallery/forms.py:155
 msgid "непідтримуваний формат відео, дозволено лише MP4 або MOV"
 msgstr "unsupported video format, only MP4 or MOV are allowed"
 
-#: gallery/forms.py:89
+#: gallery/forms.py:171
 msgid "нажаль відео не має бути довше 30 секунд"
 msgstr "the video must be up to 30 seconds long"
 
-#: gallery/forms.py:91
+#: gallery/forms.py:175
 msgid "помилка при перевірці відео"
 msgstr "error while checking video"
 
-#: gallery/views.py:73
+#: gallery/services/upload_service.py:19 gallery/views.py:41
 msgid "сьогодні вже додано 5 фото"
 msgstr "5 photos have already been added today"
 
-#: gallery/views.py:100
+#: gallery/services/upload_service.py:38 gallery/views.py:62
 msgid "сьогодні вже додано 2 відео"
 msgstr "2 videos have already been added today"
 
-#: gallery/views.py:117
+#: gallery/views.py:103
 msgid "файли успішно завантажено"
 msgstr "files successfully uploaded"
 
-#: gallery/views.py:121
+#: gallery/views.py:107
 msgid "виникли помилки під час завантаження файлів"
 msgstr "there were errors while uploading files"
 
-#: mainapp/forms.py:18
+#: mainapp/forms.py:22
 msgid "пиши свій пост на сьогодні..."
 msgstr "write your post for today..."
 
-#: mainapp/models.py:9
+#: mainapp/models.py:8
 msgid "Назва"
 msgstr "name"
 
-#: mainapp/models.py:27
+#: mainapp/models.py:26
 msgid "Категорія"
 msgstr "Category"
 
-#: mainapp/models.py:28
+#: mainapp/models.py:27
 msgid "Категорії"
 msgstr "Categories"
 
-#: mainapp/models.py:40
-msgid "Хештег"
-msgstr "Hashtag"
-
-#: mainapp/models.py:41 mainapp/models.py:52
-msgid "Хештеги"
-msgstr "Hashtags"
-
-#: mainapp/models.py:47 mainapp/models.py:64 mainapp/models.py:82
+#: mainapp/models.py:32 mainapp/models.py:54 mainapp/models.py:74
 msgid "заголовок"
 msgstr "title"
 
-#: mainapp/models.py:48 mainapp/models.py:65
+#: mainapp/models.py:33 mainapp/models.py:55
 msgid "опис"
 msgstr "content"
 
-#: mainapp/models.py:49 mainapp/models.py:66
+#: mainapp/models.py:35 mainapp/models.py:57
 msgid "дата та час"
 msgstr "date and time"
 
-#: mainapp/models.py:50 mainapp/models.py:84
+#: mainapp/models.py:41 mainapp/models.py:80
 msgid "категорія"
 msgstr "category"
 
-#: mainapp/models.py:51 mainapp/models.py:67 templates/mainapp/post.html:8
+#: mainapp/models.py:43 mainapp/models.py:59 templates/mainapp/post.html:8
 msgid "автор"
 msgstr "author"
 
-#: mainapp/models.py:58
+#: mainapp/models.py:49
 msgid "запис користувача в бібліотеку"
 msgstr "user entry in the library"
 
-#: mainapp/models.py:59
+#: mainapp/models.py:50
 msgid "записи користувача в бібліотеку"
 msgstr "user entries in the library"
 
-#: mainapp/models.py:75
+#: mainapp/models.py:67
 msgid "ОсобистийПост"
 msgstr "PersonalPost"
 
-#: mainapp/models.py:76
+#: mainapp/models.py:68
 msgid "Особисті Пости"
 msgstr "PersonalPosts"
 
-#: mainapp/models.py:83
+#: mainapp/models.py:75
 msgid "Зміст"
 msgstr "Content"
 
-#: mainapp/models.py:90
+#: mainapp/models.py:87
 msgid "пост з aдмінки для бібліотеки"
 msgstr "posts from the admin for the library"
 
-#: mainapp/models.py:91
+#: mainapp/models.py:88
 msgid "постИ з адмінки для бібліотеки"
 msgstr "posts from the admin for the library"
 
-#: mainapp/models.py:105
+#: mainapp/models.py:99
 msgid "Добре"
 msgstr "Good"
 
-#: mainapp/models.py:106
+#: mainapp/models.py:99
 msgid "Середнє"
 msgstr "Average"
 
-#: mainapp/models.py:107
+#: mainapp/models.py:99
 msgid "Погано"
 msgstr "Badly"
 
-#: mainapp/models.py:128
+#: mainapp/models.py:123
 #, python-format
 msgid "відповідь %(username)s на %(question)s %(date)s"
 msgstr "%(username)s replied to %(question)s on %(date)s"
 
-#: mainapp/views.py:66
+#: mainapp/views.py:91
 msgid "будь ласка, дай відповідь на кожне питання"
 msgstr "be honest and please answer all questions"
 
-#: mainapp/views.py:104
+#: mainapp/views.py:127
 msgid "немає вектору в конкретну сторону, цього місяця ми по середині"
 msgstr "this month, we’re staying in the middle"
 
-#: mainapp/views.py:106
+#: mainapp/views.py:129
 msgid "цього місяця динаміка позитивна"
 msgstr "this month the dynamics are super cool"
 
-#: mainapp/views.py:108
+#: mainapp/views.py:131
 msgid "цього місяця тримаємось середнього"
 msgstr "this month we are sticking to the average"
 
-#: mainapp/views.py:110
+#: mainapp/views.py:133
 msgid "цього місяця динаміка негативна"
 msgstr "this month the dynamics are negative"
 
-#: mainapp/views.py:206
+#: mainapp/views.py:234
 msgid "Пн"
 msgstr "Mon"
 
-#: mainapp/views.py:206
+#: mainapp/views.py:235
 msgid "Вт"
 msgstr "Tue"
 
-#: mainapp/views.py:206
+#: mainapp/views.py:236
 msgid "Ср"
 msgstr "Wed"
 
-#: mainapp/views.py:206
+#: mainapp/views.py:237
 msgid "Чт"
 msgstr "Thu"
 
-#: mainapp/views.py:206
+#: mainapp/views.py:238
 msgid "Пт"
 msgstr "Fri"
 
-#: mainapp/views.py:206
+#: mainapp/views.py:239
 msgid "Сб"
 msgstr "Sat"
 
-#: mainapp/views.py:206
+#: mainapp/views.py:240
 msgid "Нд"
 msgstr "Sun"
 
-#: mainapp/views.py:320
+#: mainapp/views.py:342
 msgid "запис успішно збережено"
 msgstr "the entry was successfully saved"
 
-#: mainapp/views.py:325
+#: mainapp/views.py:345
 msgid "виникла помилка при збереженні"
 msgstr "an error occurred while saving"
-
-#: mainapp/views.py:381
-msgid "метод запиту не підтримується"
-msgstr "your browser does not support video"
-
-#: mainapp/views.py:388
-msgid "порожнє повідомлення"
-msgstr "New password confirmation"
-
-#: mainapp/views.py:401
-msgid "🔌 вибач, зараз я недоступний... спробуй ще раз пізніше"
-msgstr "🔌 sorry, I'm not available right now... try again later"
-
-#: mainapp/views.py:406
-msgid "⏳ я трохи задумався... спробуй ще раз за мить"
-msgstr "⏳ I thought for a moment... try again in a moment"
-
-#: mainapp/views.py:412
-msgid "⚠️ вибач, щось пішло не так... я скоро відновлюсь"
-msgstr "⚠️ sorry, something went wrong... I'll be back soon"
 
 #: templates/gallery/index.html:7
 msgid "твій контент за поточний місяць"
@@ -348,6 +339,10 @@ msgstr ""
 msgid "зберегти відповіді"
 msgstr "save answers"
 
+#: templates/mainapp/create.html:7
+msgid "Створити"
+msgstr "create"
+
 #: templates/mainapp/home.html:5
 msgid "поспілкуватись з ші-асистентом"
 msgstr "chat with a ai-assistant"
@@ -392,7 +387,7 @@ msgstr "create a post"
 msgid "помилки:"
 msgstr "error"
 
-#: templates/mainapp/lib_user_post.html:25 templates/mainapp/library.html:96
+#: templates/mainapp/lib_user_post.html:25 templates/mainapp/library.html:103
 msgid "створити"
 msgstr "create"
 
@@ -425,35 +420,35 @@ msgstr "search"
 msgid "не введене ключове слово для пошуку"
 msgstr "you did not enter a search keyword"
 
-#: templates/mainapp/library.html:33
+#: templates/mainapp/library.html:32
 msgid "категорії"
 msgstr "categories"
 
-#: templates/mainapp/library.html:48
+#: templates/mainapp/library.html:46
 msgid "результат пошуку по категорії серед твоїх постів"
 msgstr "result by category among your posts"
 
-#: templates/mainapp/library.html:59
+#: templates/mainapp/library.html:64
 msgid "у цій категорії ще немає постів"
 msgstr "there are no posts in this category yet"
 
-#: templates/mainapp/library.html:62
+#: templates/mainapp/library.html:67
 msgid "обери категорію, щоб побачити пости"
 msgstr "select a category to see posts"
 
-#: templates/mainapp/library.html:67
+#: templates/mainapp/library.html:74
 msgid "результати пошуку по твоїм записам"
 msgstr "library search results"
 
-#: templates/mainapp/library.html:75 templates/mainapp/library.html:87
+#: templates/mainapp/library.html:82 templates/mainapp/library.html:94
 msgid "нічого не знайдено"
 msgstr "nothing found"
 
-#: templates/mainapp/library.html:79
+#: templates/mainapp/library.html:86
 msgid "результати пошуку по бібліотеці"
 msgstr "library search results"
 
-#: templates/mainapp/library.html:92
+#: templates/mainapp/library.html:99
 msgid "маєш цікаву інформацію ? запиши в бібліотеку, щоб не загубити"
 msgstr ""
 "do you have interesting information? write it down in the library so you "
@@ -691,16 +686,12 @@ msgstr "рome page"
 msgid "Вітаю %(user)s"
 msgstr "Welcome %(user)s"
 
-#: users/views.py:60
+#: users/views.py:59
 #, python-format
 msgid "Створений акаунт для %(username)s"
 msgstr "%(username)s's account is all set — go for it!"
 
-#: users/views.py:75
-msgid "Твій акаунт оновлено успішно!"
-msgstr "Your account has been updated successfully!"
-
-#: users/views.py:90
+#: users/views.py:110
 msgid ""
 "Ми щойно надіслали інструкції для зміни пароля (якщо акаунт з цією адресою "
 "існує). Лист має прийти незабаром. Якщо його не буде — перевір спам і чи "
@@ -710,6 +701,6 @@ msgstr ""
 "that email). The message should arrive soon. If not — check your spam and "
 "make sure the email is correct."
 
-#: users/views.py:100
+#: users/views.py:119
 msgid "Ваш пароль успішно змінено!"
 msgstr "Nice! Your password’s been changed."

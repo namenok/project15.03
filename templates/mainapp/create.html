@@ -4,6 +4,6 @@
 <form action="{% url 'mainapp:create' %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Створити" class="btn btn-default">
+    <input type="submit" value="{% trans 'Створити' %}" class="btn btn-default">
 </form>
 {% endblock %}

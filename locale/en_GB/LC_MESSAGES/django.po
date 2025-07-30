@@ -345,7 +345,7 @@ msgstr "create"
 
 #: templates/mainapp/home.html:5
 msgid "поспілкуватись з ші-асистентом"
-msgstr "chat with a ai-assistant"
+msgstr "chat with an ai-assistant"
 
 #: templates/mainapp/home.html:6
 msgid "при перезавантаженні чи зміні сторінки чат очищується*"

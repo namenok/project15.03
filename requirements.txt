@@ -16,3 +16,4 @@ aresponses
 ruff
 black
 daphne
+watchgod

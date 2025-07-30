@@ -21,7 +21,7 @@ services:
         condition: service_healthy
     volumes:
       - ./backups:/backups
-    entrypoint: bash -c "pg_dump -h db -U $$POSTGRES_USER $$POSTGRES_DB > /backups/backup_$(date +%F_%H-%M-%S).sql"
+    entrypoint: sleep infinity  # bash -c "pg_dump -h db -U $$POSTGRES_USER $$POSTGRES_DB > /backups/backup_$(date +%F_%H-%M-%S).sql"
 
 
   ollama:

@@ -1,6 +1,5 @@
 from django import forms
 from .models import PersonalPost, Post
-from django.utils.translation import gettext_lazy as _
 
 
 # from user to library
@@ -18,8 +17,6 @@ class PersonalPostForm(forms.ModelForm):
         model = PersonalPost
         exclude = ("published_date", "user", "date")
         widgets = {
-            "content": forms.Textarea(
-                attrs={"placeholder": _("пиши свій пост на сьогодні...")}
-            ),
+            "content": forms.Textarea(attrs={}),
             "date": forms.DateInput(attrs={"type": "date"}),
         }

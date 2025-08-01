@@ -8,6 +8,8 @@ from django.http import HttpResponse
 from gallery.models import GalleryDay
 import calendar
 from datetime import date, timedelta
+from datetime import datetime
+
 from django.utils import timezone
 from django.shortcuts import render
 from .models import PersonalPost, UserAnswer
@@ -18,7 +20,7 @@ import aiohttp
 
 import json
 from mainapp.services.category_service import get_category_by_slug, get_all_categories
-from mainapp.services.libtext_service import get_all_libtexts
+from mainapp.services.libtext_service import get_all_libtexts, get_libtexts_by_category
 from mainapp.services.personal_post_service import (
     get_today_personal_post,
     get_personal_posts_by_user,
@@ -245,21 +247,34 @@ def calendar_combined_view(request):
     return render(request, "mainapp/calendar.html", context)
 
 
-@login_required()
+def get_datetime_or_min(post):
+    dt = getattr(post, "published_date", None) or getattr(post, "created_at", None)
+    if dt is None:
+        return timezone.make_aware(datetime.min.replace(year=1, month=1, day=1))
+    if timezone.is_naive(dt):
+        return timezone.make_aware(dt)
+    return dt
+
+
+def get_combined_posts_for_category(category):
+    user_posts = get_posts_by_category(category)
+    admin_posts = get_libtexts_by_category(category)
+    combined_posts = list(user_posts) + list(admin_posts)
+    combined_posts.sort(key=get_datetime_or_min, reverse=True)
+    return combined_posts
+
+
+@login_required
 def category_list_view(request, slug):
     category = get_category_by_slug(slug)
-    posts = get_posts_by_category(category)
-    context = {"categories": category, "posts": posts}
-    return render(request, "mainapp/library.html", context=context)
-
-
-@login_required()
-def posts_by_category_view(request, slug):
-    category = get_category_by_slug(slug)
-    posts = get_posts_by_category(category)
-    return render(
-        request, "mainapp/library.html", {"category": category, "posts": posts}
-    )
+    combined_posts = get_combined_posts_for_category(category)
+    categories = get_all_categories()
+    context = {
+        "category": category,
+        "posts": combined_posts,
+        "categories": categories,
+    }
+    return render(request, "mainapp/library.html", context)
 
 
 @login_required()

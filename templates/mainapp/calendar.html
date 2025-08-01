@@ -22,11 +22,11 @@
           {% if day %}
             {% if day == today %}
               <td class="calendar-cell today">
-                <a href="?year={{ year }}&month={{ month }}&date={{ day|date:"Y-m-d" }}"><strong>{{ day.day }}</strong></a>
+                <a href="?year={{ year }}&month={{ month }}&date={{ day|date:'Y-m-d' }}"><strong>{{ day.day }}</strong></a>
               </td>
             {% elif day in data_dates %}
               <td class="calendar-cell has-data">
-                <a href="?year={{ year }}&month={{ month }}&date={{ day|date:"Y-m-d" }}">{{ day.day }}</a>
+                <a href="?year={{ year }}&month={{ month }}&date={{ day|date:'Y-m-d' }}">{{ day.day }}</a>
               </td>
             {% else %}
               <td class="calendar-cell">{{ day.day }}</td>

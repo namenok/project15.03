@@ -3,21 +3,45 @@ body {
   color: white;
 }
 
+/* Посилання у темній темі */
 a {
-  color: #90caf9; /* світлий блакитний */
+  color: #90caf9;
 }
 
-button {
-  background-color: #333;
+/* Кнопки */
+button,
+button[type="submit"],
+.btn,
+.submit-button {
+  background-color: #4caf50;
   color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.45rem 1rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
-/* Темні значення змінних */
+button:hover,
+button[type="submit"]:hover,
+.btn:hover,
+.submit-button:hover {
+  background-color: #43a047;
+}
+
+/* === CSS ПЕРЕМІННІ  === */
 :root {
   --navbar-bg: #1e1e1e;
   --navbar-text: #ddd;
   --navbar-link-hover: #64b5f6;
   --navbar-active-bg: #333;
+
+  --card-bg-night: #282828;
+  --card-border-night: #444;
+  --card-text-night: #e0e0e0;
+  --card-date-night: #aaa;
 }
 
 .main-navbar {
@@ -46,4 +70,109 @@ button {
 .navbar-button:hover {
   background-color: #444;
   color: white;
+}
+
+
+.post-card {
+  background-color: var(--card-bg-night);
+  border-color: var(--card-border-night);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.post-title,
+.post-content {
+  color: var(--card-text-night);
+}
+
+.post-date {
+  color: var(--card-date-night);
+}
+
+.search-result {
+  background-color: var(--card-bg-night);
+  border-color: var(--card-border-night);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.search-result p {
+  color: var(--card-text-night);
+}
+
+.card-section {
+  background-color: var(--card-bg-night);
+  border-color: var(--card-border-night);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.section-title {
+  color: var(--card-text-night);
+}
+
+.section-title::after {
+  background-color: #90caf9;
+}
+
+.alert.warning-alert {
+  background-color: #5e4a00;
+  color: #ffda6a;
+  border-color: #ccb000;
+}
+
+.alert.info-alert {
+  background-color: #1e3a51;
+  color: #90caf9;
+  border-color: #3f7fae;
+}
+
+/* === ПОЛЯ ФОРМ  === */
+input[type="search"],
+input[type="text"],
+textarea,
+select {
+  background-color: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+.category-list ul li a {
+  background-color: white;
+  border: 1px solid var(--card-border-night);
+  color: black;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  display: inline-block;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+.category-list ul li a:hover {
+  background-color: #f0f0f0;
+  border-color: #bbb;
+  color: #0077cc;
+}
+
+
+/* === КНОПКИ ВКЛАДОК === */
+.tabs-nav {
+  border-bottom-color: var(--card-border-night);
+}
+
+.tab-button {
+  background-color: #3a3a3a;
+  border: 1px solid #5a5a5a;
+  color: var(--card-text-night);
+  padding: 0.4rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.tab-button:hover {
+  background-color: #4a4a4a;
+}
+
+.tab-button.active {
+  background-color: var(--card-bg-night);
+  border-color: var(--card-border-night);
+  border-bottom-color: var(--card-bg-night);
+  color: #90caf9;
 }

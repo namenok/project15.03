@@ -39,6 +39,15 @@ def large_video_file():
     )
 
 
+def test_validate_image_size_passes_small_file(small_image_file):
+    validate_image_size(small_image_file)
+
+
+def test_validate_image_size_fails_large_file(large_image_file):
+    with pytest.raises(ValidationError):
+        validate_image_size(large_image_file)
+
+
 def test_validate_video_size_passes_small_file(small_video_file):
     validate_video_size(small_video_file)
 
@@ -46,18 +55,6 @@ def test_validate_video_size_passes_small_file(small_video_file):
 def test_validate_video_size_fails_large_file(large_video_file):
     with pytest.raises(ValidationError):
         validate_video_size(large_video_file)
-
-
-def test_validate_image_size_passes_small_file():
-    small_file = SimpleUploadedFile("small.png", b"1234")
-    validate_image_size(small_file)
-
-
-def test_validate_image_size_fails_large_file():
-    large_content = b"a" * (10 * 1024 * 1024 + 1)
-    large_file = SimpleUploadedFile("large.png", large_content)
-    with pytest.raises(ValidationError):
-        validate_image_size(large_file)
 
 
 def test_form_handles_empty_files():
@@ -78,8 +75,6 @@ def test_form_valid_small_files(mock_videoclip, small_image_file, small_video_fi
         }
     )
     form = MediaUploadForm(files=files)
-    if not form.is_valid():
-        print("Form errors:", form.errors)
     assert form.is_valid()
 
 
@@ -88,53 +83,7 @@ def test_form_invalid_large_image(large_image_file):
     form = MediaUploadForm(files=files)
     assert not form.is_valid()
     assert "images" in form.errors
-
-
-def test_form_invalid_large_image_via_form(large_image_file):
-    files = MultiValueDict({"images": [large_image_file]})
-    form = MediaUploadForm(files=files)
-    assert not form.is_valid()
-    assert "images" in form.errors
-
-
-@patch("gallery.forms.VideoFileClip")
-def test_form_invalid_video_duration_via_form(mock_videoclip, small_video_file):
-    mock_clip = MagicMock()
-    mock_clip.duration = 31
-    mock_videoclip.return_value = mock_clip
-
-    files = MultiValueDict({"videos": [small_video_file]})
-    form = MediaUploadForm(files=files)
-    assert not form.is_valid()
-    assert "videos" in form.errors
-
-
-def test_form_invalid_large_video(large_video_file):
-    files = MultiValueDict({"videos": [large_video_file]})
-    form = MediaUploadForm(files=files)
-
-    with pytest.raises(ValidationError):
-        for video in form.files.getlist("videos"):
-            validate_video_size(video)
-
-
-def test_form_invalid_video_extension(wrong_ext_video_file):
-    files = MultiValueDict({"videos": [wrong_ext_video_file]})
-    form = MediaUploadForm(files=files)
-    assert not form.is_valid()
-    assert "videos" in form.errors
-
-
-@patch("gallery.forms.VideoFileClip")
-def test_form_valid_video_duration(mock_videoclip, small_video_file):
-    mock_clip = MagicMock()
-    mock_clip.duration = 10
-    mock_videoclip.return_value = mock_clip
-
-    files = MultiValueDict({"videos": [small_video_file]})
-    form = MediaUploadForm(files=files)
-
-    assert form.is_valid()
+    assert any("максимальний розмір" in str(e) for e in form.errors["images"])
 
 
 @patch("gallery.forms.VideoFileClip")
@@ -145,9 +94,28 @@ def test_form_invalid_video_duration(mock_videoclip, small_video_file):
 
     files = MultiValueDict({"videos": [small_video_file]})
     form = MediaUploadForm(files=files)
-
     assert not form.is_valid()
     assert "videos" in form.errors
+    assert any("довше 30 секунд" in str(e) for e in form.errors["videos"])
+
+
+def test_form_invalid_large_video(large_video_file):
+    files = MultiValueDict({"videos": [large_video_file]})
+    form = MediaUploadForm(files=files)
+    assert not form.is_valid()
+    assert "videos" in form.errors
+    assert any("максимальний розмір" in str(e) for e in form.errors["videos"])
+
+
+def test_form_invalid_video_extension(wrong_ext_video_file):
+    files = MultiValueDict({"videos": [wrong_ext_video_file]})
+    form = MediaUploadForm(files=files)
+    assert not form.is_valid()
+    assert "videos" in form.errors
+    assert any(
+        "Недопустиме розширення" in str(e) or "непідтримуваний формат" in str(e)
+        for e in form.errors["videos"]
+    )
 
 
 def test_form_multiple_files_validation(
@@ -161,13 +129,22 @@ def test_form_multiple_files_validation(
     )
     form = MediaUploadForm(files=files)
     is_valid = form.is_valid()
-    if not is_valid:
-        print("Form errors:", form.errors)
     assert not is_valid
     assert "images" in form.errors
     assert "videos" in form.errors
-    assert any("максимальний розмір" in str(err) for err in form.errors["images"])
-    assert any("максимальний розмір" in str(err) for err in form.errors["videos"])
+    assert any("максимальний розмір" in str(e) for e in form.errors["images"])
+    assert any("максимальний розмір" in str(e) for e in form.errors["videos"])
+
+
+@patch("gallery.forms.VideoFileClip")
+def test_form_valid_video_duration(mock_videoclip, small_video_file):
+    mock_clip = MagicMock()
+    mock_clip.duration = 10
+    mock_videoclip.return_value = mock_clip
+
+    files = MultiValueDict({"videos": [small_video_file]})
+    form = MediaUploadForm(files=files)
+    assert form.is_valid()
 
 
 def test_form_invalid_video_wrong_mime_type():
@@ -176,37 +153,9 @@ def test_form_invalid_video_wrong_mime_type():
     )
     files = MultiValueDict({"videos": [wrong_mime_file]})
     form = MediaUploadForm(files=files)
-    is_valid = form.is_valid()
-    if is_valid:
-        print("Form unexpectedly valid")
-    else:
-        print("Form errors:", form.errors)
-    assert not is_valid
+    assert not form.is_valid()
     assert "videos" in form.errors
     assert any(
-        "неправильне розширення" in str(err) or "непідтримуваний формат" in str(err)
-        for err in form.errors["videos"]
+        "Недопустиме розширення" in str(e) or "непідтримуваний формат" in str(e)
+        for e in form.errors["videos"]
     )
-
-
-def test_form_invalid_large_image_error_message(large_image_file):
-    files = MultiValueDict({"images": [large_image_file]})
-    form = MediaUploadForm(files=files)
-    form.is_valid()
-    assert "images" in form.errors
-    error_msgs = form.errors["images"]
-    assert any("максимальний розмір" in str(msg) for msg in error_msgs)
-
-
-@patch("gallery.forms.VideoFileClip")
-def test_form_invalid_video_duration_error_message(mock_videoclip, small_video_file):
-    mock_clip = MagicMock()
-    mock_clip.duration = 31
-    mock_videoclip.return_value = mock_clip
-
-    files = MultiValueDict({"videos": [small_video_file]})
-    form = MediaUploadForm(files=files)
-    form.is_valid()
-    assert "videos" in form.errors
-    error_msgs = form.errors["videos"]
-    assert any("довше 30 секунд" in str(msg) for msg in error_msgs)

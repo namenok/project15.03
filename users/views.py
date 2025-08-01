@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext as _
-
+from django.utils.translation import gettext as gettext
 from django.contrib.auth.views import LoginView, PasswordResetConfirmView
 from django.contrib import messages
 from django.views import View
@@ -87,10 +87,10 @@ class ProfileView(View):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, "Your profile has been updated successfully.")
+            messages.success(request, gettext("Ваш профіль успішно оновлено."))
             return redirect("users:users_profile")
         else:
-            messages.error(request, "Please correct the errors below.")
+            messages.error(request, gettext("Будь ласка, виправте помилки нижче."))
 
         return render(
             request,

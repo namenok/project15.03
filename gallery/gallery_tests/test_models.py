@@ -102,7 +102,7 @@ def test_video_gallery_creation(test_gallery_day, dummy_video_file):
     )
     assert video.gallery_day == test_gallery_day
     assert video.description == "A short clip"
-    assert video.video.name.startswith("videos/test_video_")
+    assert video.video.name.startswith("videos/test_video")
     assert VideoGallery.objects.count() == 1
 
 

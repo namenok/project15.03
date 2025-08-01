@@ -14,11 +14,12 @@
           class="form-control"
           placeholder="{% trans 'введи ключове слово...' %}"
           value="{{ query|default:'' }}"
-          aria-label="{% trans 'пошук' %}"
-        >
-        <button class="btn btn-primary btn-sm" type="submit">
+          aria-label="{% trans 'пошук' %}">
+        <hr><hr>
+        <button class="btn btn-primary btn-sm narrow-button" type="submit">
           {% trans "шукати" %}
         </button>
+
       </form>
 
       {% if query == "" %}
@@ -29,39 +30,46 @@
     </div>
   </div>
 
+<h4 class="section">{% trans "категорії" %}</h4>
+<div class="category-list">
+  <ul>
+    {% for category in categories %}
+      <li>
+        <a href="{% url 'mainapp:library_posts_by_category' slug=category.slug %}">
+          {{ category.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
 
-  <h4>{% trans "категорії" %}</h4>
-  <div class="category-list">
-    <ul>
-      {% for category in categories %}
-        <li>
-          <a href="{% url 'mainapp:library_posts_by_category' slug=category.slug %}">
-            {{ category.name }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
-
-
-  {% if selected_category %}
-    <p>{% trans "результат пошуку по категорії серед твоїх постів" %} "{{selected_category.name}}"</p>
-    {% if posts %}
-      <div class="search-results">
-        {% for post in posts %}
-          <div class="search-result">
-            <p class="page-header"><a>{{ post.title }}</a></p>
-            <p>{{ post.content }}</p>
-          </div>
-        {% endfor %}
+{% if category %}
+  <p>{% trans "результат пошуку по категорії серед твоїх постів" %} "{{ category.name }}"</p>
+  {% if posts %}
+    <div class="search-results">
+      {% for post in posts %}
+      <div class="search-result">
+        <p class="page-header">
+          <a>{{ post.title }}</a>
+          {% if post.user %}
+            <span>by {{ post.user.username }}</span>
+          {% else %}
+            <span>by admin</span>
+          {% endif %}
+        </p>
+        <p>{{ post.content }}</p>
       </div>
-    {% else %}
-      <p>{% trans "у цій категорії ще немає постів" %}</p>
-    {% endif %}
+      {% endfor %}
+    </div>
   {% else %}
-    <p>{% trans "обери категорію, щоб побачити пости" %}</p>
+    <p>{% trans "у цій категорії ще немає постів" %}</p>
   {% endif %}
-  <hr><hr>
+
+  <p>{% trans "обери категорію, щоб побачити пости" %}</p>
+{% endif %}
+
+<hr><hr>
+
 
   {% if query %}
     <h2>{% trans "результати пошуку по твоїм записам" %}</h2>
@@ -72,7 +80,7 @@
           <p>{{ post.content }}</p>
         </div>
       {% empty %}
-        <p>{% trans "нічого не знайдено" %}</p>
+        <p class="no-results">{% trans "нічого не знайдено" %}</p>
       {% endfor %}
     </div>
 

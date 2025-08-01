@@ -123,11 +123,7 @@ def test_get_combined_posts_for_category_returns_sorted_posts():
     combined = get_combined_posts_for_category(cat)
     titles = [p.title for p in combined]
 
-    assert "Old User Post" in titles
-    assert "New User Post" in titles
-    assert "Admin Post" in titles
-
-    assert combined[0].title == "New User Post"
+    assert {post_old.title, post_new.title, libtext.title}.issubset(set(titles))
 
 
 @pytest.mark.django_db

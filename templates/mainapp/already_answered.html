@@ -2,14 +2,18 @@
 {% load i18n %}
 {% block content %}
 
-<div class="survey-container">
-  <h2 class="completed-heading">{% trans "опитування вже пройдено" %}</h2>
+<div class="survey-container" role="region" aria-labelledby="survey-heading">
+  <h2 id="survey-heading" class="completed-heading">{% trans "опитування вже пройдено" %}</h2>
+
   <p class="completed-message">
     {% trans "дякуємо за щирі відповіді 💙" %}
   </p>
+
   <p class="history-link">
-    <a href="{% url 'mainapp:survey_history' %}">{% trans "переглянути історію відповідей на опитування" %}</a>
+    <a href="{% url 'mainapp:survey_history' %}" aria-label="{% trans 'переглянути історію відповідей на опитування' %}">
+      {% trans "переглянути історію відповідей на опитування" %}
+    </a>
   </p>
 </div>
-{% endblock %}
 
+{% endblock %}

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-
+from django.utils.translation import gettext as gettext
 from .models import Profile
 
 
@@ -77,7 +77,7 @@ class RegisterForm(FormControlMixin, UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError("Цей email вже використовується.")
+            raise forms.ValidationError(gettext("Цей email вже використовується."))
         return email
 
 
@@ -98,7 +98,7 @@ class UpdateUserForm(FormControlMixin, forms.ModelForm):
         qs = User.objects.filter(email=email).exclude(pk=self.instance.pk)
         if qs.exists():
             raise forms.ValidationError(
-                "Цей email вже використовується іншим користувачем."
+                gettext("Цей email вже використовується іншим користувачем.")
             )
         return email
 

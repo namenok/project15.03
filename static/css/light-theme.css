@@ -3,6 +3,7 @@ body {
   color: black;
 }
 
+/* Посилання */
 a {
   color: #0077cc;
 }
@@ -11,7 +12,6 @@ button {
   background-color: #e0e0e0;
   color: #111;
 }
-
 
 :root {
   --navbar-bg: #f0f0f0;

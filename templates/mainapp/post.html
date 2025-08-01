@@ -6,10 +6,6 @@
 <hr>
     <h1 class="page-header"><a >{{post.title}} </a></h1>
     <p><a>{% trans "автор" %} {{ post.user }}</a>
-        {% for teg in tegs %}
-            <p><a> {{ teg.name }}</a>
-        {% endfor %}
-    </p>
     <p>{% trans "дата" %} {{ post.published_date }}</p>
 
     <hr>

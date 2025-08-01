@@ -2,8 +2,8 @@
 {% load i18n %}
 
 {% block content %}
-
+<div class="container py-4">
     <h1>{% trans "твоя аналітика за поточний місяць" %}</h1>
-    <p>{{ message }}</p>
-
+    <p>{{ message|default:_("немає даних для відображення") }}</p>
+</div>
 {% endblock %}

@@ -13,7 +13,7 @@ pytest
 pytest-django
 pytest-asyncio
 aresponses
+coverage
 ruff
-black
 daphne
 watchgod

@@ -23,12 +23,11 @@ def test_register_form_valid_data():
 
 @pytest.mark.django_db
 def test_register_form_email_unique_validation():
-    # Create user with email
     User.objects.create_user(
         username="existing",
         email="john@example.com",
         password="12345",
-    )  # nosec
+    )
     form_data = {
         "first_name": "John",
         "last_name": "Doe",

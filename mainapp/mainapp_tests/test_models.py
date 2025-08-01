@@ -38,12 +38,11 @@ def test_post_str_and_fields():
 
 @pytest.mark.django_db
 def test_personal_post_str_and_unique():
-    user = User.objects.create_user(username="testuser2", password="pass")  # nosec
-    post = PersonalPost.objects.create(  # nosec
+    user = User.objects.create_user(username="testuser2", password="pass")
+    post = PersonalPost.objects.create(
         title="Diary", content="My day", user=user, date=date.today()
     )
-    assert str(post) == f"{user.username} - {date.today()}"  # nosec
-    # unique_together: user, date, content
+    assert str(post) == f"{user.username} - {date.today()}"
     with pytest.raises(Exception):
         PersonalPost.objects.create(
             title="Diary", content="My day", user=user, date=date.today()
@@ -52,33 +51,32 @@ def test_personal_post_str_and_unique():
 
 @pytest.mark.django_db
 def test_libtext_str():
-    cat = Category.objects.create(name="LibCat")  # nosec
-    lib = LibText.objects.create(  # nosec
+    cat = Category.objects.create(name="LibCat")
+    lib = LibText.objects.create(
         title="LibTitle", content="LibContent", to_category=cat
     )
-    assert str(lib) == "LibTitle"  # nosec
-    assert lib.to_category == cat  # nosec
+    assert str(lib) == "LibTitle"
+    assert lib.to_category == cat
 
 
 @pytest.mark.django_db
 def test_survey_and_answers():
-    survey = Survey.objects.create(question="How are you?")  # nosec
-    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good!")  # nosec
-    assert str(survey) == "How are you?"  # nosec
-    assert str(ans) == "Good!"  # nosec
-    assert ans.survey == survey  # nosec
+    survey = Survey.objects.create(question="How are you?")
+    ans = Answers.objects.create(marker="good", survey=survey, choice_text="Good!")
+    assert str(survey) == "How are you?"
+    assert str(ans) == "Good!"
+    assert ans.survey == survey
 
 
 @pytest.mark.django_db
 def test_user_answer_str_and_unique():
-    user = User.objects.create_user(username="testuser3", password="pass")  # nosec
-    survey = Survey.objects.create(question="Q?")  # nosec
-    ans = Answers.objects.create(marker="neutral", survey=survey, choice_text="Ok")  # nosec
-    ua = UserAnswer.objects.create(  # nosec
+    user = User.objects.create_user(username="testuser3", password="pass")
+    survey = Survey.objects.create(question="Q?")
+    ans = Answers.objects.create(marker="neutral", survey=survey, choice_text="Ok")
+    ua = UserAnswer.objects.create(
         user=user, survey=survey, answer_choice=ans, date=date.today()
     )
-    assert survey.question in str(ua)  # nosec
-    # unique_together: user, survey, date
+    assert survey.question in str(ua)
     with pytest.raises(Exception):
         UserAnswer.objects.create(
             user=user, survey=survey, answer_choice=ans, date=date.today()

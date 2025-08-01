@@ -16,9 +16,10 @@
           value="{{ query|default:'' }}"
           aria-label="{% trans 'пошук' %}">
         <hr><hr>
-        <button class="btn btn-primary btn-sm" type="submit">
+        <button class="btn btn-primary btn-sm narrow-button" type="submit">
           {% trans "шукати" %}
         </button>
+
       </form>
 
       {% if query == "" %}
@@ -29,7 +30,7 @@
     </div>
   </div>
 
-<h4>{% trans "категорії" %}</h4>
+<h4 class="section">{% trans "категорії" %}</h4>
 <div class="category-list">
   <ul>
     {% for category in categories %}
@@ -79,7 +80,7 @@
           <p>{{ post.content }}</p>
         </div>
       {% empty %}
-        <p>{% trans "нічого не знайдено" %}</p>
+        <p class="no-results">{% trans "нічого не знайдено" %}</p>
       {% endfor %}
     </div>
 

@@ -13,7 +13,7 @@
 				<small>{{ field.errors|striptags }}</small>
 			{% endif %}
 		{% endfor %}
-		
+
 		<input type="submit" value="{% trans 'увійти' %}" class="btn btn-primary full-width">
 		<hr>
 		<p class="text-center"><a href="{% url 'users:password_reset' %}" class="btn btn-outline">{% trans "пароль втрачено?" %}</a></p>

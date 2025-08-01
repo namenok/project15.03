@@ -1,62 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
-{% include 'menu.html' %}
   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
       <link rel="icon" href="{% static 'favicon.ico' %}" />
       <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link id="theme-light" rel="stylesheet" href="{% static 'css/light-theme.css' %}">
-    <link id="theme-dark" rel="stylesheet" href="{% static 'css/dark-theme.css' %}" disabled>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap&subset=cyrillic" rel="stylesheet">
+      <link id="theme-light" rel="stylesheet" href="{% static 'css/light-theme.css' %}">
+      <link id="theme-dark" rel="stylesheet" href="{% static 'css/dark-theme.css' %}" disabled>
+
+      <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap&subset=cyrillic" rel="stylesheet">
+
+      {% block styles %}{% endblock %}
+      {% block extra_scripts %}{% endblock %}
   </head>
 
-{% block extra_scripts %}{% endblock %}
+  <body>
 
-{% block styles %}{% endblock %}
-
-<body>
+    {% include 'menu.html' %}
 
     <main role="main" class="container">
-      {% block content %}
-      {% endblock %}
+      {% block content %}{% endblock %}
     </main>
 
-</body>
+    <footer class="main-footer">
+        <p>2025 MindSpace</p>
+    </footer>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const lightTheme = document.getElementById('theme-light');
-    const darkTheme = document.getElementById('theme-dark');
-    const toggleButton = document.getElementById('theme-toggle');
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const lightTheme = document.getElementById('theme-light');
+        const darkTheme = document.getElementById('theme-dark');
+        const toggleButton = document.getElementById('theme-toggle');
 
-    function applyTheme(theme) {
-      if (!lightTheme || !darkTheme || !toggleButton) return;
+        function applyTheme(theme) {
+          if (!lightTheme || !darkTheme || !toggleButton) return;
 
-      if (theme === 'dark') {
-        lightTheme.disabled = true;
-        darkTheme.disabled = false;
-        toggleButton.textContent = '🌞';
-      } else {
-        lightTheme.disabled = false;
-        darkTheme.disabled = true;
-        toggleButton.textContent = '🌙';
-      }
+          if (theme === 'dark') {
+            lightTheme.disabled = true;
+            darkTheme.disabled = false;
+            toggleButton.textContent = '🌞';
+          } else {
+            lightTheme.disabled = false;
+            darkTheme.disabled = true;
+            toggleButton.textContent = '🌙';
+          }
 
-      localStorage.setItem('theme', theme);
-    }
+          localStorage.setItem('theme', theme);
+        }
 
-    // Встановлення теми при першому завантаженні
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    applyTheme(savedTheme);
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
 
-    // Перемикання теми при натисканні
-    if (toggleButton) {
-      toggleButton.addEventListener('click', function () {
-        const newTheme = darkTheme.disabled ? 'dark' : 'light';
-        applyTheme(newTheme);
+        if (toggleButton) {
+          toggleButton.addEventListener('click', function () {
+            const newTheme = darkTheme.disabled ? 'dark' : 'light';
+            applyTheme(newTheme);
+          });
+        }
       });
-    }
-  });
+    </script>
 
-</script>
+  </body>
 </html>

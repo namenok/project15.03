@@ -1,21 +1,30 @@
-FROM python:3.12.3-slim
+# 🔹 Base stage
+FROM python:3.12.3-slim as base
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y \
-    ffmpeg \
-    libsm6 \
-    libxext6 \
     libgl1 \
+    libxext6 \
     gettext \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip setuptools wheel
-
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements-prod.txt .
+RUN pip install --no-cache-dir -r requirements-prod.txt
 
 COPY . .
+
+# 🔹 Dev stage
+FROM base as dev
+
+RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/apt/lists/*
+
+COPY requirements-dev.txt .
+RUN pip install --no-cache-dir -r requirements-dev.txt
+
+
+#  Final production image
+FROM base as prod
 
 CMD ["uvicorn", "websiteProject.asgi:application", "--host", "0.0.0.0", "--port", "8000"]

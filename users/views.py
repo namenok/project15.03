@@ -2,7 +2,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as gettext
 from django.utils.translation import gettext as gettext
 from django.contrib.auth.views import LoginView, PasswordResetConfirmView
 from django.contrib import messages
@@ -25,7 +25,7 @@ class MyLoginView(LoginView):
 
     def form_valid(self, form):
         user = form.get_user()
-        messages.success(self.request, _("Вітаю %(user)s") % {"user": user})
+        messages.success(self.request, gettext("Вітаю %(user)s") % {"user": user})
         return super().form_valid(form)
 
 
@@ -56,7 +56,7 @@ class RegisterView(View):
             form.save()
             username = form.cleaned_data.get("username")
             messages.success(
-                request, _("Створений акаунт для %(username)s") % {"username": username}
+                request, gettext("Створений акаунт для %(username)s") % {"username": username}
             )
             return redirect("users:users_home")
         return render(request, self.template_name, {"form": form})
@@ -106,7 +106,7 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     template_name = "registration/password_reset.html"
     email_template_name = "registration/password_reset_email.html"
     subject_template_name = "registration/password_reset_subject.txt"
-    success_message = _(
+    success_message = gettext(
         "Ми щойно надіслали інструкції для зміни пароля (якщо акаунт з цією адресою "
         "існує). Лист має прийти незабаром. Якщо його не буде — перевір спам і "
         "чи правильно введено електронну адресу."
@@ -116,7 +116,7 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = "registration/change_password.html"
-    success_message = _("Ваш пароль успішно змінено!")
+    success_message = gettext("Ваш пароль успішно змінено!")
     success_url = reverse_lazy("users:users_home")
 
 

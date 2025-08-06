@@ -1,0 +1,13 @@
+Django
+requests
+pillow
+python-dateutil
+psycopg2-binary
+channels>=4.0
+daphne
+uvicorn[standard]
+langdetect
+django-modeltranslation
+aiohttp
+moviepy
+ruff

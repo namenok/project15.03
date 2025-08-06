@@ -66,7 +66,7 @@ async def test_chat_consumer_streaming_refactored():
             mock_ollama_http_client_instance.stream_post.assert_called_once_with(
                 endpoint="chat",
                 json_payload={
-                    "model": "gemma:2b",
+                    "model": "gemma3:1b",
                     "messages": expected_messages_payload,
                     "stream": True,
                 },

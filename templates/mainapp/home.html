@@ -6,11 +6,12 @@
 <p>{% trans "при перезавантаженні чи зміні сторінки чат очищується*" %}</p>
 <div id="chat-window">
   <div id="chat-messages"></div>
+
+  <form id="chat-form" autocomplete="off">
+    <input id="chat-input" type="text" placeholder="{{ _('введи текст...') }}" required />
+    <button type="submit">{% trans "надіслати" %}</button>
+  </form>
 </div>
-<form id="chat-form" autocomplete="off">
-  <input id="chat-input" type="text" placeholder="{{ _('введи текст...') }}" required />
-  <button type="submit">{% trans "надіслати" %}</button>
-</form>
 
 {% endblock %}
 
@@ -85,80 +86,36 @@ socket.onclose = function(e) {
 
 {% block styles %}
 <style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    font-family: sans-serif;
-}
-
 #chat-window {
     width: 100%;
     max-width: 800px;
     margin: 20px auto;
     border: 1px solid #ccc;
     border-radius: 12px;
-    height: 400px;
-    padding: 12px;
-    overflow-y: auto;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     background-color: #f0f2f5;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Місце для повідомлень займає все доступне місце зверху */
 #chat-messages {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    height: 100%;
+    padding: 12px 36px;
     overflow-y: auto;
-}
-
-.message {
-    padding: 10px 14px;
-    border-radius: 14px;
-    max-width: 80%;
-    word-wrap: break-word;
-    font-size: 15px;
-    line-height: 1.4;
-    position: relative;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.user {
-    align-self: flex-end;
-    background-color: #dcf8c6;
-    border: 1px solid #b2ebc5;
-}
-
-.ai {
-    align-self: flex-start;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-}
-
-.ai::before {
-    content: "🤖";
-    position: absolute;
-    left: -26px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.user::before {
-    content: "🧑";
-    position: absolute;
-    right: -26px;
-    top: 50%;
-    transform: translateY(-50%);
 }
 
 #chat-form {
     display: flex;
     gap: 10px;
-    max-width: 600px;
-    margin: 0 auto 40px;
     padding: 10px;
+    border-top: 1px solid #ccc;
+    background-color: #fff;
 }
 
 #chat-input {
@@ -183,6 +140,50 @@ body {
 #chat-form button:hover {
     background-color: #218838;
 }
+
+.message {
+    padding: 10px 14px;
+    border-radius: 14px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 15px;
+    line-height: 1.4;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.user {
+    align-self: flex-end;
+    background-color: #dcf8c6;
+    border: 1px solid #b2ebc5;
+}
+
+.ai {
+    align-self: flex-start;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+}
+
+/* Іконки як псевдоелементи */
+.ai::before {
+    content: "🤖";
+    position: absolute;
+    left: -24px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.user::before {
+    content: "🧑";
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+
 </style>
 {% endblock %}
 

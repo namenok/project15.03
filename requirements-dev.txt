@@ -1,0 +1,10 @@
+-r requirements-prod.txt
+
+pytest
+pytest-django
+pytest-asyncio
+aresponses
+coverage
+ruff
+watchgod
+moviepy

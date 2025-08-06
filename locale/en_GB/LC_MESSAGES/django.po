@@ -706,7 +706,7 @@ msgstr "Nice! Your password’s been changed."
 
 #: users/views.py:93
 msgid "Будь ласка, виправте помилки нижче."
-msgstr "be honest and please answer all questions"
+msgstr "Please correct the errors below."
 
 #: users/views.py:110
 msgid ""

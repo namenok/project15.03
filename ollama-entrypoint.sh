@@ -1,23 +1,23 @@
 #!/bin/sh
 
-echo "🚀 Starting Ollama server..."
+echo "🚀 Запуск сервера Ollama..."
 
-# Start the Ollama server in the background
+# Запуск сервера у фоновому режимі
 ollama serve &
 
-# Wait until ollama CLI can list models (server ready)
+# Очікування готовності Ollama (CLI може отримати список моделей)
 until ollama list >/dev/null 2>&1; do
-  echo "⏳ Waiting for Ollama to be ready..."
+  echo "⏳ Очікуємо готовності Ollama..."
   sleep 2
 done
 
-# Check and pull model if needed
-if ! ollama list | grep -q 'gemma.*2b'; then
-  echo "⬇️  Pulling gemma:2b model..."
-  ollama pull gemma:2b
+# Перевірка: чи модель вже присутня. Якщо ні — завантажуємо
+if ! ollama list | grep -q 'gemma3:1b'; then
+  echo "⬇️  Завантажуємо модель gemma3:1b..."
+  ollama pull gemma3:1b
 else
-  echo "✅ gemma:2b model already exists."
+  echo "✅ Модель gemma3:1b вже доступна."
 fi
 
-# Wait for background processes to finish (keeps server running)
+# Очікування завершення всіх фонових процесів (щоб сервер залишався активним)
 wait

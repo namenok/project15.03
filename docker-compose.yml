@@ -21,11 +21,10 @@ services:
         condition: service_healthy
     volumes:
       - ./backups:/backups
-    entrypoint: sleep infinity  # bash -c "pg_dump -h db -U $$POSTGRES_USER $$POSTGRES_DB > /backups/backup_$(date +%F_%H-%M-%S).sql"
-
+    entrypoint: sleep infinity
 
   ollama:
-    image: ollama/ollama:latest
+    image: arunskurian/ollama-cpu:latest
     platform: linux/amd64
     command: serve
     volumes:
@@ -43,7 +42,9 @@ services:
       start_period: 60s
 
   web:
-    build: .
+    build:
+      context: .
+      target: prod
     command: >
       sh -c "python manage.py wait_for_db &&
              python manage.py migrate &&
@@ -53,21 +54,24 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-       db:
+      db:
         condition: service_healthy
-       ollama:
+      ollama:
         condition: service_healthy
     env_file:
       - .env
     environment:
       OLLAMA_API_BASE_URL: http://ollama:11434/api/
 
-
   test:
-    build: .
+    build:
+      context: .
+      target: dev
     command: >
       sh -c "
         python manage.py wait_for_db &&
+
+        export PGPASSWORD=$${POSTGRES_PASSWORD} &&
 
         psql -U $${POSTGRES_USER} -h db -d postgres -c \"SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname='test_mainappdb' AND pid <> pg_backend_pid();\" &&
 
@@ -76,6 +80,7 @@ services:
         python manage.py migrate &&
         pytest
       "
+
     volumes:
       - .:/app
     depends_on:
@@ -86,7 +91,6 @@ services:
     env_file:
       - .env
     working_dir: /app
-
 
 volumes:
   postgres_data:

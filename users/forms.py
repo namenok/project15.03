@@ -104,14 +104,12 @@ class UpdateUserForm(FormControlMixin, forms.ModelForm):
 
 
 class UpdateProfileForm(FormControlMixin, forms.ModelForm):
-    avatar = forms.ImageField(
-        widget=forms.FileInput(attrs={"class": "form-control-file"})
-    )
+
     bio = forms.CharField(widget=forms.Textarea(attrs={"rows": 5}))
 
     class Meta:
         model = Profile
-        fields = ["avatar", "bio"]
+        fields = ["bio"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

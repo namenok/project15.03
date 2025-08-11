@@ -1,8 +1,8 @@
+
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
-from django.utils.translation import gettext as gettext
 from django.utils.translation import gettext as gettext
 from django.contrib.auth.views import LoginView, PasswordResetConfirmView
 from django.contrib import messages
@@ -75,22 +75,33 @@ class ProfileView(View):
             {
                 "user_form": user_form,
                 "profile_form": profile_form,
+
             },
         )
 
     def post(self, request):
-        user_form = UpdateUserForm(request.POST, instance=request.user)
-        profile_form = UpdateProfileForm(
-            request.POST, request.FILES, instance=request.user.profile
-        )
+        action = request.POST.get("action")
+        user_form = UpdateUserForm(instance=request.user)
+        profile_form = UpdateProfileForm(instance=request.user.profile)
 
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, gettext("Ваш профіль успішно оновлено."))
-            return redirect("users:users_profile")
-        else:
-            messages.error(request, gettext("Будь ласка, виправте помилки нижче."))
+
+        if action == "update_bio":
+            profile_form = UpdateProfileForm(
+                request.POST, instance=request.user.profile
+            )
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, gettext("особисту інформацію оновлено"))
+                return redirect("users:users_profile")
+
+        elif action == "update_email":
+            user_form = UpdateUserForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                messages.success(request, gettext("електронну пошту оновлено"))
+                return redirect("users:users_profile")
+
+        messages.error(request, gettext("будь ласка, виправ помилки нижче"))
 
         return render(
             request,
@@ -98,8 +109,10 @@ class ProfileView(View):
             {
                 "user_form": user_form,
                 "profile_form": profile_form,
+
             },
         )
+
 
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):

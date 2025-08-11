@@ -1,10 +1,6 @@
-import os
-
 import pytest
 from django.contrib.auth.models import User
 from users.forms import RegisterForm, UpdateUserForm, UpdateProfileForm
-
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 @pytest.mark.django_db
@@ -89,35 +85,13 @@ def test_update_profile_form_valid_data():
         email="test@example.com",
         password="12345",
     )
-
     profile = user.profile
-
-    image_content = (
-        b"\x47\x49\x46\x38\x39\x61\x02\x00\x01\x00\x80\x00\x00\x00\x00\x00"
-        b"\xff\xff\xff\x21\xf9\x04\x01\x00\x00\x00\x00\x2c\x00\x00\x00\x00"
-        b"\x02\x00\x01\x00\x00\x02\x02\x4c\x01\x00\x3b"
-    )
-    uploaded_file = SimpleUploadedFile(
-        "avatar.gif",
-        image_content,
-        content_type="image/gif",
-    )
 
     form_data = {
         "bio": "Updated bio",
     }
-    form_files = {
-        "avatar": uploaded_file,
-    }
-    form = UpdateProfileForm(
-        data=form_data,
-        files=form_files,
-        instance=profile,
-    )
+    form = UpdateProfileForm(data=form_data, instance=profile)
     assert form.is_valid()
+
     saved_profile = form.save()
     assert saved_profile.bio == "Updated bio"
-
-    filename = os.path.basename(saved_profile.avatar.name)
-    assert filename.startswith("avatar")
-    assert filename.endswith(".gif")

@@ -43,7 +43,7 @@
     <button type="submit">{% trans "переглянути аналітику за місяць" %}</button>
   </form>
 
-  <h2>{% trans "інфа за" %} {{ selected_date|date:"j E Y" }}</h2>
+  <h2>{% trans "інформація за" %} {{ selected_date|date:"j E Y" }}</h2>
 
   <h3>{% trans "фото" %}</h3>
   {% if gallery_items %}
@@ -56,7 +56,7 @@
       {% endfor %}
     </div>
   {% else %}
-    <p>{% trans "немає фото на цю дату" %}</p>
+    <p>{% trans "немає фотографій на цю дату" %}</p>
   {% endif %}
 
   <h3>{% trans "відео" %}</h3>

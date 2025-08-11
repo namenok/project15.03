@@ -7,8 +7,6 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "unsafe-default")
 
 DEBUG = os.environ.get("DEBUG") == "1"
 
-ALLOWED_HOSTS = ["*"]
-
 INSTALLED_APPS = [
     "channels",
     "modeltranslation",
@@ -115,6 +113,19 @@ MEDIA_URL = "/media/"
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/account/login"
@@ -136,3 +147,6 @@ ASGI_APPLICATION = "websiteProject.asgi.application"
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
+
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
+

@@ -89,7 +89,7 @@ class LibText(models.Model):
 
 
 class Survey(models.Model):
-    question = models.CharField(max_length=100)
+    question = models.CharField(max_length=150)
 
     def __str__(self):
         return self.question
@@ -99,7 +99,7 @@ class Answers(models.Model):
     CHOICES = (("good", _("Добре")), ("neutral", _("Середнє")), ("bad", _("Погано")))
     marker = models.CharField(max_length=10, choices=CHOICES)
     survey = models.ForeignKey(Survey, related_name="answers", on_delete=models.CASCADE)
-    choice_text = models.CharField(max_length=50)
+    choice_text = models.CharField(max_length=150)
 
     def __str__(self):
         return self.choice_text

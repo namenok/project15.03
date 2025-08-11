@@ -1,18 +1,12 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-01 12:22+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2025-08-08 17:10+0300\n"
+"PO-Revision-Date: 2025-08-08 00:00+0000\n"
+"Last-Translator: Your Name <you@example.com>\n"
+"Language-Team: English (United Kingdom) <you@example.com>\n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -281,7 +275,7 @@ msgid "переглянути аналітику за місяць"
 msgstr "get analytics for the current month"
 
 #: templates/mainapp/calendar.html:46
-msgid "інфа за"
+msgid "інформація за"
 msgstr "information for"
 
 #: templates/mainapp/calendar.html:48
@@ -289,7 +283,7 @@ msgid "фото"
 msgstr "photo"
 
 #: templates/mainapp/calendar.html:59
-msgid "немає фото на цю дату"
+msgid "немає фотографій на цю дату"
 msgstr "there are no videos for this date"
 
 #: templates/mainapp/calendar.html:62
@@ -540,7 +534,7 @@ msgstr "register"
 #: templates/registration/change_password.html:10
 #: templates/registration/password_reset_confirm.html:3
 #: templates/registration/password_reset_confirm.html:13
-#: templates/registration/profile.html:29
+#: templates/registration/profile.html:47
 msgid "оновити пароль"
 msgstr "update password"
 
@@ -559,7 +553,6 @@ msgstr "confirm password"
 
 #: templates/registration/change_password.html:60
 #: templates/registration/password_reset_confirm.html:58
-#: templates/registration/profile.html:38
 msgid "застосувати зміни"
 msgstr "save changes"
 
@@ -574,7 +567,6 @@ msgstr "forgot your password?"
 
 #: templates/registration/password_reset.html:29
 #: templates/registration/password_reset.html:32
-#: templates/registration/profile.html:25
 msgid "електронна пошта"
 msgstr "e-mail"
 
@@ -646,9 +638,26 @@ msgstr ""
 "an email with a link to change your password has been sent, please check "
 "your inbox"
 
+#: templates/registration/profile.html:19
+msgid "Поточне Bio"
+msgstr "Bio"
+
+#: templates/registration/profile.html:20
+msgid "Біо ще не заповнено"
+msgstr "nothing found"
+
+#: templates/registration/profile.html:27
+msgid "оновити Bio"
+msgstr "update Bio"
+
 #: templates/registration/profile.html:31
-msgid "оновити фотографію"
-msgstr "update photo"
+#: templates/registration/profile.html:42
+msgid "оновити"
+msgstr "update"
+
+#: templates/registration/profile.html:38
+msgid "оновити електронну пошту"
+msgstr "update e-mail"
 
 #: templates/registration/register.html:11
 msgid "створити аккаунт"
@@ -690,25 +699,29 @@ msgstr "This email is already in use."
 msgid "Цей email вже використовується іншим користувачем."
 msgstr "This email is already being used by another user."
 
-#: users/views.py:28
+#: users/views.py:30
 #, python-format
 msgid "Вітаю %(user)s"
 msgstr "Welcome %(user)s"
 
-#: users/views.py:59
+#: users/views.py:61
 #, python-format
 msgid "Створений акаунт для %(username)s"
 msgstr "%(username)s's account is all set — go for it!"
 
-#: users/views.py:90
-msgid "Ваш профіль успішно оновлено."
-msgstr "Nice! Your password’s been changed."
+#: users/views.py:96
+msgid "особисту інформацію оновлено"
+msgstr "personal information updated"
 
-#: users/views.py:93
-msgid "Будь ласка, виправте помилки нижче."
+#: users/views.py:103
+msgid "електронну пошту оновлено"
+msgstr "e-mail updated"
+
+#: users/views.py:106
+msgid "будь ласка, виправ помилки нижче"
 msgstr "Please correct the errors below."
 
-#: users/views.py:110
+#: users/views.py:125
 msgid ""
 "Ми щойно надіслали інструкції для зміни пароля (якщо акаунт з цією адресою "
 "існує). Лист має прийти незабаром. Якщо його не буде — перевір спам і чи "
@@ -718,6 +731,6 @@ msgstr ""
 "that email). The message should arrive soon. If not — check your spam and "
 "make sure the email is correct."
 
-#: users/views.py:119
+#: users/views.py:134
 msgid "Ваш пароль успішно змінено!"
 msgstr "Nice! Your password’s been changed."

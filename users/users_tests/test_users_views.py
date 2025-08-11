@@ -1,26 +1,20 @@
 import pytest
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 @pytest.mark.django_db
 def test_login_view(client):
-    user = User.objects.create_user(username="testuser", password="pass1234")
-    assert user.username == "testuser"
+    User.objects.create_user(username="testuser", password="pass1234")
     url = reverse("users:login")
-    response = client.post(
-        url,
-        {"username": "testuser", "password": "pass1234"},
-    )
+    response = client.post(url, {"username": "testuser", "password": "pass1234"})
     assert response.status_code == 302
     assert response.url
 
 
 @pytest.mark.django_db
 def test_logout_view(client):
-    user = User.objects.create_user(username="testuser2", password="pass1234")
-    assert user.username == "testuser2"
+    User.objects.create_user(username="testuser2", password="pass1234")
     client.login(username="testuser2", password="pass1234")
     url = reverse("users:logout")
     response = client.get(url)
@@ -72,7 +66,8 @@ def test_register_view_post_invalid(client):
 @pytest.mark.django_db
 def test_profile_view_get(client):
     user = User.objects.create_user(username="profileuser", password="pass1234")
-    assert user.username == "profileuser"
+    user.profile.bio = "Initial bio"
+    user.profile.save()
     client.login(username="profileuser", password="pass1234")
     url = reverse("users:users_profile")
     response = client.get(url)
@@ -82,49 +77,62 @@ def test_profile_view_get(client):
 
 
 @pytest.mark.django_db
-def test_profile_view_post_valid(client, tmp_path, settings):
+def test_profile_view_post_update_bio(client):
     user = User.objects.create_user(username="profileuser2", password="pass1234")
+    user.profile.bio = "Initial bio"
+    user.profile.save()
     client.login(username="profileuser2", password="pass1234")
-
-    avatar_path = tmp_path / "avatar.png"
-    avatar_path.write_bytes(b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR")
 
     url = reverse("users:users_profile")
     data = {
-        "username": "profileuser2",
-        "email": "profileuser2@example.com",
+        "action": "update_bio",
         "bio": "Updated bio",
     }
-    files = {
-        "avatar": SimpleUploadedFile(
-            str(avatar_path), avatar_path.read_bytes(), content_type="image/png"
-        )
-    }
-    response = client.post(url, data=data, files=files)
+    response = client.post(url, data=data)
     assert response.status_code == 302
     user.refresh_from_db()
     assert user.profile.bio == "Updated bio"
 
 
 @pytest.mark.django_db
-def test_profile_view_post_invalid(client):
-    user = User.objects.create_user(username="profileuser3", password="pass1234")
-    assert user.username == "profileuser3"
-
+def test_profile_view_post_update_email(client):
+    user = User.objects.create_user(
+        username="profileuser3", password="pass1234", email="old@example.com"
+    )
+    user.profile.bio = "Initial bio"
+    user.profile.save()
     client.login(username="profileuser3", password="pass1234")
 
     url = reverse("users:users_profile")
     data = {
+        "action": "update_email",
+        "username": "profileuser3",
+        "email": "new@example.com",
+    }
+    response = client.post(url, data=data)
+    assert response.status_code == 302
+    user.refresh_from_db()
+    assert user.email == "new@example.com"
+
+
+@pytest.mark.django_db
+def test_profile_view_post_invalid(client):
+    user = User.objects.create_user(username="profileuser4", password="pass1234")
+    user.profile.bio = "Initial bio"
+    user.profile.save()
+    client.login(username="profileuser4", password="pass1234")
+
+    url = reverse("users:users_profile")
+    data = {
+        "action": "update_email",
         "username": "",
         "email": "notanemail",
-        "bio": "",
     }
     response = client.post(url, data=data)
     assert response.status_code == 200
     assert "user_form" in response.context
     assert "profile_form" in response.context
     assert response.context["user_form"].errors
-    assert response.context["profile_form"].errors
 
 
 @pytest.mark.django_db
@@ -137,8 +145,7 @@ def test_password_reset_view_get(client):
 
 @pytest.mark.django_db
 def test_password_change_view_get(client):
-    user = User.objects.create_user(username="changepassuser", password="pass1234")
-    assert user.username == "changepassuser"
+    User.objects.create_user(username="changepassuser", password="pass1234")
     client.login(username="changepassuser", password="pass1234")
     url = reverse("users:password_change")
     response = client.get(url)

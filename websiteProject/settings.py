@@ -150,3 +150,11 @@ X_FRAME_OPTIONS = "DENY"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,[::1]").split(",")
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:8080",
+    "http://localhost:8080",
+    "http://10.0.2.15:8000",
+]
+
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')

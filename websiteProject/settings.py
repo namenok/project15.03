@@ -103,9 +103,12 @@ USE_TZ = True
 USE_I18N = True
 
 
+import os
+
 STATIC_URL = "/static/"
+# Шлях, який буде всередині контейнера, але примаплений на хост
+STATIC_ROOT = os.path.join("/app/staticfiles")
 STATICFILES_DIRS = [BASE_DIR / "static"]
-STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")

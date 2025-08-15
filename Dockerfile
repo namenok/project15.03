@@ -23,8 +23,9 @@ RUN apt-get update && apt-get install -y postgresql-client && rm -rf /var/lib/ap
 COPY requirements-dev.txt .
 RUN pip install --no-cache-dir -r requirements-dev.txt
 
-
-#  Final production image
+#  Final prod
 FROM base as prod
 
-CMD ["uvicorn", "websiteProject.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+RUN python manage.py collectstatic --noinput
+
+CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "--verbosity", "3", "websiteProject.asgi:application"]

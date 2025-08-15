@@ -26,6 +26,4 @@ RUN pip install --no-cache-dir -r requirements-dev.txt
 #  Final prod
 FROM base as prod
 
-RUN python manage.py collectstatic --noinput
-
 CMD ["daphne", "-b", "0.0.0.0", "-p", "8000", "--verbosity", "3", "websiteProject.asgi:application"]

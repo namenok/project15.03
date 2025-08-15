@@ -50,7 +50,7 @@ services:
              python manage.py migrate &&
              daphne -b 0.0.0.0 -p 8000 --verbosity 3 websiteProject.asgi:application"
     volumes:
-      - .:/app
+      - ./staticfiles:/app/staticfiles
     ports:
       - "8000:8000"
     depends_on:

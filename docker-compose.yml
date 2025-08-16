@@ -54,6 +54,7 @@ services:
       - ./staticfiles:/app/staticfiles
       - /home/amop/project15.03/staticfiles:/app/staticfiles
       - ./media:/app/media
+      - /home/amop/project15.03/media:/app/media
     ports:
       - "8000:8000"
     depends_on:

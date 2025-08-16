@@ -51,7 +51,7 @@ services:
              python manage.py collectstatic --noinput &&
              daphne -b 0.0.0.0 -p 8000 --verbosity 3 websiteProject.asgi:application"
     volumes:
-      - ./staticfiles:/app/staticfiles
+      - /home/amop/project15.03/staticfiles:/app/staticfiles
     ports:
       - "8000:8000"
     depends_on:

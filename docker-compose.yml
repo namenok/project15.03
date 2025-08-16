@@ -52,6 +52,7 @@ services:
              daphne -b 0.0.0.0 -p 8000 --verbosity 3 websiteProject.asgi:application"
     volumes:
       - /home/amop/project15.03/staticfiles:/app/staticfiles
+      - /home/amop/project15.03/media:/app/media
     ports:
       - "8000:8000"
     depends_on:

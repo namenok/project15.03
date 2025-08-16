@@ -53,6 +53,7 @@ services:
     volumes:
       - ./staticfiles:/app/staticfiles
       - /home/amop/project15.03/staticfiles:/app/staticfiles
+      - ./media:/app/media
     ports:
       - "8000:8000"
     depends_on:

@@ -63,6 +63,7 @@ services:
     env_file:
       - .env
     environment:
+      DJANGO_SETTINGS_MODULE: websiteProject.settings
       OLLAMA_API_BASE_URL: http://ollama:11434/api/
 
   test:

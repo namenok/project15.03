@@ -29,13 +29,7 @@
   <div class="navbar-right">
     {% if request.user.is_authenticated %}
       <span class="navbar-user">{% trans "вітаю" %}, {{ request.user|title }}</span>
-      <a href="{% url 'users:users_profile' %}" class="navbar-link">{% trans "профіль" %}</a>
-      <a href="{% url 'users:logout' %}" class="navbar-button">{% trans "вийти" %}</a>
-    {% else %}
-      <a href="{% url 'users:login' %}" class="navbar-button">{% trans "увійти" %}</a>
-      <a href="{% url 'users:register' %}" class="navbar-button">{% trans "зареєструватись" %}</a>
-    {% endif %}
-    <button id="theme-toggle" class="navbar-button theme-toggle">🌙</button>
+      <button id="theme-toggle" class="navbar-button theme-toggle">🌙</button>
         <form action="{% url 'set_language' %}" method="post">
             {% csrf_token %}
             <select name="language" onchange="this.form.submit()">
@@ -43,6 +37,12 @@
                 <option value="en-gb" {% if LANGUAGE_CODE == "en-gb" %}selected{% endif %}>🇬🇧</option>
             </select>
         </form>
-  </div>
+      <a href="{% url 'users:users_profile' %}" class="navbar-link">{% trans "профіль" %}</a>
+      <a href="{% url 'users:logout' %}" class="navbar-button">{% trans "вийти" %}</a>
+    {% else %}
+      <a href="{% url 'users:login' %}" class="navbar-button">{% trans "увійти" %}</a>
+      <a href="{% url 'users:register' %}" class="navbar-button">{% trans "зареєструватись" %}</a>
+    {% endif %}
+   </div>
 
 </nav>

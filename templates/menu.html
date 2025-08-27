@@ -27,22 +27,35 @@
   </div>
 
   <div class="navbar-right">
-    {% if request.user.is_authenticated %}
-      <span class="navbar-user">{% trans "вітаю" %}, {{ request.user|title }}</span>
-      <button id="theme-toggle" class="navbar-button theme-toggle">🌙</button>
-        <form action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <select name="language" onchange="this.form.submit()">
-                <option value="uk" {% if LANGUAGE_CODE == "uk" %}selected{% endif %}>🇺🇦</option>
-                <option value="en-gb" {% if LANGUAGE_CODE == "en-gb" %}selected{% endif %}>🇬🇧</option>
-            </select>
-        </form>
-      <a href="{% url 'users:users_profile' %}" class="navbar-link">{% trans "профіль" %}</a>
-      <a href="{% url 'users:logout' %}" class="navbar-button">{% trans "вийти" %}</a>
-    {% else %}
-      <a href="{% url 'users:login' %}" class="navbar-button">{% trans "увійти" %}</a>
-      <a href="{% url 'users:register' %}" class="navbar-button">{% trans "зареєструватись" %}</a>
-    {% endif %}
-   </div>
+  {% if request.user.is_authenticated %}
+    <span class="navbar-user">{% trans "вітаю" %}, {{ request.user|title }}</span>
+    
+    <button id="theme-toggle" 
+            style="background:none;border:none;padding:0;margin:0 5px;cursor:pointer;font:inherit;color:inherit;">
+      🌙
+    </button>
+    
+    <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+      {% csrf_token %}
+      <select name="language" onchange="this.form.submit()" 
+              style="background:none;border:none;padding:0;margin:0 5px;font:inherit;color:inherit;appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer;">
+        <option value="uk" {% if LANGUAGE_CODE == "uk" %}selected{% endif %}>🇺🇦</option>
+        <option value="en-gb" {% if LANGUAGE_CODE == "en-gb" %}selected{% endif %}>🇬🇧</option>
+      </select>
+    </form>
+    
+    <a href="{% url 'users:users_profile' %}" 
+       style="margin:0 5px;color:inherit;text-decoration:none;">{% trans "профіль" %}</a>
+       
+    <a href="{% url 'users:logout' %}" 
+       style="margin:0 5px;color:inherit;text-decoration:none;">{% trans "вийти" %}</a>
+  {% else %}
+    <a href="{% url 'users:login' %}" 
+       style="margin:0 5px;color:inherit;text-decoration:none;">{% trans "увійти" %}</a>
+    <a href="{% url 'users:register' %}" 
+       style="margin:0 5px;color:inherit;text-decoration:none;">{% trans "зареєструватись" %}</a>
+  {% endif %}
+</div>
+
 
 </nav>

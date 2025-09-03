@@ -125,3 +125,29 @@ class UserAnswer(models.Model):
             "question": self.survey.question,
             "date": self.date,
         }
+
+
+class Track(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField()
+    spotify_track_id = models.CharField(max_length=50, blank=True, null=True)
+
+    class Meta:
+        unique_together = ('user', 'date')
+
+    def __str__(self):
+        return f"{self.user} - {self.date} - {self.spotify_track_id}"
+
+
+class SpotifyToken(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="spotify_token")
+    access_token = models.CharField()
+    refresh_token = models.CharField()
+    expires_in = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_expired(self):
+        """Check if token is expired based on created_at + expires_in"""
+        from datetime import timedelta, datetime
+        expiry = self.created_at + timedelta(seconds=self.expires_in)
+        return datetime.utcnow().replace(tzinfo=expiry.tzinfo) >= expiry

@@ -20,7 +20,7 @@
           <a class="navbar-link" href="{% url 'gallery:gallery' %}">{% trans "галерея" %}</a>
         </li>
         <li class="navbar-item {% if request.resolver_match.url_name == 'daily_post' %}active{% endif %}">
-          <a class="navbar-link" href="{% url 'mainapp:daily_post' %}">{% trans "запис" %}</a>
+          <a class="navbar-link" href="{% url 'mainapp:post_history' %}">{% trans "щоденник" %}</a>
         </li>
       {% endif %}
     </ul>

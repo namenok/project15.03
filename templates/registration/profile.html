@@ -3,34 +3,13 @@
 {% block content %}
 <div class="container my-4">
 
-
-    {% if user_form.errors or profile_form.errors %}
+    {% if user_form.errors %}
     <div class="alert alert-danger alert-dismissible" role="alert">
         {% for key, value in user_form.errors.items %}
         <strong>{{ value }}</strong><br>
         {% endfor %}
-        {% for key, value in profile_form.errors.items %}
-        <strong>{{ value }}</strong><br>
-        {% endfor %}
     </div>
     {% endif %}
-
-    <div class="card p-3 mb-4">
-        <h5 class="card-title mb-3">{% trans "Поточне Bio" %}</h5>
-        <p>{{ profile_form.instance.bio|default:_("Біо ще не заповнено") }}</p>
-    </div>
-
-
-    <form method="post" class="card p-3 mb-4">
-        {% csrf_token %}
-        <input type="hidden" name="action" value="update_bio">
-        <h5 class="card-title mb-3">{% trans "оновити Bio" %}</h5>
-        <div class="form-group mb-3">
-            {{ profile_form.bio }}
-        </div>
-        <button type="submit" class="btn btn-dark">{% trans "оновити" %}</button>
-    </form>
-
 
     <form method="post" class="card p-3 mb-4">
         {% csrf_token %}
@@ -42,12 +21,10 @@
         <button type="submit" class="btn btn-dark">{% trans "оновити" %}</button>
     </form>
 
-
     <hr><hr>
     <div class="text-center mt-4">
         <a href="{% url 'users:password_change' %}" class="btn btn-primary">{% trans "оновити пароль" %}</a>
     </div>
-
 
 </div>
 {% endblock content %}

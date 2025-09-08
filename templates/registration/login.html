@@ -2,6 +2,16 @@
 {% load i18n %}
 
 {% block content %}
+<style>
+form.card input[type="text"],
+form.card input[type="password"],
+form.card input[type="email"] {
+    width: 100%;
+    max-width: 300px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+</style>
   <div class="center">
 	  <form method="post" class="card" novalidate>
 	  	{% csrf_token %}

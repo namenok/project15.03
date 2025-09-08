@@ -31,73 +31,95 @@
 
  
   <div class="spotify-section">
-    <h3>{% trans "🎵 Твій аудіотрек на сьогодні" %}</h3>
+  <h3>{% trans "🎵 Твій аудіотрек на сьогодні" %}</h3>
 
-    {% if saved_track %}
+  <!-- If user already saved a track today -->
+  {% if saved_track %}
     {% if user_token and premium_user %}
-        <!-- Premium user: Web Playback SDK for full track -->
-        <div id="player"></div>
-        <button class="play-saved-track" data-track-uri="spotify:track:{{ saved_track.spotify_track_id }}">
-          🎧 {% trans "Програти" %} (Full track)
-        </button>
-    {% else %}
-        <!-- Free account or no token: 30-second preview -->
-        <iframe src="https://open.spotify.com/embed/track/{{ saved_track.spotify_track_id }}"
-                width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
-        </iframe>
-        <small>{% trans "Preview (Free account)" %}</small>
-    {% endif %}
-{% else %}
-<form method="get" action="{% url 'mainapp:spotify_search' %}">
-    <input type="text" name="q" value="{{ query }}" placeholder="🔍 Введи назву треку..." required>
-    <button type="submit">Пошук</button>
-</form>
-
-{% if results %}
-<ul class="spotify-results">
-    {% for track in results %}
-        <li>
-            <strong>{{ track.name }}</strong> by {{ track.artists.0 }}
-
-            {% if user_token and premium_user %}
-                <button class="play-track" data-track-uri="spotify:track:{{ track.id }}">
-                  🎧 {% trans "Програти" %} (Full track)
-                </button>
-            {% else %}
-                <iframe src="https://open.spotify.com/embed/track/{{ track.id }}"
-                        width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
-                </iframe>
-                <small>{% trans "Preview (Free account)" %}</small>
-            {% endif %}
-
-            <form method="post" style="display:inline;">
-                {% csrf_token %}
-                <input type="hidden" name="track_id" value="{{ track.id }}">
-                <button type="submit">{% trans "Зберегти в щоденник" %}</button>
-            </form>
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-
+      <!-- Premium user: Web Playback SDK for full track -->
+      <div class="premium-track">
         
-      {% if query %}
-        <p>{% trans "Нічого не знайдено для" %} "{{ query }}"</p>
-      {% endif %}
-    {% endif %}
-{% endif %}
-    {% if not user_token %}
-      <a href="{% url 'mainapp:spotify_login' %}" class="spotify-login-button">
-        Connect Spotify
-      </a>
-    {% endif %}
+        <div class="track-info">
+          <strong>{{ saved_track.name }}</strong><br>
+          <small>{{ saved_track.artists|join:", " }}</small>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar" style="width:0%; height:5px; background:#1DB954;"></div>
+        </div>
+        <button class="play-saved-track" data-track-uri="spotify:track:{{ saved_track.spotify_track_id }}">
+          🎧 Play Full Track
+        </button>
+        <a href="spotify:track:{{ saved_track.spotify_track_id }}" class="open-in-app" style="display:none;">
 
-  </div>
+      🎧 Open in Spotify App
+    </a>
+      </div>
+    {% else %}
+      <!-- Free account or no token: 30-second preview -->
+      <iframe src="https://open.spotify.com/embed/track/{{ saved_track.spotify_track_id }}"
+              width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
+      </iframe>
+      <small>{% trans "Preview only" %}</small>
+    {% endif %}
+  {% else %}
+    <!-- Search form -->
+    <form method="get" action="{% url 'mainapp:spotify_search' %}">
+      <input type="text" name="q" value="{{ query }}" placeholder="🔍 Введи назву треку..." required>
+      <button type="submit">Пошук</button>
+    </form>
+  {% endif %}
 
+  <!-- Search results -->
+  {% if results %}
+    <ul class="spotify-results">
+      {% for track in results %}
+        <li>
+          <strong>{{ track.name }}</strong> by {{ track.artists.0 }}
+
+          {% if user_token and premium_user %}
+            <div class="premium-track">
+              <div class="track-info">
+                <strong>{{ track.name }}</strong><br>
+                <small>{{ track.artists|join:", " }}</small>
+              </div>
+              <button class="play-saved-track" data-track-uri="spotify:track:{{ track.id }}">
+                🎧 Play Full Track
+              </button>
+             <a href="spotify:track:{{ track.id }}" class="open-in-app" style="display:none;">
+                🎧 Open in Spotify App
+             </a>
+            </div>
+          {% else %}
+            <iframe src="https://open.spotify.com/embed/track/{{ track.id }}"
+                    width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
+            </iframe>
+            <small>{% trans "Preview only" %}</small>
+          {% endif %}
+
+          <!-- Save track button -->
+          <form method="post" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="track_id" value="{{ track.id }}">
+            <button type="submit">{% trans "Зберегти в щоденник" %}</button>
+          </form>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    {% if query %}
+      <p>{% trans "Нічого не знайдено для" %} "{{ query }}"</p>
+    {% endif %}
+  {% endif %}
+
+  <!-- Connect Spotify button if no token -->
+  {% if not user_token %}
+    <a href="{% url 'mainapp:spotify_login' %}" class="spotify-login-button">
+      Connect Spotify
+    </a>
+  {% endif %}
 </div>
 
-<!-- Spotify Web Playback SDK -->
-
+<!-- Spotify Web Playback SDK for premium users -->
 {% if user_token and premium_user %}
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
@@ -114,14 +136,29 @@
           window.spotifyDeviceId = device_id;
       });
 
+      player.addListener('player_state_changed', state => {
+          const progressElements = document.querySelectorAll('.progress-bar');
+          if(state && state.position && state.duration){
+              const progress = state.position / state.duration * 100;
+              progressElements.forEach(el => el.style.width = progress + '%');
+          }
+      });
+
       player.addListener('not_ready', ({ device_id }) => {
           console.log('Device ID has gone offline', device_id);
       });
 
       player.connect();
+      if (/Mobi|Android/i.test(navigator.userAgent)) {
+  document.querySelectorAll(".play-saved-track").forEach(btn => btn.style.display = "none");
+  document.querySelectorAll(".open-in-app").forEach(link => link.style.display = "inline-block");
+} else {
+  document.querySelectorAll(".play-saved-track").forEach(btn => btn.style.display = "inline-block");
+  document.querySelectorAll(".open-in-app").forEach(link => link.style.display = "none");
+}
 
-      // Play track when user clicks SDK button
-      document.querySelectorAll('.play-track, .play-saved-track').forEach(button => {
+      // Play track on button click
+      document.querySelectorAll('.play-saved-track').forEach(button => {
           button.addEventListener('click', e => {
               const trackUri = e.target.dataset.trackUri;
               fetch(`https://api.spotify.com/v1/me/player/play?device_id=${window.spotifyDeviceId}`, {

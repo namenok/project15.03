@@ -2,17 +2,90 @@
 {% load i18n %}
 
 {% block content %}
-  <h2 class="mb-4 page-header">{% trans "історія твоїх постів" %}</h2>
-  <a href="{% url 'mainapp:daily_post' %}">{% trans "редагувати/створити" %}</a>
-  <div class="post-history">
-    {% for post in posts %}
-      <div class="post-card">
-        <h5 class="post-title mb-2">{{ post.title }}</h5>
-        <p class="post-content mb-2">{{ post.content }}</p>
-        <p class="post-date small">{{ post.date }}</p>
-      </div>
-    {% empty %}
-      <p class="text-muted">{% trans "постів немає" %}</p>
-    {% endfor %}
-  </div>
+<h2 class="mb-4 page-header">{% trans "історія твоїх постів" %}</h2>
+<a href="{% url 'mainapp:daily_post' %}">{% trans "редагувати/створити" %}</a>
+
+<div class="post-history">
+  {% for item in posts_with_track %}
+    <div class="post-card">
+      <h5 class="post-title mb-2">{{ item.post.title }}</h5>
+      <p class="post-content mb-2">{{ item.post.content }}</p>
+      <p class="post-date small">{{ item.post.date }}</p>
+
+      {% if item.track %}
+        {% if user_token and premium_user %}
+          <div class="premium-track">
+            <div class="track-info">
+              <strong>{{ item.track.name }}</strong><br>
+              <small>{{ item.track.artists|join:", " }}</small>
+            </div>
+            <div class="progress-container">
+              <div class="progress-bar" style="width:0%; height:5px; background:#1DB954;"></div>
+            </div>
+            <button class="play-saved-track" data-track-uri="spotify:track:{{ item.track.spotify_track_id }}">
+              🎧 Play Full Track
+            </button>
+          </div>
+        {% else %}
+          <iframe src="https://open.spotify.com/embed/track/{{ item.track.spotify_track_id }}"
+                  width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
+          </iframe>
+          <small>{% trans "Preview only" %}</small>
+        {% endif %}
+      {% endif %}
+    </div>
+  {% empty %}
+    <p class="text-muted">{% trans "постів немає" %}</p>
+  {% endfor %}
+</div>
+
+<!-- Spotify Web Playback SDK for premium users -->
+{% if user_token and premium_user %}
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script>
+  window.onSpotifyWebPlaybackSDKReady = () => {
+      const token = "{{ user_token }}";
+      const player = new Spotify.Player({
+          name: 'My Web Player',
+          getOAuthToken: cb => { cb(token); },
+          volume: 0.5
+      });
+
+      player.addListener('ready', ({ device_id }) => {
+          console.log('Ready with Device ID', device_id);
+          window.spotifyDeviceId = device_id;
+      });
+
+      player.addListener('player_state_changed', state => {
+          const progressElements = document.querySelectorAll('.progress-bar');
+          if(state && state.position && state.duration){
+              const progress = state.position / state.duration * 100;
+              progressElements.forEach(el => el.style.width = progress + '%');
+          }
+      });
+
+      player.addListener('not_ready', ({ device_id }) => {
+          console.log('Device ID has gone offline', device_id);
+      });
+
+      player.connect();
+
+      // Play track on button click
+      document.querySelectorAll('.play-saved-track').forEach(button => {
+          button.addEventListener('click', e => {
+              const trackUri = e.target.dataset.trackUri;
+              fetch(`https://api.spotify.com/v1/me/player/play?device_id=${window.spotifyDeviceId}`, {
+                  method: 'PUT',
+                  body: JSON.stringify({ uris: [trackUri] }),
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${token}`
+                  },
+              });
+          });
+      });
+  };
+  </script>
+{% endif %}
 {% endblock %}
+

@@ -354,9 +354,10 @@ def daily_post_view(request):
     else:
         form = PersonalPostForm(instance=post)
 
-    user_token = get_user_spotify_token(request.user)
-    premium_user = is_premium_user(user_token) if user_token else False
-
+    user_token, premium_user = get_user_spotify_token(request.user)
+    print("USER:", request.user)
+    print("USER TOKEN:", user_token)
+    print("PREMIUM USER:", premium_user)
 
     return render(
         request,
@@ -373,7 +374,21 @@ def daily_post_view(request):
 @login_required
 def post_history_view(request):
     posts = get_personal_posts_by_user(request.user)
-    return render(request, "mainapp/personal_post_history.html", {"posts": posts})
+
+    user_token, premium_user = get_user_spotify_token(request.user)
+
+    posts_with_track = []
+    for post in posts:
+        track = Track.objects.filter(user=request.user, date=post.date).first()
+        posts_with_track.append({
+            "post": post,
+            "track": track
+        })
+
+    return render(request, "mainapp/personal_post_history.html", {
+        "posts_with_track": posts_with_track,
+        "user_token": user_token,
+        "premium_user": premium_user})
 
 
 @login_required
@@ -396,7 +411,6 @@ async def query_ollama(ollama_url, payload):
 @login_required
 def spotify_search(request):
     today = timezone.localdate()
-    
     post = get_today_personal_post(request.user)
     
     if request.method == "POST" and 'text' in request.POST: 
@@ -426,8 +440,7 @@ def spotify_search(request):
         )
         return redirect('mainapp:spotify_search')
 
-    user_token = get_user_spotify_token(request.user)
-    premium_user = is_premium_user(user_token) if user_token else False
+    user_token, premium_user = get_user_spotify_token(request.user)
 
     return render(request, 'mainapp/personal_post.html', {
         'form': form,
@@ -449,16 +462,23 @@ def spotify_callback(request):
     if not token_data:
         return redirect("mainapp:post_history")
 
-    access_token = token_data.get("access_token")
-    refresh_token = token_data.get("refresh_token")
-    expires_in = token_data.get("expires_in")
+    user_id = request.session.pop('spotify_user_id', None)
+    if not user_id:
+        return redirect("mainapp:post_history")
+
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return redirect("mainapp:post_history")
 
     SpotifyToken.objects.update_or_create(
         user=request.user,
         defaults={
-            "access_token": access_token,
-            "refresh_token": refresh_token,
-            "expires_in": expires_in,
+            "access_token": token_data["access_token"],
+            "refresh_token": token_data.get("refresh_token"),
+            "expires_in": token_data.get("expires_in"),
             "created_at": timezone.now(),
         }
     )
@@ -467,12 +487,14 @@ def spotify_callback(request):
 
 
 def spotify_login(request):
+    request.session['spotify_user_id'] = request.user.id
+
     scope = "streaming user-read-email user-read-private user-modify-playback-state"
     auth_url = "https://accounts.spotify.com/authorize?" + urllib.parse.urlencode({
         "response_type": "code",
         "client_id": settings.SPOTIFY_CLIENT_ID,
         "scope": scope,
         "redirect_uri": settings.SPOTIFY_REDIRECT_URI,
-        "show_dialog": "true"  # force consent screen
+        "show_dialog": "true"
     })
     return redirect(auth_url)

@@ -25,7 +25,7 @@ def get_spotify_token():
 
 
 
-def search_spotify_track(query, limit=5):
+def search_spotify_track(query, limit=10):
     token = get_spotify_token()
     if not token:
         return []
@@ -91,14 +91,8 @@ def get_user_spotify_token(user):
   
     token_obj = SpotifyToken.objects.filter(user=user).first()
     if not token_obj:
-        return None
-    
-    headers = {"Authorization": f"Bearer {token_obj.access_token}"}
-    r = requests.get("https://api.spotify.com/v1/me", headers=headers)
-    if r.status_code != 200:
-        return None
-    
-    # Check if expired
+        return None, False
+
     if token_obj.is_expired():
         data = refresh_access_token(token_obj.refresh_token)
         if data:
@@ -108,10 +102,20 @@ def get_user_spotify_token(user):
             token_obj.created_at = timezone.now()
             token_obj.save()
         else:
-            return None
+            return None, False
 
-    return token_obj.access_token
-
+    token = token_obj.access_token
+    try:
+        headers = {"Authorization": f"Bearer {token}"}
+        response = requests.get("https://api.spotify.com/v1/me", headers=headers, timeout=5)
+        if response.status_code == 200:
+            is_premium = response.json().get("product") == "premium"
+            return token, is_premium
+        else:
+            # token exists but request failed – still return token for free accounts
+            return token, False
+    except Exception:
+        return token, False
 
 def is_premium_user(user_token):
     headers = {"Authorization": f"Bearer {user_token}"}

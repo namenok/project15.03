@@ -8,7 +8,7 @@ from django.contrib.auth.views import LoginView, PasswordResetConfirmView
 from django.contrib import messages
 from django.views import View
 
-from .forms import UpdateUserForm, UpdateProfileForm
+from .forms import UpdateUserForm
 
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
@@ -25,7 +25,7 @@ class MyLoginView(LoginView):
 
     def form_valid(self, form):
         user = form.get_user()
-        messages.success(self.request, gettext("Вітаю %(user)s") % {"user": user})
+        messages.success(self.request, gettext("вітаю %(user)s") % {"user": user})
         return super().form_valid(form)
 
 
@@ -56,7 +56,7 @@ class RegisterView(View):
             form.save()
             username = form.cleaned_data.get("username")
             messages.success(
-                request, gettext("Створений акаунт для %(username)s") % {"username": username}
+                request, gettext("створений акаунт для %(username)s") % {"username": username}
             )
             return redirect("users:users_home")
         return render(request, self.template_name, {"form": form})
@@ -68,13 +68,12 @@ class ProfileView(View):
 
     def get(self, request):
         user_form = UpdateUserForm(instance=request.user)
-        profile_form = UpdateProfileForm(instance=request.user.profile)
+
         return render(
             request,
             self.template_name,
             {
                 "user_form": user_form,
-                "profile_form": profile_form,
 
             },
         )
@@ -82,19 +81,12 @@ class ProfileView(View):
     def post(self, request):
         action = request.POST.get("action")
         user_form = UpdateUserForm(instance=request.user)
-        profile_form = UpdateProfileForm(instance=request.user.profile)
 
 
-        if action == "update_bio":
-            profile_form = UpdateProfileForm(
-                request.POST, instance=request.user.profile
-            )
-            if profile_form.is_valid():
-                profile_form.save()
-                messages.success(request, gettext("особисту інформацію оновлено"))
-                return redirect("users:users_profile")
 
-        elif action == "update_email":
+
+
+        if action == "update_email":
             user_form = UpdateUserForm(request.POST, instance=request.user)
             if user_form.is_valid():
                 user_form.save()
@@ -108,7 +100,7 @@ class ProfileView(View):
             self.template_name,
             {
                 "user_form": user_form,
-                "profile_form": profile_form,
+
 
             },
         )
@@ -129,7 +121,7 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
 
 class ChangePasswordView(SuccessMessageMixin, PasswordChangeView):
     template_name = "registration/change_password.html"
-    success_message = gettext("Ваш пароль успішно змінено!")
+    success_message = gettext("ваш пароль успішно змінено!")
     success_url = reverse_lazy("users:users_home")
 
 

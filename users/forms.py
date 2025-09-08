@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.utils.translation import gettext as gettext
-from .models import Profile
+
 
 
 class FormControlMixin:
@@ -21,17 +21,17 @@ class RegisterForm(FormControlMixin, UserCreationForm):
     first_name = forms.CharField(
         max_length=100,
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": "First Name"}),
+        widget=forms.TextInput(attrs={"placeholder": "first name"}),
     )
     last_name = forms.CharField(
         max_length=100,
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": "Last Name"}),
+        widget=forms.TextInput(attrs={"placeholder": "last name"}),
     )
     username = forms.CharField(
         max_length=100,
         required=True,
-        widget=forms.TextInput(attrs={"placeholder": "Username"}),
+        widget=forms.TextInput(attrs={"placeholder": "username"}),
     )
     email = forms.EmailField(
         required=True, widget=forms.TextInput(attrs={"placeholder": "Email"})
@@ -41,7 +41,7 @@ class RegisterForm(FormControlMixin, UserCreationForm):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "Password",
+                "placeholder": "password",
                 "data-toggle": "password",
                 "id": "password",
             }
@@ -52,7 +52,7 @@ class RegisterForm(FormControlMixin, UserCreationForm):
         required=True,
         widget=forms.PasswordInput(
             attrs={
-                "placeholder": "Confirm Password",
+                "placeholder": "confirm password",
                 "data-toggle": "password",
                 "id": "password",
             }
@@ -77,7 +77,7 @@ class RegisterForm(FormControlMixin, UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data.get("email")
         if User.objects.filter(email=email).exists():
-            raise forms.ValidationError(gettext("Цей email вже використовується."))
+            raise forms.ValidationError(gettext("цей email вже використовується."))
         return email
 
 
@@ -98,19 +98,9 @@ class UpdateUserForm(FormControlMixin, forms.ModelForm):
         qs = User.objects.filter(email=email).exclude(pk=self.instance.pk)
         if qs.exists():
             raise forms.ValidationError(
-                gettext("Цей email вже використовується іншим користувачем.")
+                gettext("цей email вже використовується")
             )
         return email
 
 
-class UpdateProfileForm(FormControlMixin, forms.ModelForm):
 
-    bio = forms.CharField(widget=forms.Textarea(attrs={"rows": 5}))
-
-    class Meta:
-        model = Profile
-        fields = ["bio"]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["bio"].widget.attrs["class"] = "form-control"

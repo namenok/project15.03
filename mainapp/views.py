@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import redirect
 from django.conf import settings
 
-from .forms import PersonalPostForm, PostForm
+from .forms import PersonalPostForm
 from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse
@@ -26,18 +26,11 @@ from datetime import timedelta
 import urllib.parse
 
 import json
-from mainapp.services.category_service import get_category_by_slug, get_all_categories
-from mainapp.services.libtext_service import get_all_libtexts, get_libtexts_by_category
 from mainapp.services.personal_post_service import (
     get_today_personal_post,
     get_personal_posts_by_user,
 )
-from mainapp.services.post_service import (
-    get_post_by_title,
-    get_posts_by_category,
-    get_posts_by_user,
-    search_posts,
-)
+
 from mainapp.services.survey_service import (
     get_all_surveys,
     has_user_answered_today,
@@ -143,6 +136,8 @@ def get_monthly_analytics(user):
 def monthly_analytics_view(request):
     message = get_monthly_analytics(request.user)
     return render(request, "mainapp/monthly_analytics.html", {"message": message})
+
+
 
 
 def get_daily_data(user, selected_date):
@@ -263,73 +258,11 @@ def get_datetime_or_min(post):
     return dt
 
 
-def get_combined_posts_for_category(category):
-    user_posts = get_posts_by_category(category)
-    admin_posts = get_libtexts_by_category(category)
-    combined_posts = list(user_posts) + list(admin_posts)
-    combined_posts.sort(key=get_datetime_or_min, reverse=True)
-    return combined_posts
-
-
-@login_required
-def category_list_view(request, slug):
-    category = get_category_by_slug(slug)
-    combined_posts = get_combined_posts_for_category(category)
-    categories = get_all_categories()
-    context = {
-        "category": category,
-        "posts": combined_posts,
-        "categories": categories,
-    }
-    return render(request, "mainapp/library.html", context)
-
-
-@login_required()
-def categories_overview(request):
-    categories = get_all_categories()
-    return render(request, "mainapp/library.html", {"categories": categories})
-
-
-@login_required()
-def library_users_history(request):
-    posts = get_posts_by_user(request.user)
-    return render(request, "mainapp/lib_user_post_history.html", {"posts": posts})
-
-
-@login_required()
-def search(request):
-    query = request.GET.get("query", "")
-    post_blog_list = search_posts(query)
-    my_posts_list = get_all_libtexts().filter(content__icontains=query)
-    categories = get_all_categories()
-    context = {
-        "post_blog_list": post_blog_list,
-        "my_posts_list": my_posts_list,
-        "query": query,
-        "categories": categories,
-    }
-    return render(request, "mainapp/library.html", context=context)
-
 
 @login_required()
 def home(request):
     return render(request, "mainapp/home.html")
 
-
-@login_required()
-def create(request):
-    if request.method == "POST":
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.published_date = timezone.now()
-            post.user = request.user
-            post.save()
-            form.save_m2m()
-            return redirect("mainapp:library_history")
-    form = PostForm()
-    context = {"form": form}
-    return render(request, "mainapp/create.html", context=context)
 
 
 @login_required

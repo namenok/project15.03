@@ -4,52 +4,6 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=30, verbose_name=_("Назва"))
-    slug = models.SlugField(unique=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            base_slug = slugify(self.name)
-            slug = base_slug
-            counter = 1
-            while Category.objects.filter(slug=slug).exists():
-                slug = f"{base_slug}-{counter}"
-                counter += 1
-            self.slug = slug
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _("Категорія")
-        verbose_name_plural = _("Категорії")
-
-
-# from user to library
-class Post(models.Model):
-    title = models.CharField(max_length=30, verbose_name=_("заголовок"))
-    content = models.TextField(verbose_name=_("опис"))
-    published_date = models.DateTimeField(
-        auto_created=True, verbose_name=_("дата та час")
-    )
-    category = models.ForeignKey(
-        Category,
-        related_name="posts",
-        on_delete=models.CASCADE,
-        verbose_name=_("категорія"),
-    )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_("автор"))
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = _("запис користувача в бібліотеку")
-        verbose_name_plural = _("записи користувача в бібліотеку")
-
-
 class PersonalPost(models.Model):
     title = models.CharField(max_length=30, verbose_name=_("заголовок"))
     content = models.TextField(verbose_name=_("опис"))
@@ -67,25 +21,6 @@ class PersonalPost(models.Model):
         verbose_name = _("ОсобистийПост")
         verbose_name_plural = _("Особисті Пости")
         unique_together = ("user", "date", "content")
-
-
-# admin`s post to library
-class LibText(models.Model):
-    title = models.CharField(max_length=30, verbose_name=_("заголовок"))
-    content = models.TextField(verbose_name=_("Зміст"))
-    to_category = models.ForeignKey(
-        Category,
-        on_delete=models.CASCADE,
-        related_name="libtexts",
-        verbose_name=_("категорія"),
-    )
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = _("пост з aдмінки для бібліотеки")
-        verbose_name_plural = _("постИ з адмінки для бібліотеки")
 
 
 class Survey(models.Model):

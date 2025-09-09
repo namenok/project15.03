@@ -10,9 +10,7 @@
         <li class="navbar-item {% if request.resolver_match.url_name == 'calendar_combined' %}active{% endif %}">
           <a class="navbar-link" href="{% url 'mainapp:calendar_combined' %}">{% trans "календар" %}</a>
         </li>
-        <li class="navbar-item {% if request.resolver_match.url_name == 'library_category_list' %}active{% endif %}">
-          <a class="navbar-link" href="{% url 'mainapp:library_category_list' %}">{% trans "бібліотека" %}</a>
-        </li>
+        
         <li class="navbar-item {% if request.resolver_match.url_name == 'checkme' %}active{% endif %}">
           <a class="navbar-link" href="{% url 'mainapp:checkme' %}">{% trans "чекап" %}</a>
         </li>

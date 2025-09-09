@@ -2,8 +2,11 @@
 {% load i18n %}
 {% block content %}
   <p class="completed-message">
-    {% trans "дякуємо за щирі відповіді 💙" %}
+    {% trans "дякуємо за щирі відповіді 💙 ти можеш спостерігати за своїм прогресом в календарі !" %}
   </p>
+<li class="navbar-item {% if request.resolver_match.url_name == 'calendar_combined' %}active{% endif %}">
+          <a class="navbar-link" href="{% url 'mainapp:calendar_combined' %}">{% trans "календар" %}</a>
+        </li>
   <p class="history-link">
     <a href="{% url 'mainapp:survey_history' %}">{% trans "переглянути історію опитувань" %}</a>
   </p>

@@ -59,7 +59,7 @@
       <iframe src="https://open.spotify.com/embed/track/{{ saved_track.spotify_track_id }}"
               width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
       </iframe>
-      <small>{% trans "Preview only" %}</small>
+      
     {% endif %}
   {% else %}
     <!-- Search form -->
@@ -93,7 +93,7 @@
             <iframe src="https://open.spotify.com/embed/track/{{ track.id }}"
                     width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
             </iframe>
-            <small>{% trans "Preview only" %}</small>
+            
           {% endif %}
 
           <!-- Save track button -->

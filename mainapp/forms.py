@@ -1,15 +1,5 @@
 from django import forms
-from .models import PersonalPost, Post
-
-
-# from user to library
-class PostForm(forms.ModelForm):
-    class Meta:
-        model = Post
-        exclude = (
-            "published_date",
-            "user",
-        )
+from .models import PersonalPost
 
 
 class PersonalPostForm(forms.ModelForm):

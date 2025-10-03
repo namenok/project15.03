@@ -9,7 +9,7 @@
 
   <a href="?year={% if month == 12 %}{{ year|add:1 }}{% else %}{{ year }}{% endif %}&month={% if month == 12 %}1{% else %}{{ month|add:1 }}{% endif %}">{% trans "наступний" %} &#8594;</a>
 </div>
-
+<div class="calendar-wrapper">
   <table class="calendar-table">
     <tr>
       {% for day in weekdays %}
@@ -38,14 +38,16 @@
       </tr>
     {% endfor %}
   </table>
-
+</div>
+<hr>
   <form method="get" action="{% url 'mainapp:monthly_analytics' %}" class="analytics-form">
     <button type="submit">{% trans "переглянути аналітику за місяць" %}</button>
   </form>
+<hr>
 
-  <h2>{% trans "інформація за" %} {{ selected_date|date:"j E Y" }}</h2>
-
-  <h3>{% trans "фото" %}</h3>
+  <h1>{% trans "інформація за" %} {{ selected_date|date:"j E Y" }}</h1>
+<hr>
+  <h2>{% trans "фото" %}</h2>
   {% if gallery_items %}
     <div class="media-grid">
       {% for item in gallery_items %}
@@ -59,7 +61,8 @@
     <p>{% trans "немає фотографій на цю дату" %}</p>
   {% endif %}
 
-  <h3>{% trans "відео" %}</h3>
+<hr>
+  <h2>{% trans "відео" %}</h2>
   {% if video_items %}
     <div class="media-grid">
       {% for item in video_items %}
@@ -76,7 +79,8 @@
     <p>{% trans "немає відео за цю дату" %}</p>
   {% endif %}
 
-  <h3>{% trans "щоденні записи" %}</h3>
+<hr>
+  <h2>{% trans "щоденні записи" %}</h2>
   {% if personal_post %}
     <div>
       <h4>{{ personal_post.title }}</h4>
@@ -87,7 +91,36 @@
     <p>{% trans "немає записів за цю дату" %}</p>
   {% endif %}
 
-  <h3>{% trans "твої чекапи" %}</h3>
+<hr>
+<h2>{% trans "трек цього дня" %}</h2>
+{% if track %}
+  {% if user_token and premium_user %}
+    <div class="premium-track mb-3">
+      <div class="track-info">
+        <strong>{{ track.name }}</strong><br>
+        <small>{{ track.artists|join:", " }}</small>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar" style="width:0%; height:5px; background:#1DB954;"></div>
+      </div>
+      <button class="btn btn-outline-primary play-saved-track" 
+              data-track-uri="spotify:track:{{ track.spotify_track_id }}">
+         {% trans "слухати повністю" %}
+      </button>
+    </div>
+
+  {% else %}
+    <iframe src="https://open.spotify.com/embed/track/{{ track.spotify_track_id }}"
+            width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
+    </iframe>
+  {% endif %}
+{% else %}
+  <p>{% trans "трек на цю дату відсутній" %}</p>
+{% endif %}
+
+<hr>
+
+  <h2>{% trans "твої чекапи" %}</h2>
   {% if survey_answers %}
     <ul>
       {% for ans in survey_answers %}
@@ -98,4 +131,105 @@
     <p>{% trans "немає інформації за цю дату" %}</p>
   {% endif %}
 </div>
+
+
+{% if user_token and premium_user %}
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script>
+  window.onSpotifyWebPlaybackSDKReady = () => {
+      const token = "{{ user_token }}";
+      const player = new Spotify.Player({
+          name: 'My Web Player',
+          getOAuthToken: cb => { cb(token); },
+          volume: 0.5
+      });
+
+      player.addListener('ready', ({ device_id }) => {
+          console.log('Ready with Device ID', device_id);
+          window.spotifyDeviceId = device_id;
+      });
+
+      player.addListener('player_state_changed', state => {
+          const progressElements = document.querySelectorAll('.progress-bar');
+          if(state && state.position && state.duration){
+              const progress = state.position / state.duration * 100;
+              progressElements.forEach(el => el.style.width = progress + '%');
+          }
+      });
+
+      player.addListener('not_ready', ({ device_id }) => {
+          console.log('Device ID has gone offline', device_id);
+      });
+
+      player.connect();
+     
+      document.querySelectorAll('.play-saved-track').forEach(button => {
+          button.addEventListener('click', e => {
+              const trackUri = e.target.dataset.trackUri;
+              fetch(`https://api.spotify.com/v1/me/player/play?device_id=${window.spotifyDeviceId}`, {
+                  method: 'PUT',
+                  body: JSON.stringify({ uris: [trackUri] }),
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${token}`
+                  },
+              });
+          });
+      });
+  };
+  </script>
+{% endif %}
+
+
 {% endblock %}
+
+
+.calendar-wrapper {
+  width: 100%;
+  overflow-x: auto; 
+  -webkit-overflow-scrolling: touch; 
+}
+
+.calendar-table {
+  width: 100%;          
+  table-layout: fixed;   
+  border-collapse: collapse;
+}
+
+.calendar-table th,
+.calendar-table td {
+  padding: 6px 8px;
+  text-align: center;
+  word-wrap: break-word;  
+}
+
+
+@media (max-width: 768px) {
+  .calendar-table th,
+  .calendar-table td {
+    padding: 4px 6px;
+    font-size: 0.85rem;
+  }
+}
+
+.calendar-nav {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap; /* allows links to go to next line on small screens */
+  margin-bottom: 1rem;
+}
+
+.calendar-nav a {
+  padding: 0.3rem 0.6rem;
+  text-decoration: none;
+  background-color: #eee;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+body, .calendar-page {
+  margin: 0;
+  padding: 0 1rem;
+  box-sizing: border-box;
+}
+

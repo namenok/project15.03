@@ -16,92 +16,135 @@
 
         
         <div class="form-group" style="margin-bottom:20px;">
-            <label for="id_images" style="display:block; margin-bottom:5px;">
-                {% trans "до 5 фотографій на день" %}
-            </label>
-            {{ form.images }}
-            <div id="image-previews" class="file-previews" 
-                 style="background:transparent; border:1px solid #555; padding:8px; margin-top:8px; border-radius:5px;">
-            </div>
-        </div>
+    <label for="id_images" style="display:block; margin-bottom:5px;">
+        {% trans "до 5 фотографій на день" %}
+    </label>
+    {{ form.images }}
 
-        
-        <div class="form-group" style="margin-bottom:20px;">
-            <label for="id_videos" style="display:block; margin-bottom:5px;">
-                {% trans "до 2 відеороликів на день" %}
-            </label>
-            {{ form.videos }}
-            <div id="video-previews" class="file-previews" 
-                 style="background:transparent; border:1px solid #555; padding:8px; margin-top:8px; border-radius:5px;">
-            </div>
-        </div>
+    {% if form.errors.images %}
+        <ul class="errorlist">
+            {% for error in form.errors.images %}
+                <li style="color:red;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-      
+
+    <div id="image-dropzone"
+         style="border:2px dashed #888; padding:20px; text-align:center; border-radius:10px; margin-top:10px;">
+        {% trans "перетягніть фото сюди або натисніть, щоб вибрати" %}
+    </div>
+    <div id="image-previews" class="file-previews"
+         style="background:transparent; border:1px solid #555; padding:8px; margin-top:8px; border-radius:5px;">
+    </div>
+</div>
+
+<div class="form-group" style="margin-bottom:20px;">
+    <label for="id_videos" style="display:block; margin-bottom:5px;">
+        {% trans "до 2 відеороликів на день" %}
+    </label>
+    {{ form.videos }}
+
+    {% if form.errors.videos %}
+        <ul class="errorlist">
+            {% for error in form.errors.videos %}
+                <li style="color:red;">{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <div id="video-dropzone"
+         style="border:2px dashed #888; padding:20px; text-align:center; border-radius:10px; margin-top:10px;">
+        {% trans "перетягніть відео сюди або натисніть, щоб вибрати" %}
+    </div>
+    <div id="video-previews" class="file-previews"
+         style="background:transparent; border:1px solid #555; padding:8px; margin-top:8px; border-radius:5px;">
+    </div>
+</div>
         <button type="submit" 
                 style="background:#28a745; color:#fff; border:none; padding:12px 25px; border-radius:5px; cursor:pointer; font-weight:bold; width:100%;">
             {% trans "завантажити" %}
         </button>
     </form>
-</div>
+    </div>
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const imageInput = document.getElementById('id_images');
-            const imagePreviewsContainer = document.getElementById('image-previews');
-            const videoInput = document.getElementById('id_videos');
-            const videoPreviewsContainer = document.getElementById('video-previews');
+document.addEventListener('DOMContentLoaded', function() {
+    const imageInput = document.getElementById('id_images');
+    const imageDropzone = document.getElementById('image-dropzone');
+    const imagePreviewsContainer = document.getElementById('image-previews');
 
-            // Зберігаємо вже вибрані файли (якщо користувач додав, потім додав ще)
-            let selectedImages = new DataTransfer();
-            let selectedVideos = new DataTransfer();
+    const videoInput = document.getElementById('id_videos');
+    const videoDropzone = document.getElementById('video-dropzone');
+    const videoPreviewsContainer = document.getElementById('video-previews');
 
-            function displayFilePreviews(inputElement, previewsContainer, fileType) {
-                // Очищаємо попередні попередні перегляди, щоб не дублювати їх
-                previewsContainer.innerHTML = '';
+    let selectedImages = new DataTransfer();
+    let selectedVideos = new DataTransfer();
 
-                let currentFiles = inputElement.files;
-                let dataTransfer = (fileType === 'image') ? selectedImages : selectedVideos;
+    function displayFilePreviews(inputElement, previewsContainer, fileType) {
+        previewsContainer.innerHTML = '';
+        let dataTransfer = (fileType === 'image') ? selectedImages : selectedVideos;
+        if (dataTransfer.files.length > 0) {
+            const fileList = document.createElement('ul');
+            Array.from(dataTransfer.files).forEach(file => {
+                const listItem = document.createElement('li');
+                listItem.textContent = file.name;
+                fileList.appendChild(listItem);
+            });
+            previewsContainer.appendChild(fileList);
+        }
+    }
 
-                // Додаємо нові файли до DataTransfer об'єкту
-                for (let i = 0; i < currentFiles.length; i++) {
-                    let file = currentFiles[i];
-                    // Перевіряємо, чи файл вже не був доданий (за іменем і розміром, це не ідеально, але працює для простих випадків)
-                    let alreadyAdded = Array.from(dataTransfer.files).some(
-                        existingFile => existingFile.name === file.name && existingFile.size === file.size
-                    );
-                    if (!alreadyAdded) {
-                        dataTransfer.items.add(file);
-                    }
-                }
-
-                // Оновлюємо файли в інпуті, щоб вони відображали всі вибрані файли
-                inputElement.files = dataTransfer.files;
-
-                // Відображаємо всі файли з DataTransfer об'єкту
-                if (dataTransfer.files.length > 0) {
-                    const fileList = document.createElement('ul');
-                    Array.from(dataTransfer.files).forEach(file => {
-                        const listItem = document.createElement('li');
-                        // Показуємо ім'я файлу (це і є "адреса", яку браузер дозволяє показати)
-                        listItem.textContent = file.name;
-                        fileList.appendChild(listItem);
-                    });
-                    previewsContainer.appendChild(fileList);
-                }
+    function handleFiles(files, inputElement, fileType, previewsContainer, dataTransfer) {
+        for (let i = 0; i < files.length; i++) {
+            let file = files[i];
+            let alreadyAdded = Array.from(dataTransfer.files).some(
+                f => f.name === file.name && f.size === file.size
+            );
+            if (!alreadyAdded) {
+                dataTransfer.items.add(file);
             }
+        }
+        inputElement.files = dataTransfer.files;
+        displayFilePreviews(inputElement, previewsContainer, fileType);
+    }
 
-            // Прикріплюємо обробники подій
-            if (imageInput) {
-                imageInput.addEventListener('change', () => displayFilePreviews(imageInput, imagePreviewsContainer, 'image'));
-            }
-            if (videoInput) {
-                videoInput.addEventListener('change', () => displayFilePreviews(videoInput, videoPreviewsContainer, 'video'));
-            }
+    function setupDropzone(dropzone, inputElement, fileType, previewsContainer, dataTransfer) {
+        
+        dropzone.addEventListener('click', () => inputElement.click());
+
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = "#28a745";
         });
-    </script>
+        dropzone.addEventListener('dragleave', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = "#888";
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = "#888";
+            const files = e.dataTransfer.files;
+            handleFiles(files, inputElement, fileType, previewsContainer, dataTransfer);
+        });
+
+        inputElement.addEventListener('change', () => {
+            handleFiles(inputElement.files, inputElement, fileType, previewsContainer, dataTransfer);
+        });
+    }
+
+   
+    setupDropzone(imageDropzone, imageInput, 'image', imagePreviewsContainer, selectedImages);
+    setupDropzone(videoDropzone, videoInput, 'video', videoPreviewsContainer, selectedVideos);
+});
+</script>
+
+                       
+
     <style>
-        /* Додайте ваші стилі, якщо вони потрібні для оформлення списку файлів */
+       
         .file-previews {
             margin-top: 10px;
             border: 1px solid #ccc;
@@ -117,7 +160,7 @@
             padding: 5px 0;
             border-bottom: 1px dotted #eee;
         }
-        .file-previews li:last-child {
+        file-previews li:last-child {
             border-bottom: none;
         }
     </style>

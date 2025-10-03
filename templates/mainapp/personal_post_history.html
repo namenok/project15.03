@@ -39,7 +39,7 @@
   {% endfor %}
 </div>
 
-<!-- Spotify Web Playback SDK for premium users -->
+
 {% if user_token and premium_user %}
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
@@ -70,7 +70,7 @@
 
       player.connect();
 
-      // Play track on button click
+    
       document.querySelectorAll('.play-saved-track').forEach(button => {
           button.addEventListener('click', e => {
               const trackUri = e.target.dataset.trackUri;

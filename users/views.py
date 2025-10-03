@@ -82,10 +82,6 @@ class ProfileView(View):
         action = request.POST.get("action")
         user_form = UpdateUserForm(instance=request.user)
 
-
-
-
-
         if action == "update_email":
             user_form = UpdateUserForm(request.POST, instance=request.user)
             if user_form.is_valid():
@@ -100,8 +96,6 @@ class ProfileView(View):
             self.template_name,
             {
                 "user_form": user_form,
-
-
             },
         )
 

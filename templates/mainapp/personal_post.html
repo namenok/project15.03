@@ -6,24 +6,24 @@
 
  
   <div class="post-section">
-    <p>{% trans "Один день - один пост!" %}</p>
+    <p>{% trans "один день - один пост!" %}</p>
     <hr>
     <h2 class="post-title">
       {% if form.instance.pk %}
-        {% trans "Ти редагуєш створений сьогодні пост" %}
+        {% trans "ти редагуєш створений сьогодні пост" %}
       {% else %}
-        {% trans "Новий запис на сьогодні" %}
+        {% trans "новий запис на сьогодні" %}
       {% endif %}
     </h2>
 
     <form method="post" enctype="multipart/form-data" class="post-form">
       {% csrf_token %}
       {{ form.as_p }}
-      <button type="submit" class="submit-button">{% trans "Зберегти" %}</button>
+      <button type="submit" class="submit-button">{% trans "зберегти" %}</button>
     </form>
 
     <div class="back-link">
-      <a href="{% url 'mainapp:post_history' %}">{% trans "Історія постів" %}</a>
+      <a href="{% url 'mainapp:post_history' %}">{% trans "історія постів" %}</a>
     </div>
   </div>
 
@@ -31,12 +31,12 @@
 
  
   <div class="spotify-section">
-  <h3>{% trans "🎵 Твій аудіотрек на сьогодні" %}</h3>
+  <h3>{% trans "🎵 твій аудіотрек на сьогодні" %}</h3>
 
-  <!-- If user already saved a track today -->
+  
   {% if saved_track %}
     {% if user_token and premium_user %}
-      <!-- Premium user: Web Playback SDK for full track -->
+     
       <div class="premium-track">
         
         <div class="track-info">
@@ -55,21 +55,26 @@
     </a>
       </div>
     {% else %}
-      <!-- Free account or no token: 30-second preview -->
+     
+       <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <h6 class="mb-2">{{ saved_track.name }} — {{ saved_track.artists|join:", " }}</h6>
+            
       <iframe src="https://open.spotify.com/embed/track/{{ saved_track.spotify_track_id }}"
-              width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
+              width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
       </iframe>
-      
+        </div>
+        </div>
     {% endif %}
   {% else %}
-    <!-- Search form -->
+   
     <form method="get" action="{% url 'mainapp:spotify_search' %}">
-      <input type="text" name="q" value="{{ query }}" placeholder="🔍 Введи назву треку..." required>
-      <button type="submit">Пошук</button>
+      <input type="text" name="q" value="{{ query }}"  required>
+      <button type="submit">{% trans "пошук"%}</button>
     </form>
   {% endif %}
 
-  <!-- Search results -->
+ 
   {% if results %}
     <ul class="spotify-results">
       {% for track in results %}
@@ -91,27 +96,26 @@
             </div>
           {% else %}
             <iframe src="https://open.spotify.com/embed/track/{{ track.id }}"
-                    width="300" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
+                    width="100%" height="80" frameborder="0" allowtransparency="true" allow="encrypted-media">
             </iframe>
             
           {% endif %}
 
-          <!-- Save track button -->
           <form method="post" style="display:inline;">
             {% csrf_token %}
             <input type="hidden" name="track_id" value="{{ track.id }}">
-            <button type="submit">{% trans "Зберегти в щоденник" %}</button>
+            <button type="submit">{% trans "зберегти в щоденник" %}</button>
           </form>
         </li>
       {% endfor %}
     </ul>
   {% else %}
     {% if query %}
-      <p>{% trans "Нічого не знайдено для" %} "{{ query }}"</p>
+      <p>{% trans "нічого не знайдено для" %} "{{ query }}"</p>
     {% endif %}
   {% endif %}
 
-  <!-- Connect Spotify button if no token -->
+ 
   {% if not user_token %}
     <a href="{% url 'mainapp:spotify_login' %}" class="spotify-login-button">
       Connect Spotify
@@ -119,7 +123,7 @@
   {% endif %}
 </div>
 
-<!-- Spotify Web Playback SDK for premium users -->
+
 {% if user_token and premium_user %}
   <script src="https://sdk.scdn.co/spotify-player.js"></script>
   <script>
@@ -157,7 +161,7 @@
   document.querySelectorAll(".open-in-app").forEach(link => link.style.display = "none");
 }
 
-      // Play track on button click
+     
       document.querySelectorAll('.play-saved-track').forEach(button => {
           button.addEventListener('click', e => {
               const trackUri = e.target.dataset.trackUri;
@@ -173,5 +177,31 @@
       });
   };
   </script>
+
 {% endif %}
+
+
+
+<style>
+.spotify-section {
+  margin-top: 40px;
+}
+
+.spotify-results {
+  list-style: none;
+  padding: 0;
+}
+
+.spotify-results li {
+  margin-bottom: 20px;
+}
+
+.premium-track {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background: #fafafa;
+}
+</style>
 {% endblock %}

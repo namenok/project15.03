@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-08 17:10+0300\n"
+"POT-Creation-Date: 2025-10-03 14:43+0300\n"
 "PO-Revision-Date: 2025-08-08 00:00+0000\n"
 "Last-Translator: Your Name <you@example.com>\n"
 "Language-Team: English (United Kingdom) <you@example.com>\n"
@@ -55,172 +55,148 @@ msgstr "the video must be up to 30 seconds long"
 msgid "помилка при перевірці відео"
 msgstr "error while checking video"
 
-#: gallery/services/upload_service.py:19 gallery/views.py:41
+#: gallery/services/upload_service.py:19
 msgid "сьогодні вже додано 5 фото"
 msgstr "5 photos have already been added today"
 
-#: gallery/services/upload_service.py:38 gallery/views.py:62
+#: gallery/services/upload_service.py:38
 msgid "сьогодні вже додано 2 відео"
 msgstr "2 videos have already been added today"
 
-#: gallery/views.py:103
+#: gallery/views.py:63
 msgid "файли успішно завантажено"
 msgstr "files successfully uploaded"
 
-#: gallery/views.py:107
+#: gallery/views.py:67
 msgid "виникли помилки під час завантаження файлів"
 msgstr "there were errors while uploading files"
 
 #: mainapp/models.py:8
-msgid "Назва"
-msgstr "name"
-
-#: mainapp/models.py:26
-msgid "Категорія"
-msgstr "Category"
-
-#: mainapp/models.py:27
-msgid "Категорії"
-msgstr "Categories"
-
-#: mainapp/models.py:32 mainapp/models.py:54 mainapp/models.py:74
 msgid "заголовок"
 msgstr "title"
 
-#: mainapp/models.py:33 mainapp/models.py:55
+#: mainapp/models.py:9
 msgid "опис"
 msgstr "content"
 
-#: mainapp/models.py:35 mainapp/models.py:57
+#: mainapp/models.py:11
 msgid "дата та час"
 msgstr "date and time"
 
-#: mainapp/models.py:41 mainapp/models.py:80
-msgid "категорія"
-msgstr "category"
-
-#: mainapp/models.py:43 mainapp/models.py:59 templates/mainapp/post.html:8
+#: mainapp/models.py:13
 msgid "автор"
 msgstr "author"
 
-#: mainapp/models.py:49
-msgid "запис користувача в бібліотеку"
-msgstr "user entry in the library"
-
-#: mainapp/models.py:50
-msgid "записи користувача в бібліотеку"
-msgstr "user entries in the library"
-
-#: mainapp/models.py:67
+#: mainapp/models.py:21
 msgid "ОсобистийПост"
 msgstr "PersonalPost"
 
-#: mainapp/models.py:68
+#: mainapp/models.py:22
 msgid "Особисті Пости"
 msgstr "PersonalPosts"
 
-#: mainapp/models.py:75
-msgid "Зміст"
-msgstr "Content"
-
-#: mainapp/models.py:87
-msgid "пост з aдмінки для бібліотеки"
-msgstr "posts from the admin for the library"
-
-#: mainapp/models.py:88
-msgid "постИ з адмінки для бібліотеки"
-msgstr "posts from the admin for the library"
-
-#: mainapp/models.py:99
+#: mainapp/models.py:34
 msgid "Добре"
 msgstr "Good"
 
-#: mainapp/models.py:99
+#: mainapp/models.py:34
 msgid "Середнє"
 msgstr "Average"
 
-#: mainapp/models.py:99
+#: mainapp/models.py:34
 msgid "Погано"
 msgstr "Badly"
 
-#: mainapp/models.py:123
+#: mainapp/models.py:58
 #, python-format
 msgid "відповідь %(username)s на %(question)s %(date)s"
 msgstr "%(username)s replied to %(question)s on %(date)s"
 
-#: mainapp/views.py:91
+#: mainapp/views.py:90
 msgid "будь ласка, дай відповідь на кожне питання"
 msgstr "be honest and please answer all questions"
 
-#: mainapp/views.py:127
+#: mainapp/views.py:126
 msgid "немає вектору в конкретну сторону, цього місяця ми по середині"
 msgstr "this month, we’re staying in the middle"
 
-#: mainapp/views.py:129
+#: mainapp/views.py:128
 msgid "цього місяця динаміка позитивна"
 msgstr "this month the dynamics are super cool"
 
-#: mainapp/views.py:131
+#: mainapp/views.py:130
 msgid "цього місяця тримаємось середнього"
 msgstr "this month we are sticking to the average"
 
-#: mainapp/views.py:133
+#: mainapp/views.py:132
 msgid "цього місяця динаміка негативна"
 msgstr "this month the dynamics are negative"
 
-#: mainapp/views.py:234
+#: mainapp/views.py:237
 msgid "Пн"
 msgstr "Mon"
 
-#: mainapp/views.py:235
+#: mainapp/views.py:238
 msgid "Вт"
 msgstr "Tue"
 
-#: mainapp/views.py:236
+#: mainapp/views.py:239
 msgid "Ср"
 msgstr "Wed"
 
-#: mainapp/views.py:237
+#: mainapp/views.py:240
 msgid "Чт"
 msgstr "Thu"
 
-#: mainapp/views.py:238
+#: mainapp/views.py:241
 msgid "Пт"
 msgstr "Fri"
 
-#: mainapp/views.py:239
+#: mainapp/views.py:242
 msgid "Сб"
 msgstr "Sat"
 
-#: mainapp/views.py:240
+#: mainapp/views.py:243
 msgid "Нд"
 msgstr "Sun"
 
-#: mainapp/views.py:342
+#: mainapp/views.py:285
 msgid "запис успішно збережено"
 msgstr "the entry was successfully saved"
 
-#: mainapp/views.py:345
+#: mainapp/views.py:288
 msgid "виникла помилка при збереженні"
 msgstr "an error occurred while saving"
+
+#: mainapp/views.py:358
+msgid "Запис успішно збережено"
+msgstr "the entry was successfully saved"
 
 #: templates/gallery/index.html:7
 msgid "твій контент за поточний місяць"
 msgstr "your content for the current month"
 
 #: templates/gallery/index.html:8
-msgid "контент за попередні місяці дивись в календарі"
+msgid "контент за попередні місяці дивись"
 msgstr "see content from previous months in the calendar"
 
-#: templates/gallery/index.html:9
+#: templates/gallery/index.html:10 templates/mainapp/survey_thanks.html:7
+msgid "в календарі"
+msgstr "calendar"
+
+#: templates/gallery/index.html:14
 msgid "завантажити новий контент"
 msgstr "upload new files"
 
-#: templates/gallery/index.html:23 templates/mainapp/calendar.html:69
+#: templates/gallery/index.html:24 templates/mainapp/calendar.html:50
+msgid "фото"
+msgstr "photo"
+
+#: templates/gallery/index.html:36 templates/mainapp/calendar.html:72
 msgid "твій браузер не підтримує відео"
 msgstr "your browser does not support video"
 
-#: templates/gallery/index.html:33
+#: templates/gallery/index.html:46
 msgid "твоя галерея пуста, завантажуй !"
 msgstr "your gallery is empty, Upload photos or videos!"
 
@@ -232,15 +208,23 @@ msgstr "download files"
 msgid "переглянути галерею"
 msgstr "view gallery"
 
-#: templates/gallery/upload.html:15
+#: templates/gallery/upload.html:20
 msgid "до 5 фотографій на день"
 msgstr "up to 5 photos per day"
 
-#: templates/gallery/upload.html:29
+#: templates/gallery/upload.html:35
+msgid "перетягніть фото сюди або натисніть, щоб вибрати"
+msgstr "drag photo here or click to select"
+
+#: templates/gallery/upload.html:44
 msgid "до 2 відеороликів на день"
 msgstr "up to 2 videos per day"
 
-#: templates/gallery/upload.html:42
+#: templates/gallery/upload.html:58
+msgid "перетягніть відео сюди або натисніть, щоб вибрати"
+msgstr "drag video here or click to select"
+
+#: templates/gallery/upload.html:66
 msgid "завантажити"
 msgstr "download"
 
@@ -249,7 +233,6 @@ msgid "опитування вже пройдено"
 msgstr "the survey has already been completed"
 
 #: templates/mainapp/already_answered.html:9
-#: templates/mainapp/survey_thanks.html:5
 msgid "дякуємо за щирі відповіді 💙"
 msgstr "thank you for your honest answers 💙"
 
@@ -270,43 +253,51 @@ msgstr "previous month"
 msgid "наступний"
 msgstr "next month"
 
-#: templates/mainapp/calendar.html:43
+#: templates/mainapp/calendar.html:44
 msgid "переглянути аналітику за місяць"
 msgstr "get analytics for the current month"
 
-#: templates/mainapp/calendar.html:46
+#: templates/mainapp/calendar.html:48
 msgid "інформація за"
 msgstr "information for"
 
-#: templates/mainapp/calendar.html:48
-msgid "фото"
-msgstr "photo"
-
-#: templates/mainapp/calendar.html:59
+#: templates/mainapp/calendar.html:61
 msgid "немає фотографій на цю дату"
 msgstr "there are no videos for this date"
 
-#: templates/mainapp/calendar.html:62
+#: templates/mainapp/calendar.html:65
 msgid "відео"
 msgstr "video"
 
-#: templates/mainapp/calendar.html:76
+#: templates/mainapp/calendar.html:79
 msgid "немає відео за цю дату"
 msgstr "there are no videos for this date"
 
-#: templates/mainapp/calendar.html:79
+#: templates/mainapp/calendar.html:83
 msgid "щоденні записи"
 msgstr "diary"
 
-#: templates/mainapp/calendar.html:87
+#: templates/mainapp/calendar.html:91
 msgid "немає записів за цю дату"
 msgstr "there are no videos for this date."
 
-#: templates/mainapp/calendar.html:90
+#: templates/mainapp/calendar.html:95
+msgid "трек цього дня"
+msgstr "track of the day"
+
+#: templates/mainapp/calendar.html:108
+msgid "слухати повністю"
+msgstr "listen in full"
+
+#: templates/mainapp/calendar.html:118
+msgid "трек на цю дату відсутній"
+msgstr "there is no track for this date."
+
+#: templates/mainapp/calendar.html:123
 msgid "твої чекапи"
 msgstr "your checkups"
 
-#: templates/mainapp/calendar.html:98
+#: templates/mainapp/calendar.html:131
 msgid "немає інформації за цю дату"
 msgstr "there are no photos for this date."
 
@@ -331,7 +322,7 @@ msgid "зберегти відповіді"
 msgstr "save answers"
 
 #: templates/mainapp/create.html:8
-msgid "Створити"
+msgid "створити"
 msgstr "create"
 
 #: templates/mainapp/home.html:5
@@ -370,81 +361,6 @@ msgstr ""
 "a cozy space for reflection, relaxation, and taking care of your mental well-"
 "being"
 
-#: templates/mainapp/lib_user_post.html:6
-msgid "створити пост"
-msgstr "create a post"
-
-#: templates/mainapp/lib_user_post.html:14
-msgid "помилки:"
-msgstr "errors"
-
-#: templates/mainapp/lib_user_post.html:25 templates/mainapp/library.html:104
-msgid "створити"
-msgstr "create"
-
-#: templates/mainapp/lib_user_post_history.html:6
-msgid "історія твоїх особистих постів в бібліотеку"
-msgstr "history of your library posts"
-
-#: templates/mainapp/lib_user_post_history.html:17
-#: templates/mainapp/personal_post_history.html:15
-msgid "постів немає"
-msgstr "no posts"
-
-#: templates/mainapp/lib_user_post_history.html:23
-msgid "назад до бібліотеки"
-msgstr "back the library"
-
-#: templates/mainapp/library.html:9 templates/mainapp/library.html:17
-msgid "пошук"
-msgstr "search"
-
-#: templates/mainapp/library.html:15
-msgid "введи ключове слово..."
-msgstr "enter keyword..."
-
-#: templates/mainapp/library.html:20
-msgid "шукати"
-msgstr "search"
-
-#: templates/mainapp/library.html:27
-msgid "не введене ключове слово для пошуку"
-msgstr "you did not enter a search keyword"
-
-#: templates/mainapp/library.html:33
-msgid "категорії"
-msgstr "categories"
-
-#: templates/mainapp/library.html:47
-msgid "результат пошуку по категорії серед твоїх постів"
-msgstr "result by category among your posts"
-
-#: templates/mainapp/library.html:65
-msgid "у цій категорії ще немає постів"
-msgstr "there are no posts in this category yet"
-
-#: templates/mainapp/library.html:68
-msgid "обери категорію, щоб побачити пости"
-msgstr "select a category to see posts"
-
-#: templates/mainapp/library.html:75
-msgid "результати пошуку по твоїм записам"
-msgstr "library search results"
-
-#: templates/mainapp/library.html:83 templates/mainapp/library.html:95
-msgid "нічого не знайдено"
-msgstr "nothing found"
-
-#: templates/mainapp/library.html:87
-msgid "результати пошуку по бібліотеці"
-msgstr "library search results"
-
-#: templates/mainapp/library.html:100
-msgid "маєш цікаву інформацію ? запиши в бібліотеку, щоб не загубити"
-msgstr ""
-"do you have interesting information? write it down in the library so you "
-"don't lose it"
-
 #: templates/mainapp/monthly_analytics.html:6
 msgid "твоя аналітика за поточний місяць"
 msgstr "your analytics for the current month"
@@ -453,40 +369,67 @@ msgstr "your analytics for the current month"
 msgid "немає даних для відображення"
 msgstr "you haven't answered the survey yet"
 
-#: templates/mainapp/personal_post.html:6
-msgid "один день- один пост!"
+#: templates/mainapp/personal_post.html:9
+msgid "один день - один пост!"
 msgstr "one day, one post!"
 
-#: templates/mainapp/personal_post.html:10
+#: templates/mainapp/personal_post.html:13
 msgid "ти редагуєш створений сьогодні пост"
 msgstr "you are editing the post created today"
 
-#: templates/mainapp/personal_post.html:12
+#: templates/mainapp/personal_post.html:15
 msgid "новий запис на сьогодні"
 msgstr "new entry for today"
 
-#: templates/mainapp/personal_post.html:19
+#: templates/mainapp/personal_post.html:22
 msgid "зберегти"
 msgstr "save"
 
-#: templates/mainapp/personal_post.html:23
-#: templates/mainapp/survey_history.html:7
-msgid "історія"
-msgstr "go to history"
+#: templates/mainapp/personal_post.html:26
+msgid "історія постів"
+msgstr "history of your diary posts"
+
+#: templates/mainapp/personal_post.html:34
+msgid "🎵 твій аудіотрек на сьогодні"
+msgstr "🎵 your audio track for today"
+
+#: templates/mainapp/personal_post.html:73
+msgid "пошук"
+msgstr "search"
+
+#: templates/mainapp/personal_post.html:107
+msgid "зберегти в щоденник"
+msgstr "save answers"
+
+#: templates/mainapp/personal_post.html:114
+msgid "нічого не знайдено для"
+msgstr "nothing found for"
 
 #: templates/mainapp/personal_post_history.html:5
 msgid "історія твоїх постів"
 msgstr "history of your diary posts"
 
-#: templates/mainapp/post.html:9
-msgid "дата"
-msgstr "date"
+#: templates/mainapp/personal_post_history.html:6
+msgid "редагувати/створити"
+msgstr "edit/create"
+
+#: templates/mainapp/personal_post_history.html:38
+msgid "постів немає"
+msgstr "no posts"
+
+#: templates/mainapp/survey_history.html:7
+msgid "історія"
+msgstr "history"
 
 #: templates/mainapp/survey_history.html:25
 msgid "немає пройдених опитувань"
 msgstr "you haven't answered the survey yet"
 
-#: templates/mainapp/survey_thanks.html:8
+#: templates/mainapp/survey_thanks.html:5
+msgid "дякуємо за щирі відповіді 💙 ти можеш спостерігати за своїм прогресом "
+msgstr "thank you for your honest answers 💙 you can monitor your progress"
+
+#: templates/mainapp/survey_thanks.html:10
 msgid "переглянути історію опитувань"
 msgstr "view your survey response history"
 
@@ -495,46 +438,41 @@ msgid "чат"
 msgstr "chat"
 
 #: templates/menu.html:14
-msgid "бібліотека"
-msgstr "library"
-
-#: templates/menu.html:17
 msgid "чекап"
 msgstr "checkup"
 
-#: templates/menu.html:20
+#: templates/menu.html:17
 msgid "галерея"
 msgstr "gallery"
 
-#: templates/menu.html:23
-msgid "запис"
-msgstr "entry"
+#: templates/menu.html:20
+msgid "щоденник"
+msgstr "diary"
 
-#: templates/menu.html:31
+#: templates/menu.html:29
 msgid "вітаю"
 msgstr "welcome"
 
-#: templates/menu.html:32
+#: templates/menu.html:41
 msgid "профіль"
 msgstr "profile"
 
-#: templates/menu.html:33
+#: templates/menu.html:42
 msgid "вийти"
 msgstr "log out"
 
-#: templates/menu.html:35 templates/registration/login.html:17
+#: templates/menu.html:44 templates/registration/login.html:27
 msgid "увійти"
 msgstr "log in"
 
-#: templates/menu.html:36 templates/registration/login.html:20
-#: templates/registration/register.html:72
+#: templates/menu.html:45 templates/registration/register.html:72
 msgid "зареєструватись"
 msgstr "register"
 
 #: templates/registration/change_password.html:10
 #: templates/registration/password_reset_confirm.html:3
 #: templates/registration/password_reset_confirm.html:13
-#: templates/registration/profile.html:47
+#: templates/registration/profile.html:48
 msgid "оновити пароль"
 msgstr "update password"
 
@@ -556,11 +494,11 @@ msgstr "confirm password"
 msgid "застосувати зміни"
 msgstr "save changes"
 
-#: templates/registration/login.html:8
+#: templates/registration/login.html:18
 msgid "увійти в акаунт"
 msgstr "log in to your account"
 
-#: templates/registration/login.html:19
+#: templates/registration/login.html:29
 #: templates/registration/password_reset.html:11
 msgid "пароль втрачено?"
 msgstr "forgot your password?"
@@ -638,26 +576,26 @@ msgstr ""
 "an email with a link to change your password has been sent, please check "
 "your inbox"
 
-#: templates/registration/profile.html:19
-msgid "Поточне Bio"
-msgstr "Bio"
-
-#: templates/registration/profile.html:20
-msgid "Біо ще не заповнено"
-msgstr "nothing found"
-
-#: templates/registration/profile.html:27
-msgid "оновити Bio"
-msgstr "update Bio"
-
-#: templates/registration/profile.html:31
-#: templates/registration/profile.html:42
-msgid "оновити"
-msgstr "update"
-
-#: templates/registration/profile.html:38
+#: templates/registration/profile.html:18
 msgid "оновити електронну пошту"
 msgstr "update e-mail"
+
+#: templates/registration/profile.html:27
+msgid "нова пошта"
+msgstr "e-mail"
+
+#: templates/registration/profile.html:33
+msgid "оновити електронну адресу"
+msgstr "update e-mail"
+
+#: templates/registration/profile.html:42
+msgid "безпека"
+msgstr "security"
+
+#: templates/registration/profile.html:45
+msgid "рекомендуємо періодично змінювати пароль для підвищення безпеки."
+msgstr ""
+"we recommend that you change your password periodically to increase security."
 
 #: templates/registration/register.html:11
 msgid "створити аккаунт"
@@ -691,37 +629,33 @@ msgstr "сonfirm password"
 msgid "домашня сторінка"
 msgstr "рome page"
 
-#: users/forms.py:80
-msgid "Цей email вже використовується."
+#: users/forms.py:80"
+msgid "цей email вже використовується."
 msgstr "This email is already in use."
 
 #: users/forms.py:101
-msgid "Цей email вже використовується іншим користувачем."
-msgstr "This email is already being used by another user."
+msgid "цей email вже використовується"
+msgstr "This email is already in use."
 
-#: users/views.py:30
-#, python-format
-msgid "Вітаю %(user)s"
+#: users/views.py:28
+msgid "вітаю %(user)s"
 msgstr "Welcome %(user)s"
 
-#: users/views.py:61
-#, python-format
-msgid "Створений акаунт для %(username)s"
+#: users/views.py:59
+#, fuzzy, python-format
+#| msgid "Створений акаунт для %(username)s"
+msgid "створений акаунт для %(username)s"
 msgstr "%(username)s's account is all set — go for it!"
 
-#: users/views.py:96
-msgid "особисту інформацію оновлено"
-msgstr "personal information updated"
-
-#: users/views.py:103
+#: users/views.py:89
 msgid "електронну пошту оновлено"
 msgstr "e-mail updated"
 
-#: users/views.py:106
+#: users/views.py:92
 msgid "будь ласка, виправ помилки нижче"
 msgstr "Please correct the errors below."
 
-#: users/views.py:125
+#: users/views.py:109
 msgid ""
 "Ми щойно надіслали інструкції для зміни пароля (якщо акаунт з цією адресою "
 "існує). Лист має прийти незабаром. Якщо його не буде — перевір спам і чи "
@@ -731,6 +665,6 @@ msgstr ""
 "that email). The message should arrive soon. If not — check your spam and "
 "make sure the email is correct."
 
-#: users/views.py:134
-msgid "Ваш пароль успішно змінено!"
+#: users/views.py:118
+msgid "ваш пароль успішно змінено!"
 msgstr "Nice! Your password’s been changed."

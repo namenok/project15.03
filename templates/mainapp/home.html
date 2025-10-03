@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sendMessage(userMessage);
         input.value = '';
 
-        // Показуємо "генерується відповідь"
+       
         aiMessageDiv = document.createElement('div');
         aiMessageDiv.classList.add('message', 'ai');
         aiMessageDiv.textContent = '🤖 Генерується відповідь...';
@@ -101,7 +101,6 @@ socket.onclose = function(e) {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Місце для повідомлень займає все доступне місце зверху */
 #chat-messages {
     flex: 1;
     display: flex;
@@ -167,7 +166,7 @@ socket.onclose = function(e) {
     border: 1px solid #ddd;
 }
 
-/* Іконки як псевдоелементи */
+
 .ai::before {
     content: "🤖";
     position: absolute;

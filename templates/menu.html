@@ -2,61 +2,129 @@
 <nav class="main-navbar">
 
   <div class="navbar-left">
-    <ul class="navbar-menu">
-      {% if request.user.is_authenticated %}
-        <li class="navbar-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
-          <a class="navbar-link" href="{% url 'mainapp:chat_page' %}">{% trans "чат" %}</a>
-        </li>
-        <li class="navbar-item {% if request.resolver_match.url_name == 'calendar_combined' %}active{% endif %}">
-          <a class="navbar-link" href="{% url 'mainapp:calendar_combined' %}">{% trans "календар" %}</a>
-        </li>
-        
-        <li class="navbar-item {% if request.resolver_match.url_name == 'checkme' %}active{% endif %}">
-          <a class="navbar-link" href="{% url 'mainapp:checkme' %}">{% trans "чекап" %}</a>
-        </li>
-        <li class="navbar-item {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">
-          <a class="navbar-link" href="{% url 'gallery:gallery' %}">{% trans "галерея" %}</a>
-        </li>
-        <li class="navbar-item {% if request.resolver_match.url_name == 'daily_post' %}active{% endif %}">
-          <a class="navbar-link" href="{% url 'mainapp:post_history' %}">{% trans "щоденник" %}</a>
-        </li>
-      {% endif %}
-    </ul>
-  </div>
+  <ul class="navbar-menu">
+    {% if request.user.is_authenticated %}
+      <li class="navbar-item {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+        <a class="navbar-link" href="{% url 'mainapp:chat_page' %}">{% trans "чат" %}</a>
+      </li>
+      <li class="navbar-item {% if request.resolver_match.url_name == 'calendar_combined' %}active{% endif %}">
+        <a class="navbar-link" href="{% url 'mainapp:calendar_combined' %}">{% trans "календар" %}</a>
+      </li>
+      <li class="navbar-item {% if request.resolver_match.url_name == 'checkme' %}active{% endif %}">
+        <a class="navbar-link" href="{% url 'mainapp:checkme' %}">{% trans "чекап" %}</a>
+      </li>
+      <li class="navbar-item {% if request.resolver_match.url_name == 'gallery' %}active{% endif %}">
+        <a class="navbar-link" href="{% url 'gallery:gallery' %}">{% trans "галерея" %}</a>
+      </li>
+      <li class="navbar-item {% if request.resolver_match.url_name == 'daily_post' %}active{% endif %}">
+        <a class="navbar-link" href="{% url 'mainapp:post_history' %}">{% trans "щоденник" %}</a>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+
 
   <div class="navbar-right">
   {% if request.user.is_authenticated %}
     <span class="navbar-user">{% trans "вітаю" %}, {{ request.user|title }}</span>
-    <a href="{% url 'mainapp:index' %}"
-       style="margin:0 5px;color:inherit;text-decoration:none;">
-       {% trans "MindSpace" %}
-    </a>
-    <button id="theme-toggle" 
-            style="background:none;border:none;padding:0;margin:0 5px;cursor:pointer;font:inherit;color:inherit;">
-      🌙
-    </button>
-    
-    <form action="{% url 'set_language' %}" method="post" style="display:inline;">
+    <a href="{% url 'mainapp:index' %}" class="navbar-link">MindSpace</a>
+    <button id="theme-toggle" class="navbar-btn">🌙</button>
+
+    <form action="{% url 'set_language' %}" method="post">
       {% csrf_token %}
-      <select name="language" onchange="this.form.submit()" 
-              style="background:none;border:none;padding:0;margin:0 5px;font:inherit;color:inherit;appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer;">
+      <select name="language" onchange="this.form.submit()" class="navbar-select">
         <option value="uk" {% if LANGUAGE_CODE == "uk" %}selected{% endif %}>🇺🇦</option>
         <option value="en-gb" {% if LANGUAGE_CODE == "en-gb" %}selected{% endif %}>🇬🇧</option>
       </select>
     </form>
-    
-    <a href="{% url 'users:users_profile' %}" 
-       style="margin:0 5px;color:inherit;text-decoration:none;">{% trans "профіль" %}</a>
-       
-    <a href="{% url 'users:logout' %}" 
-       style="margin:0 5px;color:inherit;text-decoration:none;">{% trans "вийти" %}</a>
+
+    <a href="{% url 'users:users_profile' %}" class="navbar-link">{% trans "профіль" %}</a>
+    <a href="{% url 'users:logout' %}" class="navbar-link">{% trans "вийти" %}</a>
   {% else %}
-    <a href="{% url 'users:login' %}" 
-       style="margin:0 5px;color:inherit;text-decoration:none;">{% trans "увійти" %}</a>
-    <a href="{% url 'users:register' %}" 
-       style="margin:0 5px;color:inherit;text-decoration:none;">{% trans "зареєструватись" %}</a>
+    <a href="{% url 'users:login' %}" class="navbar-link">{% trans "увійти" %}</a>
+    <a href="{% url 'users:register' %}" class="navbar-link">{% trans "зареєструватись" %}</a>
   {% endif %}
 </div>
 
 
 </nav>
+<style>
+.main-navbar {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;           
+  padding: 10px 20px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  gap: 15px; /* відстань між пунктами */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  display: flex;
+}
+
+.navbar-link {
+  text-decoration: none;
+  color: inherit;
+  padding: 5px 10px;
+}
+
+.navbar-link:hover,
+.navbar-item.active .navbar-link {
+  background: #eee;
+  border-radius: 5px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.navbar-user {
+  margin-right: 10px;
+}
+
+.navbar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.navbar-select {
+  border: 1px solid #ccc;
+  background: white;
+  padding: 3px 5px;
+  border-radius: 4px;
+}
+
+
+@media (max-width: 768px) {
+  .main-navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-left,
+  .navbar-right {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .navbar-menu {
+    flex-wrap: column;
+    gap: 10px;
+  }
+
+}
+</style>

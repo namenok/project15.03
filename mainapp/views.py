@@ -44,7 +44,6 @@ from mainapp.services.user_answer_service import (
 )
 
 
-# user`s personal post
 @login_required()
 def post(request, id=None):
     post = get_post_by_title(id)
@@ -163,7 +162,7 @@ def get_daily_data(user, selected_date):
 @login_required
 def calendar_combined_view(request):
     today = timezone.now().date()
-    user = request.user  # Get the user early
+    user = request.user
 
     year = int(request.GET.get("year", today.year))
     month = int(request.GET.get("month", today.month))
@@ -225,6 +224,8 @@ def calendar_combined_view(request):
     )
 
     daily_data = get_daily_data(user, selected_date)
+    user_token, premium_user = get_user_spotify_token(user)
+    track = Track.objects.filter(user=user, date=selected_date).first()
 
     context = {
         "year": year,
@@ -244,6 +245,7 @@ def calendar_combined_view(request):
         "start_blank_days": range(start_weekday),
         "calendar_weeks": weeks,
         "data_dates": all_dates_with_data_in_month,
+        "track": track,
         **daily_data,
     }
     return render(request, "mainapp/calendar.html", context)

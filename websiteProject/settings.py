@@ -168,7 +168,7 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
 SPOTIFY_CLIENT_ID = "456e8268198e49d8a6418853652cd98b"
 SPOTIFY_CLIENT_SECRET = "767e5d97fadc40f8aa80670dfb2e98e0"
 
-SPOTIFY_REDIRECT_URI = "https://22995ce867fb.ngrok-free.app/en-gb/spotify/callback/"
+SPOTIFY_REDIRECT_URI = "https://8c200336a887.ngrok-free.app/en-gb/spotify/callback/"
 
 SPOTIFY_SCOPES = (
     "streaming "

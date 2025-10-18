@@ -331,16 +331,6 @@ def chat_page(request):
     return render(request, "mainapp/home.html")
 
 
-async def query_ollama(ollama_url, payload):
-    async with aiohttp.ClientSession() as session:
-        async with session.post(ollama_url, json=payload) as resp:
-            full_response = ""
-            async for line in resp.content:
-                data = json.loads(line.decode())
-                full_response += data.get("response", "")
-                if data.get("done"):
-                    break
-            return full_response
 
 
 @login_required

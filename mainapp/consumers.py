@@ -68,25 +68,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         except json.JSONDecodeError as e:
             logging.error(f"Invalid JSON from client: {e}. Data: {text_data}")
-            await self._send_error("⚠️ Невірний формат повідомлення від клієнта.")
+            await self._send_error("Invalid message format from the client.")
         except aiohttp.ClientResponseError as e:
             logging.error(
                 f"Ollama API error {e.status}: {e.message}. URL: {e.request_info.url}"
             )
             await self._send_error(
-                f"⚠️ Помилка AI: {e.status}. Деталі: {e.message[:100]}..."
+                f"Error AI: {e.status}. Деталі: {e.message[:100]}..."
             )
         except aiohttp.ClientError as e:
             logging.error(f"Network error during Ollama API call: {e}", exc_info=True)
             await self._send_error(
-                "⚠️ Сталася мережева помилка при зверненні до моделі. Перевірте з'єднання."
+                "A network error occurred while accessing the model. Check your connection."
             )
         except Exception as e:
             logging.error(
                 f"Unexpected error during message processing: {e}", exc_info=True
             )
             await self._send_error(
-                "⚠️ Виникла непередбачена помилка обробки повідомлення."
+                "An unexpected error occurred while processing the message."
             )
 
     def _build_system_prompt(self, lang_hint: str = "") -> str:
